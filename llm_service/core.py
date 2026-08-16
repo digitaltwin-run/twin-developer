@@ -27,6 +27,30 @@ class Route:
     provider: str
 
 
+@dataclass(frozen=True)
+class Provenance:
+    """Kto faktycznie wyprodukował artefakt.
+
+    Bez tego rekordu wynik fixture'u jest nieodróżnialny od wyniku modelu,
+    a `llmUsed: true` nie znaczy nic.
+    """
+
+    provider: str
+    model: str
+    response_id: str | None
+    audit_ref: str
+
+    def headers(self) -> dict[str, str]:
+        rows = {
+            "x-twin-provider": self.provider,
+            "x-twin-model": self.model,
+            "x-twin-audit-ref": self.audit_ref,
+        }
+        if self.response_id:
+            rows["x-twin-response-id"] = self.response_id
+        return rows
+
+
 def _sha(value: Any) -> str:
     payload = json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
     return "sha256:" + hashlib.sha256(payload.encode("utf-8")).hexdigest()
@@ -42,6 +66,28 @@ def _routing() -> dict[str, Any]:
     return json.loads((_root() / "config" / "llm-routing.json").read_text(encoding="utf-8"))
 
 
+_TRUTHY = {"1", "true", "yes", "on"}
+_FALSY = {"0", "false", "no", "off", ""}
+
+
+def flag_enabled(name: str, default: bool = False) -> bool:
+    """Jedna semantyka flag boolowskich dla całego projektu: brak zmiennej = default.
+
+    Domyślnie ``False``. Trasa LLM, której nikt jawnie nie włączył, jest wyłączona,
+    a nie włączona — inaczej klucz dostawcy leżący w powłoce operatora decyduje
+    o tym, dokąd wychodzą dane. Ten sam kontrakt egzekwuje ``scripts/flags.sh``.
+    """
+    raw = os.environ.get(name)
+    if raw is None:
+        return default
+    value = raw.strip().lower()
+    if value in _TRUTHY:
+        return True
+    if value in _FALSY:
+        return False
+    raise LlmConfigurationError(f"Invalid boolean value for {name}: {raw!r}")
+
+
 def _route_enabled(route_id: str) -> bool:
     route = next((item for item in _routing().get("routes", []) if item.get("id") == route_id), None)
     if not isinstance(route, dict):
@@ -49,10 +95,7 @@ def _route_enabled(route_id: str) -> bool:
     env_name = route.get("enabledEnv")
     if not env_name:
         return True
-    value = os.environ.get(str(env_name))
-    if value is None:
-        return True
-    return value.strip().lower() in {"1", "true", "yes", "on"}
+    return flag_enabled(str(env_name), default=False)
 
 
 def _registry() -> dict[str, Any]:
@@ -206,48 +249,84 @@ def _real_structured(stage: str, payload: dict[str, Any], schema: dict[str, Any]
     return parsed, audit
 
 
-def complete_intents(payload: dict[str, Any]) -> dict[str, Any]:
-    if os.environ.get("TWIN_LLM_FAKE", "").lower() in {"1", "true", "yes"}:
-        result = _fake_intents(payload)
-        append_audit({"stage": "intent-extraction", "status": "succeeded", "provider": "fake", "model": "fixture", "requestHash": _sha(payload), "schemaHash": _sha(_schema("llm-intent-extraction.schema.json"))})
-        return result
-    result, audit = _real_structured(
+def fake_mode() -> bool:
+    return flag_enabled("TWIN_LLM_FAKE", default=False)
+
+
+def _provenance(audit: dict[str, Any], ref: str) -> Provenance:
+    return Provenance(
+        provider=str(audit.get("provider") or "unknown"),
+        model=str(audit.get("model") or "unknown"),
+        response_id=(str(audit["responseId"]) if audit.get("responseId") else None),
+        audit_ref=ref,
+    )
+
+
+def _run_stage(stage: str, payload: dict[str, Any], schema_name: str, system: str, fake: Any) -> tuple[dict[str, Any], Provenance]:
+    """Wspólna ścieżka dla trybu fake i realnego, z audytem również przy porażce."""
+    if fake_mode():
+        result = fake(payload)
+        audit = {
+            "stage": stage,
+            "status": "succeeded",
+            "provider": "fake",
+            "model": "fixture",
+            "requestHash": _sha(payload),
+            "schemaHash": _sha(_schema(schema_name)),
+        }
+        return result, _provenance(audit, append_audit(audit))
+    try:
+        result, audit = _real_structured(stage, payload, _schema(schema_name), system)
+    except (LlmConfigurationError, LlmResponseError) as exc:
+        append_audit({
+            "stage": stage,
+            "status": "failed",
+            "provider": "unresolved",
+            "model": "unresolved",
+            "requestHash": _sha(payload),
+            "error": type(exc).__name__,
+        })
+        raise
+    return result, _provenance(audit, append_audit(audit))
+
+
+def complete_intents(payload: dict[str, Any]) -> tuple[dict[str, Any], Provenance]:
+    return _run_stage(
         "intent-extraction",
         payload,
-        _schema("llm-intent-extraction.schema.json"),
+        "llm-intent-extraction.schema.json",
         "Extract only durable developer execution-policy candidates. Every candidate must cite existing evidenceRefs. "
         "Do not infer personality, current code state, secrets, permissions or DONE. Context-specific incidents must not become global rules.",
+        _fake_intents,
     )
-    append_audit(audit)
-    return result
 
 
-def complete_guidelines(payload: dict[str, Any]) -> dict[str, Any]:
-    if os.environ.get("TWIN_LLM_FAKE", "").lower() in {"1", "true", "yes"}:
-        result = _fake_guidelines(payload)
-        append_audit({"stage": "guideline-generation", "status": "succeeded", "provider": "fake", "model": "fixture", "requestHash": _sha(payload), "schemaHash": _sha(_schema("guidelines.schema.json"))})
-        return result
-    result, audit = _real_structured(
+def complete_guidelines(payload: dict[str, Any]) -> tuple[dict[str, Any], Provenance]:
+    return _run_stage(
         "guideline-generation",
         payload,
-        _schema("guidelines.schema.json"),
+        "guidelines.schema.json",
         "Create a concise implementation plan constrained by the validated developer-twin DSL. Use only existing ruleRefs and only commands from allowedCommands. "
         "Do not claim that code exists, tests passed, or deployment succeeded. Unknown current state must remain in unknowns.",
+        _fake_guidelines,
     )
-    append_audit(audit)
-    return result
 
 
-def complete_chat(messages: list[dict[str, str]], model: str | None = None, temperature: float = 0.0, max_tokens: int | None = None) -> dict[str, Any]:
-    if os.environ.get("TWIN_LLM_FAKE", "").lower() in {"1", "true", "yes"}:
+def complete_chat(messages: list[dict[str, str]], model: str | None = None, temperature: float = 0.0, max_tokens: int | None = None) -> tuple[dict[str, Any], Provenance]:
+    if fake_mode():
         text = "FAKE: " + (messages[-1]["content"] if messages else "")
-        append_audit({"stage": "chat", "status": "succeeded", "provider": "fake", "model": "fixture", "requestHash": _sha(messages)})
-        return {"id": "fake-chat", "object": "chat.completion", "model": "fixture", "choices": [{"index": 0, "message": {"role": "assistant", "content": text}, "finish_reason": "stop"}], "usage": {"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0}}
+        audit = {"stage": "chat", "status": "succeeded", "provider": "fake", "model": "fixture", "requestHash": _sha(messages)}
+        result = {"id": "fake-chat", "object": "chat.completion", "model": "fixture", "choices": [{"index": 0, "message": {"role": "assistant", "content": text}, "finish_reason": "stop"}], "usage": {"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0}}
+        return result, _provenance(audit, append_audit(audit))
     try:
         from litellm import completion  # type: ignore
     except ModuleNotFoundError as exc:
         raise LlmConfigurationError("litellm is not installed; run pip install -r requirements.txt") from exc
-    route = resolve_route("chat", model)
+    try:
+        route = resolve_route("chat", model)
+    except LlmConfigurationError:
+        append_audit({"stage": "chat", "status": "failed", "provider": "unresolved", "model": "unresolved", "requestHash": _sha(messages), "error": "LlmConfigurationError"})
+        raise
     kwargs: dict[str, Any] = {"model": route.model, "messages": messages, "temperature": temperature}
     if max_tokens is not None:
         kwargs["max_tokens"] = max_tokens
@@ -256,12 +335,13 @@ def complete_chat(messages: list[dict[str, str]], model: str | None = None, temp
     if route.api_key:
         kwargs["api_key"] = route.api_key
     response = completion(**kwargs)
-    append_audit({"stage": "chat", "status": "succeeded", "provider": route.provider, "model": route.model, "responseId": getattr(response, "id", None), "requestHash": _sha(messages)})
-    return response.model_dump() if hasattr(response, "model_dump") else dict(response)
+    audit = {"stage": "chat", "status": "succeeded", "provider": route.provider, "model": route.model, "responseId": getattr(response, "id", None), "requestHash": _sha(messages)}
+    result = response.model_dump() if hasattr(response, "model_dump") else dict(response)
+    return result, _provenance(audit, append_audit(audit))
 
 
 def health() -> dict[str, Any]:
-    fake = os.environ.get("TWIN_LLM_FAKE", "").lower() in {"1", "true", "yes"}
+    fake = fake_mode()
     routes = {
         "localOpenAICompatible": {
             "enabled": _route_enabled("local-private"),

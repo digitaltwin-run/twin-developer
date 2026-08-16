@@ -24,7 +24,9 @@ export async function ingestFiles(paths: string[]): Promise<PromptEvent[]> {
       chunk = await ingestPlainText(path, sequence);
     }
     events.push(...chunk);
-    sequence = events.length ? Math.max(...events.map((event) => event.sequence)) + 1 : sequence;
+    // Licznik trzymany przyrostowo. `Math.max(...events)` rzuca RangeError
+    // powyżej ~200 tys. zdarzeń, a realna historia powłoki to przekracza.
+    for (const event of chunk) if (event.sequence >= sequence) sequence = event.sequence + 1;
   }
   return events.sort((a, b) => a.sequence - b.sequence);
 }

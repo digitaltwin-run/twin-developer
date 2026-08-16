@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""Bramka JSON Schema dla artefaktów i konfiguracji.
+
+D-1: literówka w `config/rule-catalog.json` nie powodowała błędu, tylko cichy
+brak reguły — czyli cichą zmianę polityki wykonawczej. Konfiguracja jest
+walidowana razem z artefaktami, a nie tylko obok nich.
+"""
 from __future__ import annotations
 
 import json
@@ -7,6 +13,17 @@ from pathlib import Path
 from jsonschema import Draft202012Validator, FormatChecker
 
 ROOT = Path(__file__).resolve().parents[1]
+
+# (schemat, dokument) — konfiguracja przed artefaktami, bo to ona je produkuje.
+PAIRS: list[tuple[str, str]] = [
+    ("rule-catalog.schema.json", "config/rule-catalog.json"),
+    ("source-policy.schema.json", "config/source-policy.json"),
+    ("llm-routing.schema.json", "config/llm-routing.json"),
+    ("model-registry.schema.json", "config/model-registry.json"),
+    ("project-context.schema.json", "data/context/project.json"),
+    ("developer-twin.schema.json", "data/output/developer-twin.dsl.json"),
+    ("guidelines.schema.json", "data/output/guidelines.json"),
+]
 
 
 def validate(schema_name: str, document_name: str) -> None:
@@ -21,6 +38,12 @@ def validate(schema_name: str, document_name: str) -> None:
     print(f"SCHEMA-PASS {document_name}")
 
 
+def validate_tickets() -> None:
+    for intent in sorted((ROOT / "project").glob("ticket-*/intent.json")):
+        validate("ticket-intent.schema.json", str(intent.relative_to(ROOT)))
+
+
 if __name__ == "__main__":
-    validate("developer-twin.schema.json", "data/output/developer-twin.dsl.json")
-    validate("guidelines.schema.json", "data/output/guidelines.json")
+    for schema_name, document_name in PAIRS:
+        validate(schema_name, document_name)
+    validate_tickets()

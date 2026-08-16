@@ -1,5 +1,5 @@
 {
-  "$schema": "../schemas/developer-twin.schema.json",
+  "$schema": "../../schemas/developer-twin.schema.json",
   "schemaVersion": "subactor.developer-twin/v1",
   "generatedAt": "2026-08-16T12:00:00.000Z",
   "generator": {
@@ -7,7 +7,11 @@
     "version": "0.1.0",
     "mode": "deterministic",
     "llmUsed": false,
-    "degraded": false
+    "degraded": false,
+    "provider": null,
+    "model": null,
+    "responseId": null,
+    "auditRef": null
   },
   "twin": {
     "id": "developer-twin:71ce512c96244179",

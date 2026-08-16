@@ -2,5 +2,9 @@
   "requestedMode": "deterministic",
   "effectiveMode": "deterministic",
   "degraded": false,
-  "reason": null
+  "reason": null,
+  "provider": null,
+  "model": null,
+  "responseId": null,
+  "auditRef": null
 }

@@ -121,19 +121,35 @@ export async function buildArtifacts(options: { root: string; mode: Mode; llmUrl
   let llmCandidates = undefined;
   let llmUsed = false;
   let degraded = false;
+  let provenance: { provider: string; model: string; responseId: string | null; auditRef: string | null } | undefined;
   const diagnostics = [...extraction.diagnostics];
 
   if (mode !== 'deterministic') {
     try {
       await serviceHealth(llmUrl);
-      const raw = await extractIntentCandidatesWithLlm({
+      const response = await extractIntentCandidatesWithLlm({
         baseUrl: llmUrl,
         events,
         evidence: extraction.evidence,
         existingRuleIds: extraction.rules.map((rule) => rule.id)
       });
-      llmCandidates = validateIntentCandidates(raw, new Set(extraction.evidence.map((item) => item.id))).candidates;
+      llmCandidates = validateIntentCandidates(response.value, new Set(extraction.evidence.map((item) => item.id))).candidates;
       llmUsed = true;
+      provenance = response.provenance;
+      if (response.truncatedEvents > 0) {
+        diagnostics.push({
+          code: 'DT_LLM_INPUT_TRUNCATED',
+          severity: 'review_required',
+          message: `Do ekstrakcji przekazano ostatnie ${response.windowSize} wypowiedzi człowieka; pominięto ${response.truncatedEvents}. Ustaw TWIN_LLM_EVENT_WINDOW, aby zmienić okno.`
+        });
+      }
+      if (response.provenance.provider === 'fake') {
+        diagnostics.push({
+          code: 'DT_LLM_FIXTURE_PROVIDER',
+          severity: 'review_required',
+          message: `Odpowiedź pochodzi z fixture (${response.provenance.provider}/${response.provenance.model}); nie jest dowodem zachowania modelu.`
+        });
+      }
     } catch (error) {
       if (mode === 'require-llm') throw error;
       degraded = true;
@@ -157,7 +173,8 @@ export async function buildArtifacts(options: { root: string; mode: Mode; llmUrl
     llmCandidates,
     mode,
     llmUsed,
-    degraded
+    degraded,
+    provenance
   });
   validateTwin(twin, true);
 
@@ -178,16 +195,25 @@ export async function buildGuidelineArtifacts(options: { root: string; mode: Mod
   const deterministic = generateDeterministicGuidelines({ twin, task, project, catalog });
   const allowedCommands = ['git status', 'git diff', ...(project.validationCommands ?? [])];
   let guidelines = deterministic;
-  let audit: Record<string, unknown> = { requestedMode: mode, effectiveMode: 'deterministic', degraded: false, reason: null };
+  let audit: Record<string, unknown> = { requestedMode: mode, effectiveMode: 'deterministic', degraded: false, reason: null, provider: null, model: null, responseId: null, auditRef: null };
 
   if (mode !== 'deterministic') {
     try {
-      const raw = await generateGuidelinesWithLlm({ baseUrl: llmUrl, task, twin, deterministic, allowedCommands });
-      guidelines = validateGuidelines(raw, twin, allowedCommands);
-      audit = { requestedMode: mode, effectiveMode: 'llm', degraded: false, reason: null };
+      const response = await generateGuidelinesWithLlm({ baseUrl: llmUrl, task, twin, deterministic, allowedCommands });
+      guidelines = validateGuidelines(response.value, twin, allowedCommands);
+      audit = {
+        requestedMode: mode,
+        effectiveMode: 'llm',
+        degraded: false,
+        reason: null,
+        provider: response.provenance.provider,
+        model: response.provenance.model,
+        responseId: response.provenance.responseId,
+        auditRef: response.provenance.auditRef
+      };
     } catch (error) {
       if (mode === 'require-llm') throw error;
-      audit = { requestedMode: mode, effectiveMode: 'deterministic', degraded: true, reason: error instanceof Error ? error.message : String(error) };
+      audit = { requestedMode: mode, effectiveMode: 'deterministic', degraded: true, reason: error instanceof Error ? error.message : String(error), provider: null, model: null, responseId: null, auditRef: null };
     }
   }
 

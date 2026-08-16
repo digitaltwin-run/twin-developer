@@ -1,0 +1,66 @@
+{
+  "schema": "new-project.intent/v3",
+  "ticketId": "ticket-002",
+  "title": "Faza 0 — naprawy blokujące przed wiązaniem w profilu autonomii",
+  "status": "done",
+  "workstream": "runtime_service",
+  "purpose": "Usunąć defekty P0 z docs/AUDIT_AND_AUTONOMY_PLAN.md, które unieważniają gwarancje granicy efektów, prywatności routingu i proweniencji artefaktów.",
+  "scope": [
+    "A-1 allowlista komend oparta na argv zamiast prefiksu stringa",
+    "A-2 fail-closed routing LLM i jedna semantyka flag dla Pythona i basha",
+    "A-3 uwierzytelnienie usługi REST i zakaz wiązania spoza loopbacku bez tokenu",
+    "B-1 proweniencja providera w artefaktach i odrzucanie llmUsed bez providera",
+    "B-3 bramka reprodukowalności artefaktów",
+    "D-1 schematy JSON dla konfiguracji i kontekstu projektu"
+  ],
+  "allowedPaths": [
+    "src/**",
+    "llm_service/**",
+    "schemas/**",
+    "config/**",
+    "scripts/**",
+    "tests/**",
+    "data/context/**",
+    "data/normalized/**",
+    "data/output/**",
+    "docs/**",
+    "project/ticket-002/**",
+    "project/TICKETS.md",
+    "Makefile",
+    ".env.example"
+  ],
+  "forbiddenEffects": [
+    "commit bez zielonych bramek make validate i make test",
+    "merge",
+    "deployment",
+    "production secret mutation",
+    "publishing raw prompt history",
+    "promocja reguły candidate do active"
+  ],
+  "dependencies": [
+    "wellmanifest/new-project",
+    "wellmanifest/ticket-lifecycle",
+    "wellmanifest/policy-dsl",
+    "wellmanifest/autonomy"
+  ],
+  "validation": [
+    "make validate",
+    "make test",
+    "make verify-artifacts",
+    "make llm-fake-demo"
+  ],
+  "acceptanceCriteria": [
+    "Komenda zawierająca dowolny operator powłoki jest odrzucana przez validateGuidelines, potwierdzone tabelą wektorów w testach.",
+    "Puste środowisko bez flag daje LlmConfigurationError zamiast trasy OpenRouter.",
+    "Uruchomienie serve na adresie spoza loopbacku bez TWIN_ALLOW_REMOTE i TWIN_API_TOKEN kończy się odmową startu.",
+    "developer-twin.dsl.json z llmUsed=true bez generator.provider jest odrzucany jako blocking.",
+    "make verify-artifacts wykrywa ręczną edycję artefaktu w data/output.",
+    "Każdy plik w config/ i data/context/project.json ma schemat walidowany przez make validate."
+  ],
+  "evidencePolicy": {
+    "humanIntentHome": "config/source-policy.json#truthDomains/humanIntent",
+    "projectRealityHome": "config/source-policy.json#truthDomains/projectReality",
+    "llmAuthority": "propose-only",
+    "unknownIsFalse": false
+  }
+}

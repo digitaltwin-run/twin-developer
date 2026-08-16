@@ -86,9 +86,10 @@ Policy DSL pozostaje **inertny**: opisuje zasady i ograniczenia, ale sam nie wyk
 ├── llm_service/                  # Python CLI + shell + FastAPI + LiteLLM
 ├── schemas/                      # strict JSON Schema
 ├── src/                          # TypeScript runtime
-├── scripts/                      # Aider, LiteLLM, fake REST demo, schema gate
+├── scripts/                      # Aider, LiteLLM, fake REST demo, bramki
 ├── tests/                        # Node test + Python unittest
-└── project/ticket-001/           # zakres, intent, preprompt i changelog
+├── docs/                         # architektura, DSL, SSOT, security, audyt+plan
+└── project/ticket-*/             # zakres, intent, preprompt i changelog
 ```
 
 ## Szybki start bez LLM
@@ -111,10 +112,17 @@ deterministic rules:  10
 contextual rules:     2
 LLM candidates:       0 w trybie deterministic
 guideline steps:      7
-TypeScript tests:     4/4 PASS
-Python tests:         3/3 PASS
-JSON Schema:          PASS
+TypeScript tests:     8/8 PASS
+Python tests:         13/13 PASS
+JSON Schema:          PASS (7 dokumentów + tickety)
+Flag parity:          PASS
+Artifact reproducibility: PASS (10 artefaktów)
 ```
+
+`make validate` uruchamia cztery bramki: walidację runtime, JSON Schema dla
+artefaktów **i konfiguracji**, parzystość semantyki flag oraz reprodukowalność —
+regenerację artefaktów z przypiętym `TWIN_NOW` i porównanie hashy. Ręczna edycja
+czegokolwiek w `data/output/` jest wykrywana.
 
 Główne artefakty:
 
@@ -170,8 +178,12 @@ Fake mode zachowuje ten sam kontrakt JSON Schema, ale nie używa sieci ani klucz
 
 ```bash
 make llm-fake-demo
+make demo          # przywróć deterministyczny baseline
 make validate
 ```
+
+`make validate` zawiera bramkę reprodukowalności, która odrzuca baseline
+z `llmUsed=true` — dlatego po przebiegu fake wracamy do `make demo`.
 
 Ścieżka testowa:
 
@@ -181,6 +193,11 @@ TypeScript → HTTP → FastAPI → fake structured LLM
 ```
 
 Oczekiwany wynik zawiera jeden kandydat `DT-LLM-101`, `llmUsed=true` i `degraded=false`.
+
+Artefakt z tego przebiegu niesie `generator.provider="fake"` oraz diagnostykę
+`DT_LLM_FIXTURE_PROVIDER` (`review_required`), a `make verify-artifacts` odmawia
+uznania go za commitowany baseline. Fake mode dowodzi kontraktu HTTP i JSON Schema,
+nie zachowania modelu — dlatego baseline w repozytorium jest deterministyczny.
 
 ## Python CLI, shell i REST
 
@@ -207,13 +224,23 @@ curl -fsS http://127.0.0.1:8099/healthz
 Endpointy:
 
 ```text
-GET  /healthz
-POST /v1/intents/extract
-POST /v1/guidelines/generate
-POST /v1/chat/completions
+GET  /healthz                    (bez tokenu)
+POST /v1/intents/extract         (X-Twin-Token, gdy TWIN_API_TOKEN ustawiony)
+POST /v1/guidelines/generate     (jw.)
+POST /v1/chat/completions        (jw.)
 ```
 
-Usługa zapisuje append-only audyt z `requestHash`, `schemaHash`, stage, modelem, providerem, response ID i usage. Nie zapisuje klucza, treści promptu ani surowej odpowiedzi.
+Odpowiedzi endpointów LLM niosą nagłówki proweniencji `x-twin-provider`,
+`x-twin-model`, `x-twin-audit-ref` i opcjonalnie `x-twin-response-id`. Runtime
+TypeScript odrzuca odpowiedź bez tych nagłówków — bez nich `llmUsed: true`
+nie niesie żadnej informacji o tym, kto faktycznie wyprodukował wynik.
+
+Usługa zapisuje append-only audyt z `requestHash`, `schemaHash`, stage, modelem,
+providerem, response ID, usage i `auditRef`, **również przy niepowodzeniu**
+(`status: failed`). Nie zapisuje klucza, treści promptu ani surowej odpowiedzi.
+
+Bind spoza loopbacku jest odmawiany, dopóki nie ustawisz `TWIN_ALLOW_REMOTE=1`
+i niepustego `TWIN_API_TOKEN`.
 
 ## OpenRouter przez LiteLLM
 
@@ -224,7 +251,13 @@ make setup
 cp .env.example .env
 ```
 
-Załaduj prywatne zmienne do powłoki. Nie commituj `.env`.
+`Makefile` ładuje `.env` automatycznie, jeśli plik istnieje. Nie commituj go.
+
+**Flagi są fail-closed.** Brak zmiennej `LOCAL_LLM_ENABLED`, `LITELLM_PROXY_ENABLED`
+lub `OPENROUTER_DIRECT_ENABLED` znaczy „trasa wyłączona", a nie „włączona".
+Bez jawnego włączenia którejś trasy runtime zwraca `LlmConfigurationError`
+zamiast po cichu wyjść do zewnętrznego dostawcy. Parzystość tej semantyki
+między Pythonem, skryptami i `.env.example` pilnuje `scripts/check-flag-parity.py`.
 
 ### 2. Uruchom centralny proxy
 
@@ -369,9 +402,18 @@ Dla tych concernów należy podłączyć adaptery rzeczywistości. Projekt zawie
 
 ## Bezpieczeństwo i prywatność
 
-- sekrety są redagowane przed zapisaniem `redactedText` i przed wywołaniem LLM;
+- sekrety są redagowane w warstwie ingest TypeScript przed zapisaniem `redactedText`
+  (kontrola **nie** obejmuje jeszcze usługi Python — patrz „Znane luki" w `docs/SECURITY.md`);
 - raw history pozostaje lokalna i nie jest automatycznie wysyłana do modelu;
 - usługa LLM dostaje ograniczone, zredagowane fragmenty;
+- trasy LLM są fail-closed: brak jawnie ustawionej flagi znaczy „wyłączone",
+  więc klucz dostawcy leżący w powłoce nie otwiera sam wyjścia na zewnątrz;
+- usługa REST wymaga `X-Twin-Token`, jeśli jest ustawiony, a bind spoza loopbacku
+  wymaga `TWIN_ALLOW_REMOTE=1` i niepustego tokenu;
+- komendy w wytycznych przechodzą przez allowlistę na wektorze tokenów;
+  każda składnia powłoki (`&&`, `|`, `;`, `$(...)`, przekierowania) jest odrzucana;
+- artefakty niosą proweniencję: `generator.provider/model/responseId/auditRef`,
+  więc wynik fixture'u jest odróżnialny od wyniku modelu;
 - agent claims nie są receiptami;
 - `unknown` nie jest zamieniane na `false` ani `DONE`;
 - candidate rule nie staje się active automatycznie;

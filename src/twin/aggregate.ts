@@ -148,12 +148,13 @@ export function buildDeveloperTwin(input: {
   mode?: 'deterministic' | 'prefer-llm' | 'require-llm';
   llmUsed?: boolean;
   degraded?: boolean;
+  provenance?: { provider: string; model: string; responseId: string | null; auditRef: string | null };
 }): DeveloperTwinDsl {
   const candidateResult = candidateRules(input.llmCandidates ?? [], input.evidence);
   const rules = [...input.deterministicRules, ...candidateResult.rules].sort((a, b) => a.id.localeCompare(b.id));
   const id = stableId('developer-twin', rules.map((rule) => `${rule.id}:${rule.confidence}:${rule.evidenceRefs.join(',')}`).join('\n'));
   return {
-    $schema: '../schemas/developer-twin.schema.json',
+    $schema: '../../schemas/developer-twin.schema.json',
     schemaVersion: 'subactor.developer-twin/v1',
     generatedAt: nowIso(),
     generator: {
@@ -161,7 +162,11 @@ export function buildDeveloperTwin(input: {
       version: VERSION,
       mode: input.mode ?? 'deterministic',
       llmUsed: input.llmUsed ?? false,
-      degraded: input.degraded ?? false
+      degraded: input.degraded ?? false,
+      provider: input.provenance?.provider ?? null,
+      model: input.provenance?.model ?? null,
+      responseId: input.provenance?.responseId ?? null,
+      auditRef: input.provenance?.auditRef ?? null
     },
     twin: {
       id,

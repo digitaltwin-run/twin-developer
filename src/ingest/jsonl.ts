@@ -8,12 +8,16 @@ export async function ingestJsonl(path: string, startSequence = 0): Promise<Prom
   let sequence = startSequence;
   for (const [lineIndex, line] of lines.entries()) {
     const parsed = JSON.parse(line) as Partial<PromptEvent> & { text?: string };
+    // Rekord z własną sekwencją nie może zostawić licznika w tyle — inaczej
+    // kolejne rekordy bez sekwencji dostają numery już użyte.
+    const eventSequence = parsed.sequence ?? sequence;
+    sequence = Math.max(sequence, eventSequence) + 1;
     const event = createEvent({
       sourceFile: path,
       sourceFormat: 'jsonl',
       sourceClass: parsed.sourceClass ?? 'human_instruction',
       actor: parsed.actor ?? 'human',
-      sequence: parsed.sequence ?? sequence++,
+      sequence: eventSequence,
       text: parsed.text ?? parsed.redactedText ?? '',
       metadata: { line: lineIndex + 1, ...(parsed.metadata ?? {}) }
     });

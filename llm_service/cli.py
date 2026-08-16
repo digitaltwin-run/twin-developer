@@ -2,10 +2,31 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import sys
+from dataclasses import asdict
 from pathlib import Path
 
-from .core import complete_chat, complete_guidelines, complete_intents, health
+from .core import complete_chat, complete_guidelines, complete_intents, flag_enabled, health
+
+LOOPBACK_HOSTS = {"127.0.0.1", "::1", "localhost"}
+
+
+def _guard_bind(host: str) -> None:
+    """Usługa spoza loopbacku wymaga jawnej zgody i tokenu.
+
+    Bez tego ``serve --host 0.0.0.0`` publikuje otwarte proxy do płatnego modelu.
+    """
+    if host in LOOPBACK_HOSTS:
+        return
+    if not flag_enabled("TWIN_ALLOW_REMOTE", default=False):
+        raise SystemExit(
+            f"Refusing to bind {host}: set TWIN_ALLOW_REMOTE=1 to serve outside loopback."
+        )
+    if not os.environ.get("TWIN_API_TOKEN", "").strip():
+        raise SystemExit(
+            f"Refusing to bind {host}: TWIN_API_TOKEN must be set for non-loopback binds."
+        )
 
 
 def _read(path: str | None) -> dict:
@@ -47,11 +68,14 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "health":
         _write(health(), "-")
     elif args.command == "intent":
-        _write(complete_intents(_read(args.input)), args.output)
+        result, provenance = complete_intents(_read(args.input))
+        _write({"result": result, "provenance": asdict(provenance)}, args.output)
     elif args.command == "guidelines":
-        _write(complete_guidelines(_read(args.input)), args.output)
+        result, provenance = complete_guidelines(_read(args.input))
+        _write({"result": result, "provenance": asdict(provenance)}, args.output)
     elif args.command == "chat":
-        _write(complete_chat([{"role": "user", "content": args.message}], model=args.model), "-")
+        result, provenance = complete_chat([{"role": "user", "content": args.message}], model=args.model)
+        _write({"result": result, "provenance": asdict(provenance)}, "-")
     elif args.command == "shell":
         while True:
             try:
@@ -60,11 +84,13 @@ def main(argv: list[str] | None = None) -> int:
                 break
             if not message or message in {"exit", "quit"}:
                 break
-            result = complete_chat([{"role": "user", "content": message}], model=args.model)
+            result, provenance = complete_chat([{"role": "user", "content": message}], model=args.model)
             print(result["choices"][0]["message"]["content"])
+            print(f"[{provenance.provider}/{provenance.model} {provenance.audit_ref}]", file=sys.stderr)
     elif args.command == "serve":
         import uvicorn
 
+        _guard_bind(args.host)
         uvicorn.run("llm_service.app:app", host=args.host, port=args.port, reload=False)
     return 0
 

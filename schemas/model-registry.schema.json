@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/subactor.developer-twin.model-registry/v1",
+  "title": "Model registry — HOME aliasów i domyślnych modeli",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "home", "stages"],
+  "$defs": {
+    "stage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["alias", "openrouterModelEnv", "defaultOpenRouterModel", "temperature", "tags"],
+      "properties": {
+        "alias": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+        "openrouterModelEnv": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]*$" },
+        "defaultOpenRouterModel": { "type": "string", "minLength": 1 },
+        "temperature": { "type": ["number", "null"], "minimum": 0, "maximum": 2 },
+        "tags": { "type": "array", "items": { "type": "string" } }
+      }
+    }
+  },
+  "properties": {
+    "$schema": { "type": "string" },
+    "schemaVersion": { "type": "string", "minLength": 1 },
+    "home": { "type": "string", "minLength": 1 },
+    "stages": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["intent-extraction", "guideline-generation", "code-editing", "validation"],
+      "properties": {
+        "intent-extraction": { "$ref": "#/$defs/stage" },
+        "guideline-generation": { "$ref": "#/$defs/stage" },
+        "code-editing": { "$ref": "#/$defs/stage" },
+        "validation": { "$ref": "#/$defs/stage" }
+      }
+    }
+  }
+}

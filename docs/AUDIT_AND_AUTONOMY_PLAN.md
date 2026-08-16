@@ -10,6 +10,22 @@ Dokument ma dwie części:
 2. **Plan wdrożenia** — jak wpiąć ten projekt w istniejący łańcuch autonomii Subactor,
    tak aby przejmował pracę wykonywaną dziś ręcznie w rolach founder / developer / admin.
 
+## Stan realizacji
+
+Ustalenia audytu są zapisem stanu na rewizji `6ba47a8` i nie są modyfikowane
+wstecz. Postęp śledzi ticket, nie ten dokument.
+
+| Faza | Ticket | Stan |
+|---|---|---|
+| Faza 0 — naprawy blokujące | [`project/ticket-002`](../project/ticket-002/README.md) | **zamknięta** — A-1, A-2, A-3, B-1, B-3, B-4, C-1, C-2, C-4, C-5, D-1, D-4, D-5 |
+| Faza 1 — konsumpcja kontraktów | — | otwarta |
+| Faza 2 — wiązanie w profilu autonomii | — | otwarta |
+| Faza 3 — pętla z niezależnym walidatorem | — | otwarta |
+| Faza 4 — standing grant | — | otwarta |
+
+Pozostałe pozycje P1 (A-4, A-5, A-6, A-7, B-2, B-5) świadomie zostały poza
+Fazą 0; uzasadnienie w `project/ticket-002/README.md`.
+
 ---
 
 ## 0. Metoda i granice audytu

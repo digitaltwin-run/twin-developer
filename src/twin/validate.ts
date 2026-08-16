@@ -1,4 +1,5 @@
 import type { DeveloperTwinDsl, Diagnostic, Guidelines, IntentCandidateResponse } from '../types.js';
+import { checkCommand } from '../util/command.js';
 
 const secretPattern = /(sk-[A-Za-z0-9_-]{12,}|subactor_usr_(?:live|test)_[A-Za-z0-9_-]+|Bearer\s+[A-Za-z0-9._~+/=-]{12,})/i;
 
@@ -18,6 +19,21 @@ export function validateTwin(twin: DeveloperTwinDsl, strict = true): Diagnostic[
   }
   if (!twin.generator || twin.generator.name !== 'developer-twin-runtime') {
     issues.push({ code: 'DT_GENERATOR_MISSING', severity: 'blocking', message: 'Brak poprawnej metadanej generatora.' });
+  }
+  if (twin.generator?.llmUsed === true) {
+    if (!twin.generator.provider || !twin.generator.model) {
+      issues.push({
+        code: 'DT_PROVENANCE_MISSING',
+        severity: 'blocking',
+        message: 'generator.llmUsed=true bez generator.provider/model: nie da się odróżnić wyniku modelu od fixture.'
+      });
+    } else if (twin.generator.provider === 'fake') {
+      issues.push({
+        code: 'DT_FIXTURE_PROVENANCE',
+        severity: 'review_required',
+        message: `Kandydaci pochodzą z fixture (${twin.generator.provider}/${twin.generator.model}), nie z modelu. Artefakt nie jest dowodem zachowania LLM.`
+      });
+    }
   }
   const evidenceIds = twin.evidenceCatalog.map((item) => item.id);
   const evidenceSet = new Set(evidenceIds);
@@ -91,9 +107,8 @@ export function validateGuidelines(value: unknown, twin: DeveloperTwinDsl, allow
     for (const ref of step.ruleRefs) if (typeof ref !== 'string' || !knownRules.has(ref)) throw new Error(`Unknown step ruleRef: ${String(ref)}`);
     if (Array.isArray(step.commands)) {
       for (const command of step.commands) {
-        if (typeof command !== 'string' || !allowedCommands.some((allowed) => command === allowed || command.startsWith(`${allowed} `))) {
-          throw new Error(`Command outside allowlist: ${String(command)}`);
-        }
+        const verdict = checkCommand(command, allowedCommands);
+        if (!verdict.ok) throw new Error(`Command rejected [${verdict.code}]: ${verdict.reason}`);
       }
     }
   }

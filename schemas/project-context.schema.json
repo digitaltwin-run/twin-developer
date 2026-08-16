@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/subactor.project-context/v1",
+  "title": "Project context consumed by the twin runtime",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "projectId"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schemaVersion": { "const": "subactor.project-context/v1" },
+    "projectId": { "type": "string", "minLength": 1 },
+    "home": { "type": "string" },
+    "shape": { "type": "string" },
+    "adopts": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "activeTicket": { "type": "string", "pattern": "^project/ticket-[0-9]{3}$" },
+    "truthOwners": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["concern", "home", "role"],
+        "properties": {
+          "concern": { "type": "string", "minLength": 1 },
+          "home": { "type": "string", "minLength": 1 },
+          "role": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "validationCommands": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "description": "Wejście allowlisty komend; każdy wpis musi być pojedynczym wywołaniem bez składni powłoki."
+    },
+    "productionConstraints": { "type": "array", "items": { "type": "string" } }
+  }
+}

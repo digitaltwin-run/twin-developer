@@ -42,4 +42,4 @@ Wykonaj zadanie w 7 etapach, stosując reguły developer twin jako ograniczenia 
 ## Niewiadome
 
 - Historia promptów nie dowodzi bieżącego stanu kodu, środowiska ani wdrożenia; trzeba je obserwować w repozytorium docelowym.
-- Aktywny ticket deklarowany przez kontekst: project/ticket-001.
+- Aktywny ticket deklarowany przez kontekst: project/ticket-002.

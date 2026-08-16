@@ -146,6 +146,11 @@ export interface DeveloperTwinDsl {
     mode: 'deterministic' | 'prefer-llm' | 'require-llm';
     llmUsed: boolean;
     degraded: boolean;
+    /** Kto wyprodukował kandydatów. `null` tylko przy `llmUsed: false`. */
+    provider: string | null;
+    model: string | null;
+    responseId: string | null;
+    auditRef: string | null;
   };
   twin: {
     id: string;

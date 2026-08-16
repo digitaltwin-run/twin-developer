@@ -4,7 +4,15 @@ NODE ?= node
 NPM ?= npm
 TWIN_LLM_PORT ?= 8099
 
-.PHONY: help setup build demo validate test test-ts test-py guidelines reality aider-context llm-health llm-api llm-fake-demo litellm-proxy aider clean
+# Konfiguracja prywatna ładowana jawnie. Bez tego posture zależała od tego,
+# czy operator pamiętał o `set -a; source .env` — a brak flagi znaczył
+# "trasa włączona", więc zapomnienie otwierało wyjście do zewnętrznego dostawcy.
+ifneq (,$(wildcard .env))
+include .env
+export
+endif
+
+.PHONY: help setup build demo validate verify-artifacts test test-ts test-py guidelines reality aider-context llm-health llm-api llm-fake-demo litellm-proxy aider clean
 
 help:
 	@printf '%s\n' \
@@ -12,7 +20,8 @@ help:
 	  'make build          - compile TypeScript' \
 	  'make demo           - deterministic end-to-end run on data/raw' \
 	  'make llm-fake-demo  - end-to-end run through Python REST with fake structured LLM' \
-	  'make validate       - runtime validation + JSON Schema validation' \
+	  'make validate       - runtime validation + JSON Schema + reproducibility gate' \
+	  'make verify-artifacts - regenerate and compare committed artifacts' \
 	  'make test           - TypeScript and Python tests' \
 	  'make llm-api        - start Python REST service on 127.0.0.1:8099' \
 	  'make litellm-proxy  - start LiteLLM proxy on 127.0.0.1:4000' \
@@ -35,6 +44,11 @@ demo: build
 validate: build
 	$(NODE) dist/src/cli.js validate
 	$(PYTHON) scripts/validate-schema.py
+	$(PYTHON) scripts/check-flag-parity.py
+	$(MAKE) verify-artifacts
+
+verify-artifacts: build
+	scripts/verify-artifacts.sh
 
 test-ts: build
 	$(NODE) --test dist/tests/*.test.js
