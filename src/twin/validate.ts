@@ -12,37 +12,46 @@ export class TwinValidationError extends Error {
   }
 }
 
-export function validateTwin(twin: DeveloperTwinDsl, strict = true): Diagnostic[] {
-  const issues: Diagnostic[] = [];
+function validateGenerator(twin: DeveloperTwinDsl, issues: Diagnostic[]): void {
   if (twin.schemaVersion !== 'subactor.developer-twin/v1') {
     issues.push({ code: 'DT_SCHEMA_VERSION', severity: 'blocking', message: 'Nieobsługiwana schemaVersion.' });
   }
   if (!twin.generator || twin.generator.name !== 'developer-twin-runtime') {
     issues.push({ code: 'DT_GENERATOR_MISSING', severity: 'blocking', message: 'Brak poprawnej metadanej generatora.' });
   }
-  if (twin.generator?.llmUsed === true) {
-    if (!twin.generator.provider || !twin.generator.model) {
-      issues.push({
-        code: 'DT_PROVENANCE_MISSING',
-        severity: 'blocking',
-        message: 'generator.llmUsed=true bez generator.provider/model: nie da się odróżnić wyniku modelu od fixture.'
-      });
-    } else if (twin.generator.provider === 'fake') {
-      issues.push({
-        code: 'DT_FIXTURE_PROVENANCE',
-        severity: 'review_required',
-        message: `Kandydaci pochodzą z fixture (${twin.generator.provider}/${twin.generator.model}), nie z modelu. Artefakt nie jest dowodem zachowania LLM.`
-      });
-    }
+  if (twin.generator?.llmUsed !== true) return;
+  if (!twin.generator.provider || !twin.generator.model) {
+    issues.push({
+      code: 'DT_PROVENANCE_MISSING',
+      severity: 'blocking',
+      message: 'generator.llmUsed=true bez generator.provider/model: nie da się odróżnić wyniku modelu od fixture.'
+    });
+  } else if (twin.generator.provider === 'fake') {
+    issues.push({
+      code: 'DT_FIXTURE_PROVENANCE',
+      severity: 'review_required',
+      message: `Kandydaci pochodzą z fixture (${twin.generator.provider}/${twin.generator.model}), nie z modelu. Artefakt nie jest dowodem zachowania LLM.`
+    });
   }
+}
+
+function evidenceIndex(twin: DeveloperTwinDsl, issues: Diagnostic[]): Set<string> {
   const evidenceIds = twin.evidenceCatalog.map((item) => item.id);
   const evidenceSet = new Set(evidenceIds);
   if (evidenceSet.size !== evidenceIds.length) {
     issues.push({ code: 'DT_DUPLICATE_EVIDENCE', severity: 'blocking', message: 'Evidence IDs nie są unikalne.' });
   }
+  return evidenceSet;
+}
+
+function validateRules(twin: DeveloperTwinDsl, evidenceSet: Set<string>, issues: Diagnostic[]): void {
   const ruleIds = twin.rules.map((rule) => rule.id);
   if (new Set(ruleIds).size !== ruleIds.length) {
     issues.push({ code: 'DT_DUPLICATE_RULE', severity: 'blocking', message: 'Rule IDs nie są unikalne.' });
+  }
+  const evidenceActors = new Map<string, string>();
+  for (const item of twin.evidenceCatalog) {
+    if (!evidenceActors.has(item.id)) evidenceActors.set(item.id, item.actor);
   }
   for (const rule of twin.rules) {
     if (!/^DT-[A-Z]+-[0-9]{3}$/.test(rule.id)) {
@@ -58,15 +67,28 @@ export function validateTwin(twin: DeveloperTwinDsl, strict = true): Diagnostic[
     if (rule.supportCount !== rule.evidenceRefs.length) {
       issues.push({ code: 'DT_SUPPORT_COUNT_DRIFT', severity: 'warning', message: `${rule.id}: supportCount różni się od liczby unikalnych evidenceRefs.` });
     }
-    if (rule.status === 'active') {
-      const agentOnly = rule.evidenceRefs.length > 0 && rule.evidenceRefs.every((ref) => twin.evidenceCatalog.find((item) => item.id === ref)?.actor === 'agent');
-      if (agentOnly) issues.push({ code: 'DT_AGENT_ONLY_ACTIVE_RULE', severity: 'blocking', message: `${rule.id} opiera się wyłącznie na claimach agenta.` });
+    const agentOnly = rule.status === 'active'
+      && rule.evidenceRefs.length > 0
+      && rule.evidenceRefs.every((ref) => evidenceActors.get(ref) === 'agent');
+    if (agentOnly) {
+      issues.push({ code: 'DT_AGENT_ONLY_ACTIVE_RULE', severity: 'blocking', message: `${rule.id} opiera się wyłącznie na claimach agenta.` });
     }
   }
+}
+
+function validateWorkflow(twin: DeveloperTwinDsl, issues: Diagnostic[]): void {
   const orders = twin.workflow.map((step) => step.order);
   if (new Set(orders).size !== orders.length) {
     issues.push({ code: 'DT_WORKFLOW_ORDER', severity: 'blocking', message: 'Kolejność workflow nie jest unikalna.' });
   }
+}
+
+export function validateTwin(twin: DeveloperTwinDsl, strict = true): Diagnostic[] {
+  const issues: Diagnostic[] = [];
+  validateGenerator(twin, issues);
+  const evidenceSet = evidenceIndex(twin, issues);
+  validateRules(twin, evidenceSet, issues);
+  validateWorkflow(twin, issues);
   if (secretPattern.test(JSON.stringify(twin))) {
     issues.push({ code: 'DT_SECRET_LEAK', severity: 'blocking', message: 'Artefakt DSL zawiera materiał przypominający sekret.' });
   }
