@@ -19,9 +19,8 @@
     {
       "id": "commit-without-gates",
       "aliases": ["commit bez zielonych bramek make validate i make test"],
-      "kind": "hook",
-      "hooks": ["pre-commit"],
-      "note": "Hook pre-commit odmawia, gdy staged pliki łamią paths. Pełne make validate zostaje w Makefile — hook nie udaje, że je uruchomił."
+      "kind": "recorded",
+      "note": "Hook pre-commit uruchamia tę bramkę na staged plikach. Pełne make validate zostaje w Makefile — nie udajemy, że hook je odpalił, i nie blokujemy commita samym napisem."
     },
     {
       "id": "commit",

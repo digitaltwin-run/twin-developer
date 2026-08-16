@@ -37,9 +37,8 @@ to wszystko powyżej jest zbudowane na fałszywej gwarancji.
 
 Świadomie poza zakresem tego ticketu, z uzasadnieniem w dokumencie audytu:
 
-- **A-4, A-5, A-6** — redakcja sekretów. Wymaga przeniesienia kontroli do warstwy
-  Pythona i przepisania wzorców; osobny ticket, bo zmienia kontrakt `PromptEvent`.
-- **A-7** — egzekucja `forbiddenEffects` jako hook. Zależy od decyzji, czy hook
-  ma być lokalny, czy wpięty w `subactor/github-com`.
+- **A-4, A-5, A-6** — zamknięte na `main` (Group A, `4c270e8`).
+- **A-7** — przeniesione do [`ticket-004`](../ticket-004/README.md): bramka
+  lokalna, nie `subactor/github-com`.
 - **B-2** — kalibracja `confidence`. Wymaga zbioru etykietowanego (P2 z `NEXT_STEPS.md`).
 - **B-5, B-6, C-3, C-6, D-2, D-3, D-6** — dług techniczny bez wpływu na granicę efektów.

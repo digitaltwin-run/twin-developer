@@ -94,6 +94,16 @@ class ForbiddenEffectsGateTest(unittest.TestCase):
         hooked = evaluate(root=ROOT, catalog=self.catalog, tickets=tickets, paths=[], hook="pre-commit")
         self.assertTrue(any("commit" in item and "pre-commit" in item for item in hooked), hooked)
 
+    def test_commit_without_gates_does_not_block_the_hook(self) -> None:
+        problems = evaluate(
+            root=ROOT,
+            catalog=self.catalog,
+            tickets=[_entry("ticket-004", "in_progress", ["commit bez zielonych bramek make validate i make test"])],
+            paths=["src/util/redaction.ts"],
+            hook="pre-commit",
+        )
+        self.assertEqual(problems, [])
+
     def test_done_ticket_does_not_block_commit_hook(self) -> None:
         problems = evaluate(
             root=ROOT,

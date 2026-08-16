@@ -12,7 +12,7 @@ include .env
 export
 endif
 
-.PHONY: help setup build demo validate verify-artifacts test test-ts test-py guidelines reality aider-context llm-health llm-api llm-fake-demo litellm-proxy aider clean
+.PHONY: help setup build demo validate verify-artifacts test test-ts test-py hooks guidelines reality aider-context llm-health llm-api llm-fake-demo litellm-proxy aider clean
 
 help:
 	@printf '%s\n' \
@@ -23,6 +23,7 @@ help:
 	  'make validate       - runtime validation + JSON Schema + reproducibility gate' \
 	  'make verify-artifacts - regenerate and compare committed artifacts' \
 	  'make test           - TypeScript and Python tests' \
+	  'make hooks          - install local A-7 git hooks into .git/hooks' \
 	  'make llm-api        - start Python REST service on 127.0.0.1:8099' \
 	  'make litellm-proxy  - start LiteLLM proxy on 127.0.0.1:4000' \
 	  'make aider-context  - regenerate validated Aider message' \
@@ -49,6 +50,10 @@ validate: build
 	$(PYTHON) scripts/check-redaction-parity.py
 	$(PYTHON) scripts/check-forbidden-effects.py
 	$(MAKE) verify-artifacts
+
+hooks:
+	install -m 0755 githooks/pre-commit .git/hooks/pre-commit
+	install -m 0755 githooks/pre-push .git/hooks/pre-push
 
 verify-artifacts: build
 	scripts/verify-artifacts.sh

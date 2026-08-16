@@ -20,6 +20,7 @@ PAIRS: list[tuple[str, str]] = [
     ("source-policy.schema.json", "config/source-policy.json"),
     ("llm-routing.schema.json", "config/llm-routing.json"),
     ("model-registry.schema.json", "config/model-registry.json"),
+    ("forbidden-effects.schema.json", "config/forbidden-effects.json"),
     ("project-context.schema.json", "data/context/project.json"),
     ("developer-twin.schema.json", "data/output/developer-twin.dsl.json"),
     ("guidelines.schema.json", "data/output/guidelines.json"),
