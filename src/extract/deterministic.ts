@@ -34,14 +34,14 @@ function effectiveClass(event: PromptEvent, repeated: boolean): string {
   return event.sourceClass;
 }
 
-export function extractDeterministicRules(
-  events: PromptEvent[],
-  policy: SourcePolicy,
-  catalog: RuleCatalogEntry[]
-): DeterministicExtraction {
+interface MatchIndex {
+  matches: Map<string, PromptEvent[]>;
+  matchedEntriesByEvent: Map<string, RuleCatalogEntry[]>;
+}
+
+function collectMatches(events: PromptEvent[], catalog: RuleCatalogEntry[]): MatchIndex {
   const matches = new Map<string, PromptEvent[]>();
   const matchedEntriesByEvent = new Map<string, RuleCatalogEntry[]>();
-
   for (const entry of catalog) {
     const rows = events.filter((event) => eventMatches(entry, event));
     matches.set(entry.id, rows);
@@ -51,7 +51,14 @@ export function extractDeterministicRules(
       matchedEntriesByEvent.set(event.id, current);
     }
   }
+  return { matches, matchedEntriesByEvent };
+}
 
+function buildEvidence(
+  events: PromptEvent[],
+  policy: SourcePolicy,
+  { matches, matchedEntriesByEvent }: MatchIndex
+): Map<string, EvidenceRecord> {
   const evidenceByEvent = new Map<string, EvidenceRecord>();
   for (const event of events) {
     const entries = matchedEntriesByEvent.get(event.id) ?? [];
@@ -73,11 +80,17 @@ export function extractDeterministicRules(
       topicHints: uniqueStrings(entries.map((entry) => entry.id))
     });
   }
+  return evidenceByEvent;
+}
 
+function materializeRules(
+  catalog: RuleCatalogEntry[],
+  matches: Map<string, PromptEvent[]>,
+  evidenceByEvent: Map<string, EvidenceRecord>
+): Pick<DeterministicExtraction, 'rules' | 'diagnostics' | 'matchesByRule'> {
   const rules: TwinRule[] = [];
   const diagnostics: Diagnostic[] = [];
   const matchesByRule: Record<string, string[]> = {};
-
   for (const entry of catalog) {
     const rows = (matches.get(entry.id) ?? []).filter(supportingEvent);
     const refs = uniqueStrings(rows.map((event) => evidenceByEvent.get(event.id)?.id ?? ''));
@@ -116,7 +129,14 @@ export function extractDeterministicRules(
       conflictPolicy: entry.forceContextual ? 'CR-CONTEXT-NOT-GLOBAL' : 'CR-INTENT-NEWER-CORRECTION'
     });
   }
+  return { rules, diagnostics, matchesByRule };
+}
 
+function appendAuditDiagnostics(
+  rules: TwinRule[],
+  evidenceByEvent: Map<string, EvidenceRecord>,
+  diagnostics: Diagnostic[]
+): void {
   const agentClaims = [...evidenceByEvent.values()].filter((item) => item.actor === 'agent');
   if (agentClaims.length > 0) {
     diagnostics.push({
@@ -136,7 +156,17 @@ export function extractDeterministicRules(
       evidenceRefs: dockerRule.evidenceRefs
     });
   }
+}
 
+export function extractDeterministicRules(
+  events: PromptEvent[],
+  policy: SourcePolicy,
+  catalog: RuleCatalogEntry[]
+): DeterministicExtraction {
+  const matchIndex = collectMatches(events, catalog);
+  const evidenceByEvent = buildEvidence(events, policy, matchIndex);
+  const { rules, diagnostics, matchesByRule } = materializeRules(catalog, matchIndex.matches, evidenceByEvent);
+  appendAuditDiagnostics(rules, evidenceByEvent, diagnostics);
   return {
     rules: rules.sort((a, b) => a.id.localeCompare(b.id)),
     evidence: [...evidenceByEvent.values()].sort((a, b) => a.sequence - b.sequence),
