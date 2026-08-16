@@ -1,0 +1,34 @@
+{
+  "schemaVersion": "subactor.developer-twin.model-registry/v1",
+  "home": "config/model-registry.json",
+  "stages": {
+    "intent-extraction": {
+      "alias": "twin-intent",
+      "openrouterModelEnv": "OPENROUTER_INTENT_MODEL",
+      "defaultOpenRouterModel": "openrouter/auto",
+      "temperature": 0,
+      "tags": ["intent", "structured-output", "evidence-grounded"]
+    },
+    "guideline-generation": {
+      "alias": "twin-guidelines",
+      "openrouterModelEnv": "OPENROUTER_GUIDELINES_MODEL",
+      "defaultOpenRouterModel": "openrouter/auto",
+      "temperature": 0,
+      "tags": ["planning", "policy-conditioned", "structured-output"]
+    },
+    "code-editing": {
+      "alias": "twin-code",
+      "openrouterModelEnv": "OPENROUTER_CODE_MODEL",
+      "defaultOpenRouterModel": "openrouter/auto",
+      "temperature": null,
+      "tags": ["code", "aider", "ticket-scoped"]
+    },
+    "validation": {
+      "alias": "twin-validation",
+      "openrouterModelEnv": "OPENROUTER_VALIDATION_MODEL",
+      "defaultOpenRouterModel": "openrouter/auto",
+      "temperature": 0,
+      "tags": ["validation", "independent-check", "structured-output"]
+    }
+  }
+}

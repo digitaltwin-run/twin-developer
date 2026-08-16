@@ -1,0 +1,6 @@
+{
+  "requestedMode": "require-llm",
+  "effectiveMode": "llm",
+  "degraded": false,
+  "reason": null
+}

@@ -1,0 +1,6 @@
+{
+  "requestedMode": "deterministic",
+  "effectiveMode": "deterministic",
+  "degraded": false,
+  "reason": null
+}

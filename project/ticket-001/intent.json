@@ -1,0 +1,54 @@
+{
+  "schema": "new-project.intent/v3",
+  "ticketId": "ticket-001",
+  "title": "Developer Digital Twin from prompt histories",
+  "status": "done",
+  "workstream": "runtime_service",
+  "purpose": "Build an evidence-grounded execution-policy twin and LLM/Aider control path from supplied developer prompt histories.",
+  "allowedPaths": [
+    "src/**",
+    "llm_service/**",
+    "schemas/**",
+    "config/**",
+    "scripts/**",
+    "tests/**",
+    "data/**",
+    "docs/**",
+    "project/ticket-001/**",
+    "README.md",
+    "Makefile",
+    "package.json",
+    "tsconfig.json",
+    "requirements.txt",
+    ".env.example",
+    ".gitignore"
+  ],
+  "forbiddenEffects": [
+    "commit",
+    "push",
+    "merge",
+    "deployment",
+    "production secret mutation",
+    "publishing raw prompt history"
+  ],
+  "dependencies": [
+    "wellmanifest/new-project",
+    "wellmanifest/ticket-lifecycle",
+    "wellmanifest/modularity",
+    "wellmanifest/ssot",
+    "wellmanifest/project-ssot",
+    "wellmanifest/policy-dsl",
+    "todo2code concepts: Intent Evidence DSL and Intent vs Reality"
+  ],
+  "validation": [
+    "make test",
+    "make llm-fake-demo",
+    "make validate"
+  ],
+  "evidencePolicy": {
+    "humanIntentHome": "config/source-policy.json#truthDomains/humanIntent",
+    "projectRealityHome": "config/source-policy.json#truthDomains/projectReality",
+    "llmAuthority": "propose-only",
+    "unknownIsFalse": false
+  }
+}

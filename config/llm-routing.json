@@ -1,0 +1,71 @@
+{
+  "schemaVersion": "subactor.llm-routing/v1",
+  "policy": "privacy-first-then-managed-fallback",
+  "routes": [
+    {
+      "id": "local-private",
+      "priority": 10,
+      "enabledEnv": "LOCAL_LLM_ENABLED",
+      "transport": "openai-compatible",
+      "modelEnv": "LOCAL_LLM_MODEL",
+      "apiBaseEnv": "LOCAL_LLM_API_BASE",
+      "apiKeyEnv": "LOCAL_LLM_API_KEY",
+      "tags": [
+        "local",
+        "privacy",
+        "zero-data-egress"
+      ],
+      "purposes": [
+        "intent-extraction",
+        "guideline-generation",
+        "validation",
+        "code-editing"
+      ]
+    },
+    {
+      "id": "litellm-proxy",
+      "priority": 20,
+      "enabledEnv": "LITELLM_PROXY_ENABLED",
+      "transport": "litellm-proxy",
+      "apiBaseEnv": "LITELLM_PROXY_URL",
+      "apiKeyEnv": "LITELLM_MASTER_KEY",
+      "tags": [
+        "central-policy",
+        "audit",
+        "fallback",
+        "cost-control"
+      ],
+      "purposes": [
+        "intent-extraction",
+        "guideline-generation",
+        "code-editing",
+        "validation"
+      ]
+    },
+    {
+      "id": "openrouter-direct",
+      "priority": 30,
+      "enabledEnv": "OPENROUTER_DIRECT_ENABLED",
+      "transport": "openrouter",
+      "apiKeyEnv": "OPENROUTER_API_KEY",
+      "tags": [
+        "managed",
+        "structured-output",
+        "wide-model-catalog"
+      ],
+      "purposes": [
+        "intent-extraction",
+        "guideline-generation",
+        "code-editing",
+        "validation"
+      ],
+      "modelEnvs": {
+        "intent-extraction": "OPENROUTER_INTENT_MODEL",
+        "guideline-generation": "OPENROUTER_GUIDELINES_MODEL",
+        "code-editing": "OPENROUTER_CODE_MODEL",
+        "validation": "OPENROUTER_VALIDATION_MODEL"
+      }
+    }
+  ],
+  "modelRegistry": "config/model-registry.json"
+}

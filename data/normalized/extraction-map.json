@@ -1,0 +1,91 @@
+{
+  "DT-GOV-001": [
+    "event:141d56d6db5a1525"
+  ],
+  "DT-TEST-001": [
+    "event:db1211861c8e16ad",
+    "event:b557ae28c109703b",
+    "event:b65bb3d9bd0178e3",
+    "event:141d56d6db5a1525",
+    "event:04991960592d6c04"
+  ],
+  "DT-SSOT-001": [
+    "event:b97a55e3544c448f",
+    "event:aa20b320fd966b98",
+    "event:ef19b7ba78d82436",
+    "event:b524eabbc1b86c42",
+    "event:002311da00d529a1",
+    "event:d7e383d10254d1cc",
+    "event:76094ef9d179a0d1",
+    "event:6a1ccb5bf9870174",
+    "event:03b8ed3fd8ebe455"
+  ],
+  "DT-REALITY-001": [
+    "event:2bdf5d720a921b6a",
+    "event:b557ae28c109703b",
+    "event:1c1f5ad5045139e5",
+    "event:cea578744b4e470c",
+    "event:fba9cd7138e34c91",
+    "event:2cdd5c7a63ee58bc",
+    "event:03540eef24cf2a7b",
+    "event:941ceb2e0ab355f9"
+  ],
+  "DT-REUSE-001": [
+    "event:2bdf5d720a921b6a",
+    "event:94db84dd328cb049",
+    "event:fba9cd7138e34c91",
+    "event:ef19b7ba78d82436"
+  ],
+  "DT-PROD-001": [
+    "event:45bdfedf81b4211a",
+    "event:b65bb3d9bd0178e3",
+    "event:e19ab76162e60bf1",
+    "event:f226db069f22809a",
+    "event:9516ab08feab3440",
+    "event:2cdd5c7a63ee58bc",
+    "event:21c6027410e3c5ba",
+    "event:f3e2b9e34389b4e4"
+  ],
+  "DT-UX-001": [
+    "event:1c1f5ad5045139e5",
+    "event:2bee552f55b65eb7",
+    "event:f875ca3084f70a31",
+    "event:314f4aeed3ab28e9",
+    "event:716bd602b9c2d8bb"
+  ],
+  "DT-CONTINUE-001": [
+    "event:141d56d6db5a1525",
+    "event:c2d9d12c8532eb63",
+    "event:314f4aeed3ab28e9",
+    "event:08d7a1701943d3ab",
+    "event:61d5fbd8990ce7e3",
+    "event:9516ab08feab3440",
+    "event:b4accb30ade9f296",
+    "event:f2c033ed921df87e",
+    "event:6982222c941ef935",
+    "event:5faa73d042407cb8",
+    "event:8689a999bd66a0c4"
+  ],
+  "DT-LLM-001": [
+    "event:2bdf5d720a921b6a",
+    "event:b97a55e3544c448f",
+    "event:aa20b320fd966b98",
+    "event:f875ca3084f70a31",
+    "event:141d56d6db5a1525",
+    "event:fba9cd7138e34c91",
+    "event:d9a07c7e9a66d02d",
+    "event:b524eabbc1b86c42",
+    "event:57e397872bb769eb",
+    "event:d7e383d10254d1cc",
+    "event:76094ef9d179a0d1",
+    "event:6a1ccb5bf9870174",
+    "event:03b8ed3fd8ebe455",
+    "event:21c6027410e3c5ba",
+    "event:2802dff9092e1825",
+    "event:941ceb2e0ab355f9"
+  ],
+  "DT-DOCKER-001": [
+    "event:c69280f6478b8eff",
+    "event:9516ab08feab3440"
+  ]
+}

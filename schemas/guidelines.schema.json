@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/subactor.developer-twin.guidelines/v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "summary", "steps", "gates", "unknowns", "ruleRefs"],
+  "properties": {
+    "schemaVersion": { "const": "subactor.developer-twin.guidelines/v1" },
+    "summary": { "type": "string" },
+    "steps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["order", "action", "reason", "ruleRefs"],
+        "properties": {
+          "order": { "type": "integer", "minimum": 1 },
+          "action": { "type": "string" },
+          "reason": { "type": "string" },
+          "ruleRefs": { "type": "array", "items": { "type": "string" } },
+          "commands": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+    "gates": { "type": "array", "items": { "type": "string" } },
+    "unknowns": { "type": "array", "items": { "type": "string" } },
+    "ruleRefs": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }
+  }
+}

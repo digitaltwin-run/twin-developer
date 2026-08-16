@@ -1,0 +1,346 @@
+{
+  "rules": [
+    {
+      "id": "DT-GOV-001",
+      "title": "Ticket i intent przed wieloetapową zmianą",
+      "kind": "obligation",
+      "scope": "subactor",
+      "description": "Wieloetapowa zmiana ma być prowadzona w aktywnym project/ticket-* zgodnie z new-project i ticket-lifecycle.",
+      "matchAny": [
+        "project/ticket",
+        "new-project",
+        "ticket-lifecycle",
+        "aktualnie jest robione",
+        "ticket governance",
+        "aktywnym ticket",
+        "aktywny ticket",
+        "ticketcie"
+      ],
+      "triggers": [
+        "multi_step_change",
+        "cross_file_change",
+        "standardization_change"
+      ],
+      "must": [
+        "Utworzyć lub wskazać aktywny project/ticket-* przed implementacją.",
+        "Zapisać zakres, kryteria akceptacji, dozwolone ścieżki i plan walidacji.",
+        "Aktualizować changelog i indeks ticketów wraz z pracą."
+      ],
+      "should": [
+        "Związać wynik z dokładną rewizją i receiptami testów."
+      ],
+      "mustNot": [
+        "Prowadzić wieloetapowej implementacji wyłącznie w czacie bez śladu ticketu."
+      ],
+      "minSupport": 1,
+      "baseConfidence": 0.82
+    },
+    {
+      "id": "DT-TEST-001",
+      "title": "Restart, TestQL i pełna walidacja po zmianie",
+      "kind": "obligation",
+      "scope": "subactor",
+      "description": "Po zmianach runtime/UI/usług użytkownik oczekuje restartu i odtwarzalnej weryfikacji, szczególnie przez TestQL.",
+      "matchAny": [
+        "zrestartuj",
+        "restart",
+        "testql",
+        "przetestuj",
+        "wykonaj testy",
+        "npm test",
+        "healthz"
+      ],
+      "triggers": [
+        "code_change",
+        "service_change",
+        "ui_change",
+        "deployment_change"
+      ],
+      "must": [
+        "Uruchomić deklarowany restart lub odtworzyć równoważny lifecycle usługi.",
+        "Uruchomić TestQL/kontraktowe testy projektu i pełną suitę właściwą dla zmienionego zakresu.",
+        "Zapisać komendy, kody wyjścia, rewizję i najważniejsze obserwacje jako receipt."
+      ],
+      "should": [
+        "Sprawdzić healthz i krytyczne endpointy na żywo."
+      ],
+      "mustNot": [
+        "Raportować PASS na podstawie samego tekstu agenta."
+      ],
+      "minSupport": 2,
+      "baseConfidence": 0.86
+    },
+    {
+      "id": "DT-SSOT-001",
+      "title": "HOME/ADOPT/facade i jeden właściciel prawdy",
+      "kind": "decision-rule",
+      "scope": "subactor",
+      "description": "Dane produktu pozostają w kanonicznym HOME; standardy definiują kontrakty, a projekcje są fasadami z bramką driftu.",
+      "matchAny": [
+        "ssot",
+        "project-ssot",
+        "modularity",
+        "adopt",
+        "facade",
+        "single-exporter",
+        "źródło prawdy",
+        "offer",
+        "brand",
+        "home/adopt/facade",
+        "home:",
+        "źródła prawdy",
+        "drugiego źródła prawdy"
+      ],
+      "triggers": [
+        "duplicate_contract",
+        "pricing_change",
+        "brand_change",
+        "cross_repo_standardization"
+      ],
+      "must": [
+        "Wskazać jeden HOME dla każdego concernu.",
+        "Oznaczyć kopie jako generated mirror, vendored parity copy albo facade.",
+        "Porównać projekcje z HOME przed merge."
+      ],
+      "should": [
+        "Rozdzielić schemat zarządzany od danych instancji specyficznych dla repozytorium."
+      ],
+      "mustNot": [
+        "Tworzyć drugiego SSOT cen, brandu lub required checks w repozytorium adoptującym."
+      ],
+      "minSupport": 2,
+      "baseConfidence": 0.88
+    },
+    {
+      "id": "DT-REALITY-001",
+      "title": "Dokumentacja i prompt muszą być konfrontowane z rzeczywistością",
+      "kind": "obligation",
+      "scope": "global",
+      "description": "Stan projektu jest ustalany przez wersjonowane źródła i obserwacje, nie przez przekonujący opis LLM.",
+      "matchAny": [
+        "zbadaj",
+        "czy są błędy",
+        "jak będzie działało na produkcji",
+        "rzeczywisto",
+        "digital twin",
+        "walidacji intencji",
+        "dokumentacji z projektem",
+        "porównanie",
+        "side-by-side"
+      ],
+      "triggers": [
+        "claim_about_current_state",
+        "production_readiness",
+        "documentation_change",
+        "parallel_change_conflict"
+      ],
+      "must": [
+        "Określić zakres claimu i właściwego właściciela danych.",
+        "Zebrać odtwarzalne dowody z kodu, Git, testów i runtime.",
+        "Oznaczyć unknown, under_specified i konflikty zamiast zgadywać."
+      ],
+      "should": [
+        "Użyć grafu Intent vs Reality i diagnostyk o jawnej proweniencji."
+      ],
+      "mustNot": [
+        "Traktować historii promptów jako aktualnego SSOT faktów projektowych."
+      ],
+      "minSupport": 2,
+      "baseConfidence": 0.88
+    },
+    {
+      "id": "DT-REUSE-001",
+      "title": "Najpierw istniejące API, formularze i komponenty",
+      "kind": "preference",
+      "scope": "subactor",
+      "description": "Przed tworzeniem nowej implementacji należy zbadać i wykorzystać istniejące kontrakty oraz projekty referencyjne.",
+      "matchAny": [
+        "skorzystaj z istniejącego api",
+        "istniejącego api",
+        "formularza z projektu",
+        "podobnie jak",
+        "przyjrzyj się",
+        "sprawdź kilka ostatnich ticketów"
+      ],
+      "triggers": [
+        "new_feature",
+        "auth_flow_change",
+        "ui_flow_change"
+      ],
+      "must": [
+        "Zidentyfikować istniejący kontrakt lub projekt referencyjny.",
+        "Zachować kompatybilność albo jawnie opisać migrację."
+      ],
+      "should": [
+        "Porównać zachowanie side-by-side przed refaktoryzacją."
+      ],
+      "mustNot": [
+        "Wymyślać równoległego API bez analizy istniejącego."
+      ],
+      "minSupport": 1,
+      "baseConfidence": 0.78
+    },
+    {
+      "id": "DT-PROD-001",
+      "title": "Produkcja, bezpieczeństwo i anty-spam są częścią Definition of Done",
+      "kind": "obligation",
+      "scope": "subactor",
+      "description": "Zmiana ma być oceniona w warunkach produkcyjnych lub ich wiernej symulacji, z ochroną sekretów i abuse controls.",
+      "matchAny": [
+        "produkcyjn",
+        "smtp",
+        "prawdziwego email",
+        "otp",
+        "spam",
+        "rate limit",
+        "docker testowy",
+        "ingress",
+        "bez portów",
+        "admin panel"
+      ],
+      "triggers": [
+        "authentication_change",
+        "email_change",
+        "deployment_change",
+        "public_endpoint_change"
+      ],
+      "must": [
+        "Oddzielić dev bypass od produkcji i domyślnie fail-closed.",
+        "Zweryfikować konfigurację sekretów bez ujawniania wartości.",
+        "Przetestować rate limiting, błędy i ścieżkę odzyskiwania."
+      ],
+      "should": [
+        "Użyć produkcyjnego digital twin lub środowiska parity."
+      ],
+      "mustNot": [
+        "Zakładać, że lokalny mock dowodzi dostarczenia prawdziwego e-maila lub działania produkcji."
+      ],
+      "minSupport": 2,
+      "baseConfidence": 0.84
+    },
+    {
+      "id": "DT-UX-001",
+      "title": "Stan UI ma być adresowalny, czytelny i mobilny",
+      "kind": "preference",
+      "scope": "project",
+      "description": "W panelu Subactor użytkownik preferuje osobne zakładki, stan w URL, krótkie etykiety, podpowiedzi i boczne menu mobilne.",
+      "matchAny": [
+        "taby",
+        "tab=",
+        "w url",
+        "etykiety",
+        "podpowiedzi",
+        "mobilnej wersji",
+        "panel-tabs-bar",
+        "menu z boku"
+      ],
+      "triggers": [
+        "panel_navigation_change",
+        "responsive_ui_change"
+      ],
+      "must": [
+        "Odzwierciedlić aktywny widok w URL i obsłużyć deep-link/back-forward.",
+        "Zachować dostępność klawiatury i czytelne opisy."
+      ],
+      "should": [
+        "Używać krótkich etykiet z tooltipem oraz bocznego drawer na małych ekranach."
+      ],
+      "mustNot": [
+        "Dublować tę samą nawigację pod mylącymi nazwami."
+      ],
+      "minSupport": 2,
+      "baseConfidence": 0.82
+    },
+    {
+      "id": "DT-CONTINUE-001",
+      "title": "Kontynuacja oznacza odczyt stanu i domknięcie rozpoczętego zakresu",
+      "kind": "decision-rule",
+      "scope": "contextual",
+      "description": "Samo 'kontynuuj' nie ustanawia nowego celu; runtime ma odczytać aktywny ticket, diff, testy i niedomknięte kryteria.",
+      "matchAny": [
+        "kontynuuj",
+        "niezakończone wdrożenia",
+        "kontynuuj niezakonczone"
+      ],
+      "triggers": [
+        "continue_request"
+      ],
+      "must": [
+        "Odczytać aktywny ticket i ostatnie potwierdzone kryteria.",
+        "Kontynuować wyłącznie w niezamkniętym zakresie i ponownie zweryfikować stan."
+      ],
+      "should": [
+        "Nie powtarzać pytania, na które odpowiedź już istnieje w ticket/context."
+      ],
+      "mustNot": [
+        "Zgadywać nowego celu na podstawie samego słowa 'kontynuuj'."
+      ],
+      "minSupport": 2,
+      "baseConfidence": 0.8
+    },
+    {
+      "id": "DT-LLM-001",
+      "title": "LLM jest ekstraktorem i doradcą, nie źródłem autorytetu",
+      "kind": "prohibition",
+      "scope": "global",
+      "description": "LLM może generować kandydatów DSL i wytyczne, ale runtime deterministyczny waliduje schemat, cytowania, zakres i bramki efektów.",
+      "matchAny": [
+        "todo2code",
+        "autogrammar",
+        "dsl",
+        "llm",
+        "validator",
+        "intencji",
+        "generowania dsl"
+      ],
+      "triggers": [
+        "llm_generated_policy",
+        "llm_generated_guidelines",
+        "code_agent_execution"
+      ],
+      "must": [
+        "Wymagać structured output i walidacji lokalnej.",
+        "Weryfikować, że każdy wniosek cytuje istniejące evidenceRefs.",
+        "Oddzielić propose od apply i wymagać receipt po wykonaniu."
+      ],
+      "should": [
+        "Używać tego samego gateway/model routing dla runtime i Aider, ale osobnych celów/tagów."
+      ],
+      "mustNot": [
+        "Pozwalać LLM nadawać sobie uprawnień, deklarować DONE bez testów albo modyfikować sekrety."
+      ],
+      "minSupport": 1,
+      "baseConfidence": 0.88
+    },
+    {
+      "id": "DT-DOCKER-001",
+      "title": "Docker jest narzędziem kontekstowym, nie domyślną zasadą",
+      "kind": "decision-rule",
+      "scope": "contextual",
+      "description": "Historia zawiera zarówno usunięcie konkretnego błędnego kontenera, jak i żądanie produkcyjnej symulacji Docker; decyzję wyznacza cel i ticket.",
+      "matchAny": [
+        "usun ten docker",
+        "docker testowy",
+        "docker",
+        "symulowal infrastrukture produkcyjna"
+      ],
+      "triggers": [
+        "container_incident",
+        "production_parity_test"
+      ],
+      "must": [
+        "Rozróżnić usunięcie konkretnej wadliwej instancji od zakazu technologii.",
+        "Użyć Dockera tylko, gdy wspiera jawny kontrakt deployment/parity."
+      ],
+      "should": [
+        "Udokumentować właściciela procesu i cleanup."
+      ],
+      "mustNot": [
+        "Generalizować pojedynczego polecenia 'usuń ten Docker' do globalnego 'nigdy Docker'."
+      ],
+      "minSupport": 2,
+      "baseConfidence": 0.76,
+      "forceContextual": true
+    }
+  ]
+}

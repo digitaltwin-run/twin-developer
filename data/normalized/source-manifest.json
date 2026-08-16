@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "subactor.developer-twin.source-manifest/v1",
+  "generatedAt": "2026-08-16T12:00:00.000Z",
+  "sources": [
+    {
+      "sourceFile": "data/raw/history-portal.md",
+      "contentHash": "sha256:04a66c80932e77e197ab2dae54799aab73eedaa7364f0640ae820c4adb61a696",
+      "byteLength": 69904,
+      "eventCount": 133,
+      "sourceFormats": [
+        "markdown-transcript"
+      ]
+    },
+    {
+      "sourceFile": "data/raw/history-cursor.json",
+      "contentHash": "sha256:a6ffa867e13cd07a71558f84b86c744d7ad19b224cbb26cbf1241d76cf6f6d6b",
+      "byteLength": 17008098,
+      "eventCount": 28,
+      "sourceFormats": [
+        "cursor-export"
+      ]
+    }
+  ]
+}

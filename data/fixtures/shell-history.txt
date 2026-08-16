@@ -1,0 +1,4 @@
+# example shell history
+make build
+make test
+git status --short

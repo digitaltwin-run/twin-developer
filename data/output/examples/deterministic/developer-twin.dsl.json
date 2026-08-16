@@ -1,0 +1,2676 @@
+{
+  "$schema": "../schemas/developer-twin.schema.json",
+  "schemaVersion": "subactor.developer-twin/v1",
+  "generatedAt": "2026-08-16T12:00:00.000Z",
+  "generator": {
+    "name": "developer-twin-runtime",
+    "version": "0.1.0",
+    "mode": "deterministic",
+    "llmUsed": false,
+    "degraded": false
+  },
+  "twin": {
+    "id": "developer-twin:71ce512c96244179",
+    "kind": "behavioral-execution-policy",
+    "purpose": "Kontynuowanie rozwoju Subactor zgodnie z udokumentowanym sposobem pracy człowieka, bez imitowania jego tożsamości lub cech osobowości.",
+    "scope": [
+      "software-development",
+      "subactor",
+      "ticket-governance",
+      "validation",
+      "ssot",
+      "llm-routing"
+    ],
+    "consent": {
+      "basis": "Jawne przekazanie historii promptów w celu utworzenia projektu developer digital twin.",
+      "allowedUses": [
+        "generowanie planów i wytycznych projektowych",
+        "kontrola zgodności LLM/Aider z ticketem, SSOT i testami",
+        "wykrywanie konfliktów intencji"
+      ],
+      "forbiddenUses": [
+        "ocena zatrudnienia lub wydajności człowieka",
+        "wnioskowanie o zdrowiu, poglądach lub cechach osobowości",
+        "podszywanie się pod człowieka",
+        "publikacja surowych promptów lub sekretów"
+      ],
+      "expiresAt": null
+    }
+  },
+  "sourcePolicy": {
+    "truthDomains": {
+      "humanIntent": {
+        "description": "Co człowiek chce, jak pracuje i jak rozstrzyga konflikt intencji.",
+        "ranking": [
+          {
+            "sourceClass": "human_correction",
+            "weight": 100,
+            "note": "Nowsza jawna korekta wygrywa w tym samym zakresie."
+          },
+          {
+            "sourceClass": "human_instruction_repeated",
+            "weight": 92,
+            "note": "Powtarzalne zachowanie w wielu zadaniach."
+          },
+          {
+            "sourceClass": "human_instruction",
+            "weight": 84,
+            "note": "Jawne polecenie, ale może być jednorazowe i kontekstowe."
+          },
+          {
+            "sourceClass": "accepted_command",
+            "weight": 72,
+            "note": "Dowód akceptacji operacji, nie zawsze trwała preferencja."
+          },
+          {
+            "sourceClass": "ticket_intent",
+            "weight": 70,
+            "note": "Wersjonowana intencja projektu."
+          },
+          {
+            "sourceClass": "agent_claim",
+            "weight": 20,
+            "note": "Opis agenta nie może sam ustanowić preferencji człowieka."
+          }
+        ]
+      },
+      "projectReality": {
+        "description": "Co faktycznie istnieje i działa w projekcie.",
+        "ranking": [
+          {
+            "sourceClass": "live_runtime_observation",
+            "weight": 100,
+            "note": "Odtwarzalny odczyt endpointu lub środowiska z czasem i zakresem."
+          },
+          {
+            "sourceClass": "test_receipt",
+            "weight": 96,
+            "note": "Wynik wykonanej bramki z kodem wyjścia i rewizją."
+          },
+          {
+            "sourceClass": "versioned_ssot",
+            "weight": 92,
+            "note": "Kanoniczny HOME, przypięta rewizja i walidowany schemat."
+          },
+          {
+            "sourceClass": "code_or_config",
+            "weight": 88,
+            "note": "Bieżący kod/config na znanej rewizji."
+          },
+          {
+            "sourceClass": "git_history",
+            "weight": 80,
+            "note": "Dowód zmiany, nie pełny dowód aktualnego runtime."
+          },
+          {
+            "sourceClass": "documentation",
+            "weight": 55,
+            "note": "Twierdzenie wymagające porównania z kodem i runtime."
+          },
+          {
+            "sourceClass": "human_prompt_fact",
+            "weight": 40,
+            "note": "Wskazówka lub oczekiwanie; nie stan systemu rekordowego."
+          },
+          {
+            "sourceClass": "agent_claim",
+            "weight": 15,
+            "note": "Claim, dopóki nie ma receipt/obserwacji."
+          }
+        ]
+      }
+    },
+    "conflictResolution": [
+      {
+        "id": "CR-INTENT-NEWER-CORRECTION",
+        "when": "Dwie wypowiedzi człowieka dotyczą tego samego zakresu i nowsza jest jawną korektą.",
+        "winner": "Nowsza jawna korekta człowieka.",
+        "reason": "Historia ma zachować supersession, a nie głosowanie większościowe."
+      },
+      {
+        "id": "CR-REALITY-OBSERVED",
+        "when": "Prompt lub dokumentacja przeczy odtwarzalnej obserwacji runtime albo kanonicznemu SSOT.",
+        "winner": "Odtwarzalna obserwacja lub wersjonowany HOME właściwy dla danego claimu.",
+        "reason": "Prompt opisuje oczekiwanie; nie jest automatycznie stanem rzeczywistym."
+      },
+      {
+        "id": "CR-CONTEXT-NOT-GLOBAL",
+        "when": "Polecenie dotyczy jednego kontenera, ekranu, oferty lub incydentu.",
+        "winner": "Reguła kontekstowa, bez generalizacji na wszystkie projekty.",
+        "reason": "Zapobiega błędnym regułom typu 'nigdy Docker' wyprowadzonym z jednego incydentu."
+      },
+      {
+        "id": "CR-AUTHORITATIVE-DISAGREEMENT",
+        "when": "Dwa autorytatywne źródła rzeczywistości o równym zakresie są sprzeczne.",
+        "winner": "Brak automatycznego zwycięzcy; wynik review_required lub blocking.",
+        "reason": "Digital twin nie może arbitralnie wymyślić prawdy."
+      }
+    ],
+    "epistemicRules": [
+      "Claim agenta pozostaje claimem, dopóki nie ma odtwarzalnego dowodu.",
+      "Brak dowodu nie oznacza false ani DONE.",
+      "LLM może proponować kandydatów reguł, ale nie może nadawać im autorytetu ani wykonywać efektów.",
+      "Sekrety są redagowane przed wysłaniem do LLM i nigdy nie trafiają do artefaktów audytowych.",
+      "Każda reguła ma evidenceRefs, confidence, scope i status supersession."
+    ]
+  },
+  "rules": [
+    {
+      "id": "DT-CONTINUE-001",
+      "title": "Kontynuacja oznacza odczyt stanu i domknięcie rozpoczętego zakresu",
+      "kind": "decision-rule",
+      "scope": "contextual",
+      "status": "contextual",
+      "description": "Samo 'kontynuuj' nie ustanawia nowego celu; runtime ma odczytać aktywny ticket, diff, testy i niedomknięte kryteria.",
+      "triggers": [
+        "continue_request"
+      ],
+      "must": [
+        "Odczytać aktywny ticket i ostatnie potwierdzone kryteria.",
+        "Kontynuować wyłącznie w niezamkniętym zakresie i ponownie zweryfikować stan."
+      ],
+      "should": [
+        "Nie powtarzać pytania, na które odpowiedź już istnieje w ticket/context."
+      ],
+      "mustNot": [
+        "Zgadywać nowego celu na podstawie samego słowa 'kontynuuj'."
+      ],
+      "evidenceRefs": [
+        "evidence:c769a91e78958a94",
+        "evidence:3cf8983fb8fc51db",
+        "evidence:a044e67804c1d66d",
+        "evidence:0d1fc2882c906c22",
+        "evidence:6b38ab74f172ee84",
+        "evidence:384556423fffa5ff",
+        "evidence:f6755ac3d4ba8b05",
+        "evidence:fb46f0e2b4b3c6bb",
+        "evidence:0897c050f01f8c4e",
+        "evidence:b8a88f8702e5e9af",
+        "evidence:f88212ba744c3b5b"
+      ],
+      "supportCount": 11,
+      "confidence": 0.938,
+      "conflictPolicy": "CR-INTENT-NEWER-CORRECTION"
+    },
+    {
+      "id": "DT-DOCKER-001",
+      "title": "Docker jest narzędziem kontekstowym, nie domyślną zasadą",
+      "kind": "decision-rule",
+      "scope": "contextual",
+      "status": "contextual",
+      "description": "Historia zawiera zarówno usunięcie konkretnego błędnego kontenera, jak i żądanie produkcyjnej symulacji Docker; decyzję wyznacza cel i ticket.",
+      "triggers": [
+        "container_incident",
+        "production_parity_test"
+      ],
+      "must": [
+        "Rozróżnić usunięcie konkretnej wadliwej instancji od zakazu technologii.",
+        "Użyć Dockera tylko, gdy wspiera jawny kontrakt deployment/parity."
+      ],
+      "should": [
+        "Udokumentować właściciela procesu i cleanup."
+      ],
+      "mustNot": [
+        "Generalizować pojedynczego polecenia 'usuń ten Docker' do globalnego 'nigdy Docker'."
+      ],
+      "evidenceRefs": [
+        "evidence:87c8bb1e43f65669",
+        "evidence:384556423fffa5ff"
+      ],
+      "supportCount": 2,
+      "confidence": 0.819,
+      "conflictPolicy": "CR-CONTEXT-NOT-GLOBAL"
+    },
+    {
+      "id": "DT-GOV-001",
+      "title": "Ticket i intent przed wieloetapową zmianą",
+      "kind": "obligation",
+      "scope": "subactor",
+      "status": "active",
+      "description": "Wieloetapowa zmiana ma być prowadzona w aktywnym project/ticket-* zgodnie z new-project i ticket-lifecycle.",
+      "triggers": [
+        "multi_step_change",
+        "cross_file_change",
+        "standardization_change"
+      ],
+      "must": [
+        "Utworzyć lub wskazać aktywny project/ticket-* przed implementacją.",
+        "Zapisać zakres, kryteria akceptacji, dozwolone ścieżki i plan walidacji.",
+        "Aktualizować changelog i indeks ticketów wraz z pracą."
+      ],
+      "should": [
+        "Związać wynik z dokładną rewizją i receiptami testów."
+      ],
+      "mustNot": [
+        "Prowadzić wieloetapowej implementacji wyłącznie w czacie bez śladu ticketu."
+      ],
+      "evidenceRefs": [
+        "evidence:c769a91e78958a94"
+      ],
+      "supportCount": 1,
+      "confidence": 0.88,
+      "conflictPolicy": "CR-INTENT-NEWER-CORRECTION"
+    },
+    {
+      "id": "DT-LLM-001",
+      "title": "LLM jest ekstraktorem i doradcą, nie źródłem autorytetu",
+      "kind": "prohibition",
+      "scope": "global",
+      "status": "active",
+      "description": "LLM może generować kandydatów DSL i wytyczne, ale runtime deterministyczny waliduje schemat, cytowania, zakres i bramki efektów.",
+      "triggers": [
+        "llm_generated_policy",
+        "llm_generated_guidelines",
+        "code_agent_execution"
+      ],
+      "must": [
+        "Wymagać structured output i walidacji lokalnej.",
+        "Weryfikować, że każdy wniosek cytuje istniejące evidenceRefs.",
+        "Oddzielić propose od apply i wymagać receipt po wykonaniu."
+      ],
+      "should": [
+        "Używać tego samego gateway/model routing dla runtime i Aider, ale osobnych celów/tagów."
+      ],
+      "mustNot": [
+        "Pozwalać LLM nadawać sobie uprawnień, deklarować DONE bez testów albo modyfikować sekrety."
+      ],
+      "evidenceRefs": [
+        "evidence:e6bbc0be7788a0d6",
+        "evidence:9105acb7f51036ff",
+        "evidence:71362d83e2de46c0",
+        "evidence:273e39098d7c490a",
+        "evidence:c769a91e78958a94",
+        "evidence:e85aeb834c6d02f3",
+        "evidence:d2cb286a45eafd8e",
+        "evidence:a0721eb41ab7adaf",
+        "evidence:ae874ca4eddd57ea",
+        "evidence:4990b17f356e4e48",
+        "evidence:fa80b06e21ef8564",
+        "evidence:43fd4a9245f3cd9f",
+        "evidence:061bdd499581b8a2",
+        "evidence:14295c4267d25d29",
+        "evidence:12a1b047f312ce07",
+        "evidence:08de1a94595be98b"
+      ],
+      "supportCount": 16,
+      "confidence": 0.99,
+      "conflictPolicy": "CR-INTENT-NEWER-CORRECTION"
+    },
+    {
+      "id": "DT-PROD-001",
+      "title": "Produkcja, bezpieczeństwo i anty-spam są częścią Definition of Done",
+      "kind": "obligation",
+      "scope": "subactor",
+      "status": "active",
+      "description": "Zmiana ma być oceniona w warunkach produkcyjnych lub ich wiernej symulacji, z ochroną sekretów i abuse controls.",
+      "triggers": [
+        "authentication_change",
+        "email_change",
+        "deployment_change",
+        "public_endpoint_change"
+      ],
+      "must": [
+        "Oddzielić dev bypass od produkcji i domyślnie fail-closed.",
+        "Zweryfikować konfigurację sekretów bez ujawniania wartości.",
+        "Przetestować rate limiting, błędy i ścieżkę odzyskiwania."
+      ],
+      "should": [
+        "Użyć produkcyjnego digital twin lub środowiska parity."
+      ],
+      "mustNot": [
+        "Zakładać, że lokalny mock dowodzi dostarczenia prawdziwego e-maila lub działania produkcji."
+      ],
+      "evidenceRefs": [
+        "evidence:25e7899e9692da00",
+        "evidence:ddd48173c580cca5",
+        "evidence:c4846ffe0920da33",
+        "evidence:62e4528cd42e46ed",
+        "evidence:384556423fffa5ff",
+        "evidence:d32f7dd3e09d38e0",
+        "evidence:14295c4267d25d29",
+        "evidence:d1eca7e0bf1cee8b"
+      ],
+      "supportCount": 8,
+      "confidence": 0.948,
+      "conflictPolicy": "CR-INTENT-NEWER-CORRECTION"
+    },
+    {
+      "id": "DT-REALITY-001",
+      "title": "Dokumentacja i prompt muszą być konfrontowane z rzeczywistością",
+      "kind": "obligation",
+      "scope": "global",
+      "status": "active",
+      "description": "Stan projektu jest ustalany przez wersjonowane źródła i obserwacje, nie przez przekonujący opis LLM.",
+      "triggers": [
+        "claim_about_current_state",
+        "production_readiness",
+        "documentation_change",
+        "parallel_change_conflict"
+      ],
+      "must": [
+        "Określić zakres claimu i właściwego właściciela danych.",
+        "Zebrać odtwarzalne dowody z kodu, Git, testów i runtime.",
+        "Oznaczyć unknown, under_specified i konflikty zamiast zgadywać."
+      ],
+      "should": [
+        "Użyć grafu Intent vs Reality i diagnostyk o jawnej proweniencji."
+      ],
+      "mustNot": [
+        "Traktować historii promptów jako aktualnego SSOT faktów projektowych."
+      ],
+      "evidenceRefs": [
+        "evidence:e6bbc0be7788a0d6",
+        "evidence:582a7a56e28d9ae1",
+        "evidence:0e9972121c3ecb61",
+        "evidence:7aea914cb1920eb1",
+        "evidence:e85aeb834c6d02f3",
+        "evidence:d32f7dd3e09d38e0",
+        "evidence:e45054d61dc8b890",
+        "evidence:08de1a94595be98b"
+      ],
+      "supportCount": 8,
+      "confidence": 0.988,
+      "conflictPolicy": "CR-INTENT-NEWER-CORRECTION"
+    },
+    {
+      "id": "DT-REUSE-001",
+      "title": "Najpierw istniejące API, formularze i komponenty",
+      "kind": "preference",
+      "scope": "subactor",
+      "status": "active",
+      "description": "Przed tworzeniem nowej implementacji należy zbadać i wykorzystać istniejące kontrakty oraz projekty referencyjne.",
+      "triggers": [
+        "new_feature",
+        "auth_flow_change",
+        "ui_flow_change"
+      ],
+      "must": [
+        "Zidentyfikować istniejący kontrakt lub projekt referencyjny.",
+        "Zachować kompatybilność albo jawnie opisać migrację."
+      ],
+      "should": [
+        "Porównać zachowanie side-by-side przed refaktoryzacją."
+      ],
+      "mustNot": [
+        "Wymyślać równoległego API bez analizy istniejącego."
+      ],
+      "evidenceRefs": [
+        "evidence:e6bbc0be7788a0d6",
+        "evidence:335902ac5a215d9b",
+        "evidence:e85aeb834c6d02f3",
+        "evidence:9d80ef9bff859739"
+      ],
+      "supportCount": 4,
+      "confidence": 0.868,
+      "conflictPolicy": "CR-INTENT-NEWER-CORRECTION"
+    },
+    {
+      "id": "DT-SSOT-001",
+      "title": "HOME/ADOPT/facade i jeden właściciel prawdy",
+      "kind": "decision-rule",
+      "scope": "subactor",
+      "status": "active",
+      "description": "Dane produktu pozostają w kanonicznym HOME; standardy definiują kontrakty, a projekcje są fasadami z bramką driftu.",
+      "triggers": [
+        "duplicate_contract",
+        "pricing_change",
+        "brand_change",
+        "cross_repo_standardization"
+      ],
+      "must": [
+        "Wskazać jeden HOME dla każdego concernu.",
+        "Oznaczyć kopie jako generated mirror, vendored parity copy albo facade.",
+        "Porównać projekcje z HOME przed merge."
+      ],
+      "should": [
+        "Rozdzielić schemat zarządzany od danych instancji specyficznych dla repozytorium."
+      ],
+      "mustNot": [
+        "Tworzyć drugiego SSOT cen, brandu lub required checks w repozytorium adoptującym."
+      ],
+      "evidenceRefs": [
+        "evidence:9105acb7f51036ff",
+        "evidence:71362d83e2de46c0",
+        "evidence:9d80ef9bff859739",
+        "evidence:a0721eb41ab7adaf",
+        "evidence:9e9f8c0281c6df64",
+        "evidence:4990b17f356e4e48",
+        "evidence:fa80b06e21ef8564",
+        "evidence:43fd4a9245f3cd9f",
+        "evidence:061bdd499581b8a2"
+      ],
+      "supportCount": 9,
+      "confidence": 0.99,
+      "conflictPolicy": "CR-INTENT-NEWER-CORRECTION"
+    },
+    {
+      "id": "DT-TEST-001",
+      "title": "Restart, TestQL i pełna walidacja po zmianie",
+      "kind": "obligation",
+      "scope": "subactor",
+      "status": "active",
+      "description": "Po zmianach runtime/UI/usług użytkownik oczekuje restartu i odtwarzalnej weryfikacji, szczególnie przez TestQL.",
+      "triggers": [
+        "code_change",
+        "service_change",
+        "ui_change",
+        "deployment_change"
+      ],
+      "must": [
+        "Uruchomić deklarowany restart lub odtworzyć równoważny lifecycle usługi.",
+        "Uruchomić TestQL/kontraktowe testy projektu i pełną suitę właściwą dla zmienionego zakresu.",
+        "Zapisać komendy, kody wyjścia, rewizję i najważniejsze obserwacje jako receipt."
+      ],
+      "should": [
+        "Sprawdzić healthz i krytyczne endpointy na żywo."
+      ],
+      "mustNot": [
+        "Raportować PASS na podstawie samego tekstu agenta."
+      ],
+      "evidenceRefs": [
+        "evidence:95f653b124c6f0d5",
+        "evidence:582a7a56e28d9ae1",
+        "evidence:ddd48173c580cca5",
+        "evidence:c769a91e78958a94",
+        "evidence:2064786bcc201a40"
+      ],
+      "supportCount": 5,
+      "confidence": 0.978,
+      "conflictPolicy": "CR-INTENT-NEWER-CORRECTION"
+    },
+    {
+      "id": "DT-UX-001",
+      "title": "Stan UI ma być adresowalny, czytelny i mobilny",
+      "kind": "preference",
+      "scope": "project",
+      "status": "active",
+      "description": "W panelu Subactor użytkownik preferuje osobne zakładki, stan w URL, krótkie etykiety, podpowiedzi i boczne menu mobilne.",
+      "triggers": [
+        "panel_navigation_change",
+        "responsive_ui_change"
+      ],
+      "must": [
+        "Odzwierciedlić aktywny widok w URL i obsłużyć deep-link/back-forward.",
+        "Zachować dostępność klawiatury i czytelne opisy."
+      ],
+      "should": [
+        "Używać krótkich etykiet z tooltipem oraz bocznego drawer na małych ekranach."
+      ],
+      "mustNot": [
+        "Dublować tę samą nawigację pod mylącymi nazwami."
+      ],
+      "evidenceRefs": [
+        "evidence:0e9972121c3ecb61",
+        "evidence:b3e7f07432bb2261",
+        "evidence:273e39098d7c490a",
+        "evidence:a044e67804c1d66d",
+        "evidence:55a58ca9b6a98ad1"
+      ],
+      "supportCount": 5,
+      "confidence": 0.938,
+      "conflictPolicy": "CR-INTENT-NEWER-CORRECTION"
+    }
+  ],
+  "workflow": [
+    {
+      "order": 1,
+      "id": "observe",
+      "name": "Zbierz i znormalizuj dowody",
+      "requiredWhen": [
+        "always"
+      ],
+      "actions": [
+        "Wczytaj historię IDE/shell/chat.",
+        "Zredaguj sekrety.",
+        "Zachowaj hash, źródło, kolejność i aktora."
+      ],
+      "evidenceRequired": [
+        "normalized-event-log"
+      ]
+    },
+    {
+      "order": 2,
+      "id": "resolve-intent",
+      "name": "Rozstrzygnij intencję człowieka",
+      "requiredWhen": [
+        "new_task",
+        "conflicting_prompts",
+        "continue_request"
+      ],
+      "actions": [
+        "Zastosuj ranking humanIntent.",
+        "Nowszą korektę traktuj jako supersession w tym samym zakresie.",
+        "Nie globalizuj incydentu."
+      ],
+      "evidenceRequired": [
+        "human evidenceRefs",
+        "conflict-resolution receipt"
+      ]
+    },
+    {
+      "order": 3,
+      "id": "reconcile-reality",
+      "name": "Porównaj intencję z bieżącą rzeczywistością",
+      "requiredWhen": [
+        "claim_about_current_state",
+        "code_change",
+        "production_readiness"
+      ],
+      "actions": [
+        "Znajdź HOME właściwy dla claimu.",
+        "Sprawdź kod, Git, testy i runtime.",
+        "Oznacz unknown lub disagreement zamiast zgadywać."
+      ],
+      "evidenceRequired": [
+        "versioned SSOT or code revision",
+        "test/runtime receipt"
+      ]
+    },
+    {
+      "order": 4,
+      "id": "govern",
+      "name": "Zwiąż pracę z ticketem i zakresem",
+      "requiredWhen": [
+        "multi_step_change",
+        "cross_file_change"
+      ],
+      "actions": [
+        "Odczytaj lub utwórz project/ticket-*.",
+        "Sprawdź allowed paths i acceptance criteria.",
+        "Zapisuj decyzje i changelog."
+      ],
+      "evidenceRequired": [
+        "ticket intent",
+        "scope validation"
+      ]
+    },
+    {
+      "order": 5,
+      "id": "propose",
+      "name": "Wygeneruj plan i kontekst wykonawczy",
+      "requiredWhen": [
+        "implementation_requested"
+      ],
+      "actions": [
+        "Preferuj istniejące API i komponenty.",
+        "Przekaż do LLM tylko zwalidowany DSL oraz minimalny kontekst.",
+        "Kandydaci LLM pozostają propose-only."
+      ],
+      "evidenceRequired": [
+        "validated DSL",
+        "guideline artifact"
+      ]
+    },
+    {
+      "order": 6,
+      "id": "execute-and-verify",
+      "name": "Wykonaj w ograniczonym zakresie i zweryfikuj",
+      "requiredWhen": [
+        "source_mutation_approved"
+      ],
+      "actions": [
+        "Wykonaj zmianę w allowed paths.",
+        "Uruchom build, TestQL/kontrakty i pełne testy.",
+        "Sprawdź health/live behavior i zapisz receipty."
+      ],
+      "evidenceRequired": [
+        "diff",
+        "command receipts",
+        "runtime observations"
+      ]
+    }
+  ],
+  "autonomy": {
+    "allowed": [
+      "czytanie lokalnych źródeł",
+      "redakcja sekretów",
+      "deterministyczna ekstrakcja i walidacja",
+      "proponowanie planu",
+      "uruchamianie jawnie dozwolonych testów w bieżącym ticket scope"
+    ],
+    "approvalRequired": [
+      "modyfikacja kodu źródłowego przez Aider",
+      "commit, push, merge lub deployment",
+      "zmiana produkcyjnej konfiguracji, DNS, SMTP lub sekretów",
+      "promocja rule.status=candidate do active"
+    ],
+    "forbidden": [
+      "ujawnianie sekretów",
+      "nadawanie sobie uprawnień przez LLM",
+      "twierdzenie PASS/DONE bez receiptów",
+      "zmiana HOME produktu z samej historii promptów",
+      "profilowanie człowieka poza jego sposobem realizacji pracy"
+    ],
+    "failClosedOn": [
+      "brak aktywnego ticketu dla wieloetapowej zmiany",
+      "nieznane evidenceRefs",
+      "sprzeczność równorzędnych źródeł autorytatywnych",
+      "niepoprawny structured output",
+      "nieudane testy lub brak wymaganych receiptów"
+    ]
+  },
+  "modelRouting": {
+    "policy": "privacy-first-then-managed-fallback",
+    "stages": [
+      {
+        "stage": "intent-extraction",
+        "purposeTags": [
+          "intent",
+          "structured-output",
+          "evidence-grounded"
+        ],
+        "modelAlias": "twin-intent",
+        "routeOrder": [
+          "local-private",
+          "litellm-proxy",
+          "openrouter-direct"
+        ],
+        "structuredOutputRequired": true
+      },
+      {
+        "stage": "guideline-generation",
+        "purposeTags": [
+          "planning",
+          "policy-conditioned",
+          "structured-output"
+        ],
+        "modelAlias": "twin-guidelines",
+        "routeOrder": [
+          "local-private",
+          "litellm-proxy",
+          "openrouter-direct"
+        ],
+        "structuredOutputRequired": true
+      },
+      {
+        "stage": "code-editing",
+        "purposeTags": [
+          "code",
+          "aider",
+          "ticket-scoped"
+        ],
+        "modelAlias": "twin-code",
+        "routeOrder": [
+          "local-private",
+          "litellm-proxy",
+          "openrouter-direct"
+        ],
+        "structuredOutputRequired": false
+      },
+      {
+        "stage": "validation",
+        "purposeTags": [
+          "validation",
+          "independent-check",
+          "structured-output"
+        ],
+        "modelAlias": "twin-validation",
+        "routeOrder": [
+          "local-private",
+          "litellm-proxy",
+          "openrouter-direct"
+        ],
+        "structuredOutputRequired": true
+      }
+    ]
+  },
+  "evidenceCatalog": [
+    {
+      "id": "evidence:e6bbc0be7788a0d6",
+      "eventId": "event:2bdf5d720a921b6a",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "human_instruction_repeated",
+      "actor": "human",
+      "sequence": 0,
+      "excerpt": "jak mogę się zalogować do developerskiej wersji podobnie jak w auto.subactor.com lub sub.actor w celu realziadania, jako klient-founder saas, ktory powoluje po zakupie wswoja instancje i realziuje zdania swojej roganizacji majac d o dyspozycji sowwje urzdzenia lokalne poprzez node i digital twin urzadzen poprzez llm-acccoount-hub",
+      "contentHash": "sha256:43ba3b3905045e158dff0af1e35474db44551448a6b9621130926302e5c749ed",
+      "intentWeight": 92,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-REALITY-001",
+        "DT-REUSE-001",
+        "DT-LLM-001"
+      ]
+    },
+    {
+      "id": "evidence:a7f1988d7ebe83f6",
+      "eventId": "event:2e9ca6cebf286402",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "agent_claim",
+      "actor": "agent",
+      "sequence": 1,
+      "excerpt": "Aby zalogować się do deweloperskiej wersji portalu SaaS (odpowiednika produkcyjnych `sub.actor` / `auto.subactor.com`) jako klient-founder powołujący swoją instancję, realizujący zadania organizacji oraz podłączający lokalne urządzenia (Node) i ich cyfrowe bliźniaki (Digital Twin via `llm-account-hub`), wykonaj poniższe kroki.\n\n---\n\n### 1. Podstawowe Adresy…",
+      "contentHash": "sha256:75d0fd5f25706eb9886739715fedb78eead384152abe5185f65eec9840d4d90b",
+      "intentWeight": 20,
+      "realityWeight": 15,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-REALITY-001",
+        "DT-PROD-001",
+        "DT-LLM-001",
+        "DT-DOCKER-001"
+      ]
+    },
+    {
+      "id": "evidence:f0abe12b078f8025",
+      "eventId": "event:6d329d266b29a558",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "agent_claim",
+      "actor": "agent",
+      "sequence": 10,
+      "excerpt": "Zmiana cennika została dokonana wczoraj w nocy (**15 sierpnia 2026 r. o godzinie 00:31 CEST**, commit `3387c35` w ramach ticketu `TICKET-044`).\n\nPrawdziwymi i aktualnymi cenami obowiązującymi od 15 sierpnia 2026 są **dokładnie te, które podałeś w zapytaniu** (nowy model rozliczania oparty na **aktywnych cyfrowych bliźniakach i zweryfikowanych akcjach**, bez…",
+      "contentHash": "sha256:0aeee00174dc400f543f535afb6a503265b8bb18932e9789be90dcc176c81764",
+      "intentWeight": 20,
+      "realityWeight": 15,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-TEST-001"
+      ]
+    },
+    {
+      "id": "evidence:87c8bb1e43f65669",
+      "eventId": "event:c69280f6478b8eff",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "human_correction",
+      "actor": "human",
+      "sequence": 11,
+      "excerpt": "nie, usun ten docker , musi być inny, gdzie nie było oferty On-Premise",
+      "contentHash": "sha256:1ac542acb89430ffba19d7701e72a901266d6da4af5f95e30c18d2b6515fdb4b",
+      "intentWeight": 100,
+      "realityWeight": 0,
+      "isCorrection": true,
+      "topicHints": [
+        "DT-DOCKER-001"
+      ]
+    },
+    {
+      "id": "evidence:523f30eb01ec3d3c",
+      "eventId": "event:870d50d323052b35",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "accepted_command",
+      "actor": "human",
+      "sequence": 12,
+      "excerpt": "docker ps -a",
+      "contentHash": "sha256:162035ec2d281b1bbcb04ab3942d79b23465716ebc2d183f90cac10f91c6e567",
+      "intentWeight": 72,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-DOCKER-001"
+      ]
+    },
+    {
+      "id": "evidence:66da9fe11ef7b89e",
+      "eventId": "event:1e322f8437a5ab05",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "accepted_command",
+      "actor": "human",
+      "sequence": 13,
+      "excerpt": "docker ps -a | grep -i portal",
+      "contentHash": "sha256:fb9b3d8c2ce8053709a569d39039aa8f7da4d0dff31ebee50e44f5f64bf6cdf8",
+      "intentWeight": 72,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-DOCKER-001"
+      ]
+    },
+    {
+      "id": "evidence:c993563ebada13e8",
+      "eventId": "event:568bf13dac195779",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "accepted_command",
+      "actor": "human",
+      "sequence": 14,
+      "excerpt": "docker rm -f subactor-platform-portal-1 dcd408080f73 2>/dev/null || true",
+      "contentHash": "sha256:0982dced71c37c88a1c36b8c81cc1f1ddfeacd5b0b35eb1c012dfcab7581dc64",
+      "intentWeight": 72,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-DOCKER-001"
+      ]
+    },
+    {
+      "id": "evidence:a82dfc40e3c999de",
+      "eventId": "event:eb100accc28b023f",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "accepted_command",
+      "actor": "human",
+      "sequence": 15,
+      "excerpt": "docker ps -a | grep -E \"sub-actor|portal\"",
+      "contentHash": "sha256:4a4d3e0aa3ba18a2637fb47c55120df4fbb01c0b51bdddcc93404504889c4f90",
+      "intentWeight": 72,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-DOCKER-001"
+      ]
+    },
+    {
+      "id": "evidence:514d9cd4d8de7130",
+      "eventId": "event:f3d811ae15ffa7bc",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "accepted_command",
+      "actor": "human",
+      "sequence": 17,
+      "excerpt": "cd /home/tom/github/subactor/www-sub-actor && make frontend && make restart",
+      "contentHash": "sha256:6014361ae87083c8fed51725f01a4cf1f5f5f3f58b5a3d607a6bc29022c949b7",
+      "intentWeight": 72,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-TEST-001"
+      ]
+    },
+    {
+      "id": "evidence:668f074aec05852d",
+      "eventId": "event:553c6ca80f2c3bf5",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "agent_claim",
+      "actor": "agent",
+      "sequence": 20,
+      "excerpt": "Wykonano wymagane zmiany:\n\n1. **Usunięto kontener Docker**:\n - Zawieszony/restartujący się kontener `subactor-platform-portal-1` został zatrzymany i całkowicie usunięty (`docker rm -f`).\n - Serwer uruchamia się teraz bezpośrednio jako czysty proces lokalny PHP/Node.\n\n2. **Wyłączono ofertę On-Premise z siatki planów**:\n - W pliku `src/php_app/config/plans.js…",
+      "contentHash": "sha256:c24bcc1bfb9486faf9cbdef5b6d4e1b0a7389fb3d7a825745f160f42b99ea3a5",
+      "intentWeight": 20,
+      "realityWeight": 15,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-TEST-001",
+        "DT-DOCKER-001"
+      ]
+    },
+    {
+      "id": "evidence:9105acb7f51036ff",
+      "eventId": "event:b97a55e3544c448f",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "human_instruction_repeated",
+      "actor": "human",
+      "sequence": 21,
+      "excerpt": "chciałbym aby standard /home/tom/github/wellmanifest/modularity zapobiegał tego typu problemom, porpzez tworzenie np folderow podpaczek w packages np w www-sub-actor w celu oddzielenie roznych elementow strony w takis pospob, aby mozna było już po strukturze sledzic z miany",
+      "contentHash": "sha256:fdd9b5d9acc003af6ff1ff0e32afbc1dc64e55f077900cc511ad6112d68f5cce",
+      "intentWeight": 92,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-SSOT-001",
+        "DT-LLM-001"
+      ]
+    },
+    {
+      "id": "evidence:01aa74522a9551a6",
+      "eventId": "event:931fc0e8c1563a62",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "accepted_command",
+      "actor": "human",
+      "sequence": 23,
+      "excerpt": "cd /home/tom/github/subactor/www-sub-actor && node test/testql-suite.mjs",
+      "contentHash": "sha256:986cd30b5aeceb77ef96e69573b7ebb6437677a91d7e766029f53157e299ab1b",
+      "intentWeight": 72,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-TEST-001"
+      ]
+    },
+    {
+      "id": "evidence:25907cdd5c486b81",
+      "eventId": "event:18144ccc5e19ba98",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "accepted_command",
+      "actor": "human",
+      "sequence": 24,
+      "excerpt": "cd /home/tom/github/subactor/www-sub-actor && node test/testql-suite.mjs",
+      "contentHash": "sha256:986cd30b5aeceb77ef96e69573b7ebb6437677a91d7e766029f53157e299ab1b",
+      "intentWeight": 72,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-TEST-001"
+      ]
+    },
+    {
+      "id": "evidence:6d714e63557861b7",
+      "eventId": "event:fdef8eb699cfd5b9",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "accepted_command",
+      "actor": "human",
+      "sequence": 25,
+      "excerpt": "php -r \"require 'src/php_app/Modules.php'; use Subactor\\Saas\\Domain\\Plans; print_r(Plans::offered());\"",
+      "contentHash": "sha256:67f6a7550eb0764b63b6d927047301b5703195a2c1247303fac89f22cd28a573",
+      "intentWeight": 72,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-SSOT-001"
+      ]
+    },
+    {
+      "id": "evidence:71362d83e2de46c0",
+      "eventId": "event:aa20b320fd966b98",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "human_instruction_repeated",
+      "actor": "human",
+      "sequence": 27,
+      "excerpt": "w rmaach modularity oczekujemy rozniez spelnienia standardu /home/tom/github/wellmanifest/ssot /home/tom/github/wellmanifest/project-ssot",
+      "contentHash": "sha256:25a305bcc9cd0535ef9c65427f812d00460357465d98af1703442708a3246253",
+      "intentWeight": 92,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-SSOT-001",
+        "DT-LLM-001"
+      ]
+    },
+    {
+      "id": "evidence:a6cb6aab3fec63ec",
+      "eventId": "event:c2df2a6bf436fcf3",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "accepted_command",
+      "actor": "human",
+      "sequence": 28,
+      "excerpt": "cd /home/tom/github/subactor/www-sub-actor && node test/testql-suite.mjs",
+      "contentHash": "sha256:986cd30b5aeceb77ef96e69573b7ebb6437677a91d7e766029f53157e299ab1b",
+      "intentWeight": 72,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-TEST-001"
+      ]
+    },
+    {
+      "id": "evidence:eeedc33a0c4af1c2",
+      "eventId": "event:a730b52e2600577d",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "accepted_command",
+      "actor": "human",
+      "sequence": 29,
+      "excerpt": "cd /home/tom/github/subactor/www-sub-actor && node test/testql-suite.mjs",
+      "contentHash": "sha256:986cd30b5aeceb77ef96e69573b7ebb6437677a91d7e766029f53157e299ab1b",
+      "intentWeight": 72,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-TEST-001"
+      ]
+    },
+    {
+      "id": "evidence:87ca47550d27c43b",
+      "eventId": "event:bb14d2f5598fe5af",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "accepted_command",
+      "actor": "human",
+      "sequence": 30,
+      "excerpt": "cd /home/tom/github/subactor/www-sub-actor && node test/testql-suite.mjs",
+      "contentHash": "sha256:986cd30b5aeceb77ef96e69573b7ebb6437677a91d7e766029f53157e299ab1b",
+      "intentWeight": 72,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-TEST-001"
+      ]
+    },
+    {
+      "id": "evidence:bca68b7f03afa8e7",
+      "eventId": "event:6e4dd1abf6428336",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "agent_claim",
+      "actor": "agent",
+      "sequence": 32,
+      "excerpt": "Standard Wdrożenia Modułowości **Wellmanifest** (`wellmanifest/modularity`, `wellmanifest/ssot`, `wellmanifest/project-ssot`) został zaimplementowany w repozytorium `www-sub-actor`.\n\n### Podsumowanie wykonanych prac:\n\n1. **Podział na podpakiety domenowe (`packages/`)**:\n Utworzono strukturę podpakietów w `packages/` wydzielającą poszczególne elementy aplika…",
+      "contentHash": "sha256:66b122f13e580a872d13bf01e0ce18fde290aeda53ff7e62dab3a6203734de08",
+      "intentWeight": 20,
+      "realityWeight": 15,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-TEST-001",
+        "DT-SSOT-001",
+        "DT-PROD-001",
+        "DT-LLM-001"
+      ]
+    },
+    {
+      "id": "evidence:95f653b124c6f0d5",
+      "eventId": "event:db1211861c8e16ad",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "human_instruction_repeated",
+      "actor": "human",
+      "sequence": 33,
+      "excerpt": "zrestartuj i prztetstuj",
+      "contentHash": "sha256:94f21d243430b16acd7ed429e446a1cd61e7c395c96519bbf1008b2578892cda",
+      "intentWeight": 92,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-TEST-001"
+      ]
+    },
+    {
+      "id": "evidence:3c4d32cdd70585f0",
+      "eventId": "event:11133e5a31ab8a6e",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "accepted_command",
+      "actor": "human",
+      "sequence": 34,
+      "excerpt": "cd /home/tom/github/subactor/www-sub-actor && make restart",
+      "contentHash": "sha256:122124d60bb0536ca8cd0b188bcddf7ec8e385fe554c5f1890b187b26836e699",
+      "intentWeight": 72,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-TEST-001"
+      ]
+    },
+    {
+      "id": "evidence:91d9aa55653388ff",
+      "eventId": "event:78fe47b9d03a36c3",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "accepted_command",
+      "actor": "human",
+      "sequence": 35,
+      "excerpt": "cd /home/tom/github/subactor/www-sub-actor && make testql",
+      "contentHash": "sha256:59a98195699c020cfbded0259a007c70c7218769ab94ef0fe1245800f2bac6d9",
+      "intentWeight": 72,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-TEST-001"
+      ]
+    },
+    {
+      "id": "evidence:1944cd1fbac985ca",
+      "eventId": "event:d5e1e671c0cb8ef6",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "accepted_command",
+      "actor": "human",
+      "sequence": 36,
+      "excerpt": "curl -s http://127.0.0.1:8781/healthz && echo \"\" && curl -s http://127.0.0.1:8781/api/config | head -c 300 && echo \"\"",
+      "contentHash": "sha256:c44304643abf5a77244fbf7ccf386f78e255093ae20203c410bb88d12aaf11ea",
+      "intentWeight": 72,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-TEST-001"
+      ]
+    },
+    {
+      "id": "evidence:157da24c30f3a73f",
+      "eventId": "event:249a11cf2feb100f",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "agent_claim",
+      "actor": "agent",
+      "sequence": 37,
+      "excerpt": "Usługi zostały zrestartowane i w pełni przetestowane.\n\n### Wyniki weryfikacji:\n1. **Restart serwerów deweloperskich**:\n - `PHP SaaS Server` uruchomiony na porcie `8781` (`http://127.0.0.1:8781`)\n - `PayPal Digital Twin` uruchomiony na porcie `8793` (`http://127.0.0.1:8793`)\n\n2. **Testy jednostkowe, kontraktowe i integracyjne (`make testql`)**:\n - **TestQL S…",
+      "contentHash": "sha256:738c014ee5ec2994fc6163de3408af8f4f8f64cf1fd27bbb0ef9d16ab7ee7d15",
+      "intentWeight": 20,
+      "realityWeight": 15,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-TEST-001",
+        "DT-SSOT-001",
+        "DT-REALITY-001"
+      ]
+    },
+    {
+      "id": "evidence:335902ac5a215d9b",
+      "eventId": "event:94db84dd328cb049",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "human_instruction_repeated",
+      "actor": "human",
+      "sequence": 38,
+      "excerpt": "rejetsracja i logowanie majqa przebieggac podoobnie, nie ma byc podawane iden tyfikacji rogazniacji, skorzytsaj z istniejacego api oraz formularza z projektu auth-subactor-com\n<section class=\"auth-section\"><h2 class=\"auth-title\">Logowanie do panelu operacyjnego</h2><p class=\"auth-subtitle\">Podaj e-mail i identyfikator organizacji podany przy rejestracji.</p…",
+      "contentHash": "sha256:30342baa2a38eeeb31bca0d3873c51ad2a41e6afd03339c8c94887a672689d41",
+      "intentWeight": 92,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-REUSE-001"
+      ]
+    },
+    {
+      "id": "evidence:2099bb5c53a07b2b",
+      "eventId": "event:dd05f209fe453b3e",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "accepted_command",
+      "actor": "human",
+      "sequence": 40,
+      "excerpt": "cd /home/tom/github/subactor/www-sub-actor && node test/testql-suite.mjs",
+      "contentHash": "sha256:986cd30b5aeceb77ef96e69573b7ebb6437677a91d7e766029f53157e299ab1b",
+      "intentWeight": 72,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-TEST-001"
+      ]
+    },
+    {
+      "id": "evidence:3d5c12231721fb6b",
+      "eventId": "event:2a5847ad40c1576d",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "accepted_command",
+      "actor": "human",
+      "sequence": 41,
+      "excerpt": "cd /home/tom/github/subactor/www-sub-actor && node test/testql-suite.mjs",
+      "contentHash": "sha256:986cd30b5aeceb77ef96e69573b7ebb6437677a91d7e766029f53157e299ab1b",
+      "intentWeight": 72,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-TEST-001"
+      ]
+    },
+    {
+      "id": "evidence:a40fc7c0c27d3994",
+      "eventId": "event:b14e56f6a7734e75",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "accepted_command",
+      "actor": "human",
+      "sequence": 42,
+      "excerpt": "cd /home/tom/github/subactor/www-sub-actor && node test/testql-suite.mjs",
+      "contentHash": "sha256:986cd30b5aeceb77ef96e69573b7ebb6437677a91d7e766029f53157e299ab1b",
+      "intentWeight": 72,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-TEST-001"
+      ]
+    },
+    {
+      "id": "evidence:b4ca2450a9e9b0aa",
+      "eventId": "event:ad0c8cdadbce83d9",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "accepted_command",
+      "actor": "human",
+      "sequence": 43,
+      "excerpt": "cd /home/tom/github/subactor/www-sub-actor && node test/testql-suite.mjs",
+      "contentHash": "sha256:986cd30b5aeceb77ef96e69573b7ebb6437677a91d7e766029f53157e299ab1b",
+      "intentWeight": 72,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-TEST-001"
+      ]
+    },
+    {
+      "id": "evidence:3e97fbc56a8ff3b1",
+      "eventId": "event:f1429ccba20491c1",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "accepted_command",
+      "actor": "human",
+      "sequence": 44,
+      "excerpt": "cd /home/tom/github/subactor/www-sub-actor && node test/testql-suite.mjs",
+      "contentHash": "sha256:986cd30b5aeceb77ef96e69573b7ebb6437677a91d7e766029f53157e299ab1b",
+      "intentWeight": 72,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-TEST-001"
+      ]
+    },
+    {
+      "id": "evidence:184421d4be8b1237",
+      "eventId": "event:c31deaf1792fae6a",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "accepted_command",
+      "actor": "human",
+      "sequence": 45,
+      "excerpt": "cd /home/tom/github/subactor/www-sub-actor && node test/testql-suite.mjs",
+      "contentHash": "sha256:986cd30b5aeceb77ef96e69573b7ebb6437677a91d7e766029f53157e299ab1b",
+      "intentWeight": 72,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-TEST-001"
+      ]
+    },
+    {
+      "id": "evidence:b25824686cc92427",
+      "eventId": "event:a706ca899939ee6d",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "accepted_command",
+      "actor": "human",
+      "sequence": 48,
+      "excerpt": "cd /home/tom/github/subactor/www-sub-actor && make testql",
+      "contentHash": "sha256:59a98195699c020cfbded0259a007c70c7218769ab94ef0fe1245800f2bac6d9",
+      "intentWeight": 72,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-TEST-001"
+      ]
+    },
+    {
+      "id": "evidence:e839a1b729e747ac",
+      "eventId": "event:9463cb9978290d55",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "accepted_command",
+      "actor": "human",
+      "sequence": 51,
+      "excerpt": "cd /home/tom/github/subactor/www-sub-actor && make testql",
+      "contentHash": "sha256:59a98195699c020cfbded0259a007c70c7218769ab94ef0fe1245800f2bac6d9",
+      "intentWeight": 72,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-TEST-001"
+      ]
+    },
+    {
+      "id": "evidence:252e34e830f02d13",
+      "eventId": "event:1ae3ca22958be101",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "agent_claim",
+      "actor": "agent",
+      "sequence": 52,
+      "excerpt": "### Summary of Work\n\n1. **Simplified Authentication Workflow & Organization ID Removal**:\n - **Backend (`src/php_app/Modules.php`)**:\n - Added `Normalizer::slugFromEmail()` to automatically derive a clean, valid organization slug from any user email address.\n - Added `EventStore::registrationForEmail()` and updated `DslInterpreter::cmdLogin()` and `CommandD…",
+      "contentHash": "sha256:cee0cef4c919e6e72a589813cafc1185909b0a85a9f1f86e6d1bec0b83753788",
+      "intentWeight": 20,
+      "realityWeight": 15,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-TEST-001",
+        "DT-SSOT-001",
+        "DT-LLM-001"
+      ]
+    },
+    {
+      "id": "evidence:582a7a56e28d9ae1",
+      "eventId": "event:b557ae28c109703b",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "human_instruction_repeated",
+      "actor": "human",
+      "sequence": 53,
+      "excerpt": "zrestartuj wszytsei uslugi i prztetsyuj, Co jeszce wymaga porpawy? zbadaj poprzez testql",
+      "contentHash": "sha256:93ecfc5390bff60ec894f015f4096ff483fe747081aa0aa1711e6669ee176517",
+      "intentWeight": 92,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-TEST-001",
+        "DT-REALITY-001"
+      ]
+    },
+    {
+      "id": "evidence:273cab308b111db1",
+      "eventId": "event:bbc18d6a2c16645c",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "accepted_command",
+      "actor": "human",
+      "sequence": 54,
+      "excerpt": "cd /home/tom/github/subactor/www-sub-actor && make restart",
+      "contentHash": "sha256:122124d60bb0536ca8cd0b188bcddf7ec8e385fe554c5f1890b187b26836e699",
+      "intentWeight": 72,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-TEST-001"
+      ]
+    },
+    {
+      "id": "evidence:b1e9a734ad85ab3b",
+      "eventId": "event:ad83672821432fb0",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "accepted_command",
+      "actor": "human",
+      "sequence": 55,
+      "excerpt": "cd /home/tom/github/subactor/www-sub-actor && make testql",
+      "contentHash": "sha256:59a98195699c020cfbded0259a007c70c7218769ab94ef0fe1245800f2bac6d9",
+      "intentWeight": 72,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-TEST-001"
+      ]
+    },
+    {
+      "id": "evidence:c6a2afcbc1644f0f",
+      "eventId": "event:c41ee3295b5d6ba1",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "accepted_command",
+      "actor": "human",
+      "sequence": 56,
+      "excerpt": "cd /home/tom/github/subactor/www-sub-actor && npm test",
+      "contentHash": "sha256:c971725a5339d6268cdd78bcf82fc68aa78f6ad1a3eeeb8d4b7ab9e9b86382af",
+      "intentWeight": 72,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-TEST-001"
+      ]
+    },
+    {
+      "id": "evidence:08d3c226cb5ca51d",
+      "eventId": "event:d01c8a8471f7f935",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "agent_claim",
+      "actor": "agent",
+      "sequence": 57,
+      "excerpt": "Usługi zostały zrestartowane i przetestowane za pomocą pakietu **TestQL** oraz pełnej suity testowej.\n\n---\n\n### 1. Status po restarcie i wynik testów\n\n- **PHP SaaS Server (`http://127.0.0.1:8781`)**: **AKTYWNY / READY**\n- **PayPal Digital Twin (`http://127.0.0.1:8793`)**: **AKTYWNY / READY**\n- **TestQL Suite (`node test/testql-suite.mjs`)**: \n - `/healthz`…",
+      "contentHash": "sha256:2a1b9166713db32d41a4743fa8998ff2d3a09e4b59ba7e35d5439519ea307afe",
+      "intentWeight": 20,
+      "realityWeight": 15,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-GOV-001",
+        "DT-TEST-001",
+        "DT-SSOT-001",
+        "DT-REALITY-001",
+        "DT-LLM-001",
+        "DT-DOCKER-001"
+      ]
+    },
+    {
+      "id": "evidence:25e7899e9692da00",
+      "eventId": "event:45bdfedf81b4211a",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "human_instruction_repeated",
+      "actor": "human",
+      "sequence": 58,
+      "excerpt": "dlaczego w trakcie logowania nie jest proszone o OTP",
+      "contentHash": "sha256:64c598d2e4d06ff8b7c5d59822f47e8ecbcae6cb84332fb5307f1809b70380f8",
+      "intentWeight": 92,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-PROD-001"
+      ]
+    },
+    {
+      "id": "evidence:da42e7b3d20c52f5",
+      "eventId": "event:d96688db9f4de5c5",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "agent_claim",
+      "actor": "agent",
+      "sequence": 59,
+      "excerpt": "W obecnej wersji aplikacji **logowanie nie wymaga wpisywania kodu OTP / Magic Link** z następujących powodów:\n\n1. **Uproszczony model sesji (SaaS MVP / Direct Session)**:\n - Aktualny endpoint `/api/access/login` przyjmuje adres e-mail i sprawdza, czy istnieje dla niego zdarzenie rejestracji organizacji (`TenantRegistered`). \n - Jeśli e-mail jest poprawny i…",
+      "contentHash": "sha256:314eb802055183e730721bf51dc0062d7d36079cf77ced49a6b9b225cd7ac309",
+      "intentWeight": 20,
+      "realityWeight": 15,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-PROD-001"
+      ]
+    },
+    {
+      "id": "evidence:43b82e4b265719bc",
+      "eventId": "event:413628236032bfb2",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "accepted_command",
+      "actor": "human",
+      "sequence": 62,
+      "excerpt": "cd /home/tom/github/subactor/www-sub-actor && make restart",
+      "contentHash": "sha256:122124d60bb0536ca8cd0b188bcddf7ec8e385fe554c5f1890b187b26836e699",
+      "intentWeight": 72,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-TEST-001"
+      ]
+    },
+    {
+      "id": "evidence:9813c9e7fed8a247",
+      "eventId": "event:2b4e798a6b9a1601",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "accepted_command",
+      "actor": "human",
+      "sequence": 63,
+      "excerpt": "cd /home/tom/github/subactor/www-sub-actor && make testql",
+      "contentHash": "sha256:59a98195699c020cfbded0259a007c70c7218769ab94ef0fe1245800f2bac6d9",
+      "intentWeight": 72,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-TEST-001"
+      ]
+    },
+    {
+      "id": "evidence:1c5768283f8af31f",
+      "eventId": "event:e702c9d968cca147",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "accepted_command",
+      "actor": "human",
+      "sequence": 64,
+      "excerpt": "cd /home/tom/github/subactor/www-sub-actor && npm test",
+      "contentHash": "sha256:c971725a5339d6268cdd78bcf82fc68aa78f6ad1a3eeeb8d4b7ab9e9b86382af",
+      "intentWeight": 72,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-TEST-001"
+      ]
+    },
+    {
+      "id": "evidence:254ef7476f27acdd",
+      "eventId": "event:5b80076a3624d486",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "agent_claim",
+      "actor": "agent",
+      "sequence": 65,
+      "excerpt": "Zaimplementowano pełną obsługę logowania dwuetapowego przy użyciu jednorazowego kodu OTP (One-Time Password) wygenerowanego i zweryfikowanego przez backend.\n\n---\n\n### Co zostało wykonane:\n\n1. **Moduł zarządzania kodami OTP (`Subactor\\Saas\\Session\\OtpManager`)**:\n - Wygenerowanie 6-cyfrowego cyfrowego kodu OTP z czasem ważności 10 minut.\n - Weryfikacja kodu…",
+      "contentHash": "sha256:578a56d74de6dfc8c7f866eca0ddbf42285bbbc4f82a39c1e66893c4fa605a59",
+      "intentWeight": 20,
+      "realityWeight": 15,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-TEST-001",
+        "DT-PROD-001",
+        "DT-LLM-001"
+      ]
+    },
+    {
+      "id": "evidence:ddd48173c580cca5",
+      "eventId": "event:b65bb3d9bd0178e3",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "human_instruction_repeated",
+      "actor": "human",
+      "sequence": 66,
+      "excerpt": "zrestartuj wszytskie uslugi, prztetstuj, czy email otp bedzie wysylany na moj prawdziyw?",
+      "contentHash": "sha256:928d1c030b5c5e28c7957a9f19997a7a7bc999b7e53890a01022df57dd43ceb0",
+      "intentWeight": 92,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-TEST-001",
+        "DT-PROD-001"
+      ]
+    },
+    {
+      "id": "evidence:b388e3cb45c0fd1e",
+      "eventId": "event:e89e380d978728b9",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "accepted_command",
+      "actor": "human",
+      "sequence": 68,
+      "excerpt": "cd /home/tom/github/subactor/www-sub-actor && make restart",
+      "contentHash": "sha256:122124d60bb0536ca8cd0b188bcddf7ec8e385fe554c5f1890b187b26836e699",
+      "intentWeight": 72,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-TEST-001"
+      ]
+    },
+    {
+      "id": "evidence:2db4487d70f3fb63",
+      "eventId": "event:afdada99a394e1c0",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "accepted_command",
+      "actor": "human",
+      "sequence": 69,
+      "excerpt": "cd /home/tom/github/subactor/www-sub-actor && make testql",
+      "contentHash": "sha256:59a98195699c020cfbded0259a007c70c7218769ab94ef0fe1245800f2bac6d9",
+      "intentWeight": 72,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-TEST-001"
+      ]
+    },
+    {
+      "id": "evidence:13fbadee3699c05b",
+      "eventId": "event:a8c23e63fb3d8d8e",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "accepted_command",
+      "actor": "human",
+      "sequence": 70,
+      "excerpt": "cd /home/tom/github/subactor/www-sub-actor && npm test",
+      "contentHash": "sha256:c971725a5339d6268cdd78bcf82fc68aa78f6ad1a3eeeb8d4b7ab9e9b86382af",
+      "intentWeight": 72,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-TEST-001"
+      ]
+    },
+    {
+      "id": "evidence:5f3fe4cc0e9eed35",
+      "eventId": "event:2dce573938c6beb2",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "agent_claim",
+      "actor": "agent",
+      "sequence": 71,
+      "excerpt": "Wszystkie usługi zostały zrestartowane i przetestowane.\n\n---\n\n### 1. Status po restarcie i testach\n- **PHP SaaS Server (`http://127.0.0.1:8781`)**: **AKTYWNY / READY**\n- **PayPal Digital Twin (`http://127.0.0.1:8793`)**: **AKTYWNY / READY**\n- **TestQL Suite (`make testql`)**: **PASSED** (Wszystkie scenariusze serwisu, OTP i commercial SSOT zaliczone)\n- **Un…",
+      "contentHash": "sha256:cd55900c174521b3c4fc981ef1bdc5bc907f65b7f75a44ac373ebe86bf008289",
+      "intentWeight": 20,
+      "realityWeight": 15,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-TEST-001",
+        "DT-SSOT-001",
+        "DT-REALITY-001",
+        "DT-PROD-001"
+      ]
+    },
+    {
+      "id": "evidence:0e9972121c3ecb61",
+      "eventId": "event:1c1f5ad5045139e5",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "human_instruction_repeated",
+      "actor": "human",
+      "sequence": 72,
+      "excerpt": "w panelu usera zrob lepszą organziacje panelu, aby zawartosc był podzielona poprzez TABY, aby konfiugruacja konta była osobno i aby, integracje, tożsamosci, digital twins, nodes były osobno",
+      "contentHash": "sha256:41fe23e72ee8a5ae8e591c00bc632f08db071317c1f85a0e812a728eb7d0e080",
+      "intentWeight": 92,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-REALITY-001",
+        "DT-UX-001"
+      ]
+    },
+    {
+      "id": "evidence:8a4a25b079b8c41e",
+      "eventId": "event:026b43b342d7a603",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "accepted_command",
+      "actor": "human",
+      "sequence": 74,
+      "excerpt": "cd /home/tom/github/subactor/www-sub-actor && make restart",
+      "contentHash": "sha256:122124d60bb0536ca8cd0b188bcddf7ec8e385fe554c5f1890b187b26836e699",
+      "intentWeight": 72,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-TEST-001"
+      ]
+    },
+    {
+      "id": "evidence:3683cdb34495e029",
+      "eventId": "event:d1e4109685b236e4",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "accepted_command",
+      "actor": "human",
+      "sequence": 75,
+      "excerpt": "cd /home/tom/github/subactor/www-sub-actor && make testql",
+      "contentHash": "sha256:59a98195699c020cfbded0259a007c70c7218769ab94ef0fe1245800f2bac6d9",
+      "intentWeight": 72,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-TEST-001"
+      ]
+    },
+    {
+      "id": "evidence:714ca99161675efc",
+      "eventId": "event:830ea3dc14e1cebe",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "accepted_command",
+      "actor": "human",
+      "sequence": 76,
+      "excerpt": "cd /home/tom/github/subactor/www-sub-actor && npm test",
+      "contentHash": "sha256:c971725a5339d6268cdd78bcf82fc68aa78f6ad1a3eeeb8d4b7ab9e9b86382af",
+      "intentWeight": 72,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-TEST-001"
+      ]
+    },
+    {
+      "id": "evidence:50c2587e23f90219",
+      "eventId": "event:3cbfd125f043ef39",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "agent_claim",
+      "actor": "agent",
+      "sequence": 77,
+      "excerpt": "Zreorganizowano panel użytkownika w oparciu o nowozdefiniowaną nawigację zakładkową (TABY).\n\n---\n\n### Wprowadzone zmiany:\n\n1. **Struktura Zakładek (Tabs)**:\n - **`Konfiguracja konta`**: Dedykowana zakładka zawierająca szczegóły planu subskrypcji, stan rozliczeń, ustawienia infrastruktury hostingowej (Plesk/VPS/Cloud), certyfikaty oraz dziennik zdarzeń CQRS.…",
+      "contentHash": "sha256:ce6eff64339ec91b4e0e136ab751f77a9103d0dbf5a1dd86f916daa0566c008c",
+      "intentWeight": 20,
+      "realityWeight": 15,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-TEST-001",
+        "DT-REALITY-001",
+        "DT-PROD-001",
+        "DT-UX-001",
+        "DT-LLM-001"
+      ]
+    },
+    {
+      "id": "evidence:7aea914cb1920eb1",
+      "eventId": "event:cea578744b4e470c",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "human_instruction_repeated",
+      "actor": "human",
+      "sequence": 78,
+      "excerpt": "CO jeszce wymaga poropawy? jak to bezie działało na sytsemie proudkcyjnym? zbadaj czy sa jakies błędy",
+      "contentHash": "sha256:f1947d95f30070ea9757ef2064d09e9fed18abbdc1ceac6c6c5ff9d524938cb2",
+      "intentWeight": 92,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-REALITY-001"
+      ]
+    },
+    {
+      "id": "evidence:0cdce6be7984502f",
+      "eventId": "event:132718d1cb26400b",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "accepted_command",
+      "actor": "human",
+      "sequence": 80,
+      "excerpt": "cd /home/tom/github/subactor/www-sub-actor && make testql",
+      "contentHash": "sha256:59a98195699c020cfbded0259a007c70c7218769ab94ef0fe1245800f2bac6d9",
+      "intentWeight": 72,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-TEST-001"
+      ]
+    },
+    {
+      "id": "evidence:a2fe80fd15685ee2",
+      "eventId": "event:6ac35f2eae221b45",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "accepted_command",
+      "actor": "human",
+      "sequence": 81,
+      "excerpt": "cd /home/tom/github/subactor/www-sub-actor && npm test",
+      "contentHash": "sha256:c971725a5339d6268cdd78bcf82fc68aa78f6ad1a3eeeb8d4b7ab9e9b86382af",
+      "intentWeight": 72,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-TEST-001"
+      ]
+    },
+    {
+      "id": "evidence:9fa3981fde03ff4b",
+      "eventId": "event:32158ab4b5429fe2",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "agent_claim",
+      "actor": "agent",
+      "sequence": 84,
+      "excerpt": "Zbadano stan aplikacji pod kątem gotowości produkcyjnej i bezpieczeństwa.\n\n---\n\n### 1. Co zostało wykryte i usprawnione:\n\n1. **Zabezpieczenie Kodu OTP przed Obejściem w Produkcji**:\n - **Wcześniej**: Kod deweloperski (`123456` / `NOCC100`) pozwalał na logowanie w każdym środowisku.\n - **Poprawka**: Wprowadzono flagę `$allowDevBypass`. W środowisku produkcyj…",
+      "contentHash": "sha256:5dd74aaaea926587c108bdaa0f12cfc8fcfd7a5a1ba91a603a4913dfb5e34d31",
+      "intentWeight": 20,
+      "realityWeight": 15,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-TEST-001",
+        "DT-PROD-001"
+      ]
+    },
+    {
+      "id": "evidence:b3e7f07432bb2261",
+      "eventId": "event:2bee552f55b65eb7",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "human_instruction_repeated",
+      "actor": "human",
+      "sequence": 85,
+      "excerpt": "po co <button class=\"btn-toggle\"><svg class=\"icon\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.…",
+      "contentHash": "sha256:77bbe092736989a2bc58769d8441a7c146ef9a91ac90ad483aef98fb12d79b9e",
+      "intentWeight": 92,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-UX-001"
+      ]
+    },
+    {
+      "id": "evidence:e9168e57f10b91e1",
+      "eventId": "event:83ce25dc8a592a2f",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "accepted_command",
+      "actor": "human",
+      "sequence": 87,
+      "excerpt": "cd /home/tom/github/subactor/www-sub-actor && make testql",
+      "contentHash": "sha256:59a98195699c020cfbded0259a007c70c7218769ab94ef0fe1245800f2bac6d9",
+      "intentWeight": 72,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-TEST-001"
+      ]
+    },
+    {
+      "id": "evidence:5c21f98410e0ba9e",
+      "eventId": "event:c9461326062f5984",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "accepted_command",
+      "actor": "human",
+      "sequence": 88,
+      "excerpt": "cd /home/tom/github/subactor/www-sub-actor && npm test",
+      "contentHash": "sha256:c971725a5339d6268cdd78bcf82fc68aa78f6ad1a3eeeb8d4b7ab9e9b86382af",
+      "intentWeight": 72,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-TEST-001"
+      ]
+    },
+    {
+      "id": "evidence:9a8f67c983ff4815",
+      "eventId": "event:638d50f8dfe63227",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "agent_claim",
+      "actor": "agent",
+      "sequence": 90,
+      "excerpt": "Masz całkowitą rację. Przycisk w górnej belce (top navbar) po zalogowaniu służy do przejścia do całego widoku panelu klienta.\n\nEtykieta `Moje integracje` na górnym pasku była pozostałością ze starego widoku, zanim podzieliliśmy panel na osobne zakłady.\n\n### Co zostało poprawione:\n1. **Etykieta górnego przycisku**: Zmieniono z `Moje integracje` na **`Panel o…",
+      "contentHash": "sha256:7cd96fb2ef5f2f3f2532106489ca6e853daf0a0c0905c3361308ce03a7b0efc0",
+      "intentWeight": 20,
+      "realityWeight": 15,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-TEST-001",
+        "DT-REALITY-001"
+      ]
+    },
+    {
+      "id": "evidence:273e39098d7c490a",
+      "eventId": "event:f875ca3084f70a31",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "human_instruction_repeated",
+      "actor": "human",
+      "sequence": 91,
+      "excerpt": "w url nie widac co zostalo klieknite http://127.0.0.1:8781/?action=panel&currency=PLN\npowinnobyc konfiguracja konta i inne taby gduy sa klikane, dodatkowo w konfigruacji konta powinny być API TOKEN do systemu subactor usera oraz w panel-tabs-bar zakladka dla TOKENOW LLM zasilajacych system z uzloeniem priorytetyzacji i rprzeznaczenia, otagownaia kazdego LLM…",
+      "contentHash": "sha256:68c91cd673cbb8d7b1d4413dc2fe638dcc96a1f538a9015c77a3844a7ecbd6ee",
+      "intentWeight": 92,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-UX-001",
+        "DT-LLM-001"
+      ]
+    },
+    {
+      "id": "evidence:1e16409e2db61501",
+      "eventId": "event:1b1d232044d0643c",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "accepted_command",
+      "actor": "human",
+      "sequence": 93,
+      "excerpt": "cd /home/tom/github/subactor/www-sub-actor && make testql",
+      "contentHash": "sha256:59a98195699c020cfbded0259a007c70c7218769ab94ef0fe1245800f2bac6d9",
+      "intentWeight": 72,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-TEST-001"
+      ]
+    },
+    {
+      "id": "evidence:c40933c79ad2ef38",
+      "eventId": "event:df00c22a3c48f2f4",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "accepted_command",
+      "actor": "human",
+      "sequence": 94,
+      "excerpt": "cd /home/tom/github/subactor/www-sub-actor && npm test",
+      "contentHash": "sha256:c971725a5339d6268cdd78bcf82fc68aa78f6ad1a3eeeb8d4b7ab9e9b86382af",
+      "intentWeight": 72,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-TEST-001"
+      ]
+    },
+    {
+      "id": "evidence:c166b8f3f0493044",
+      "eventId": "event:eec37a32982142de",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "agent_claim",
+      "actor": "agent",
+      "sequence": 95,
+      "excerpt": "Wszystkie wymagane funkcje zostały zaimplementowane, zbudowane i przetestowane.\n\n---\n\n### Zrealizowane usprawnienia:\n\n1. **Synchronizacja Zakładek z URL (`tab=...`)**:\n - Przełączanie zakładek w `panel-tabs-bar` automatycznie aktualizuje adres URL bez przeładowania strony, np.:\n - `http://127.0.0.1:8781/?action=panel&tab=account`\n - `http://127.0.0.1:8781/?…",
+      "contentHash": "sha256:b4911888caa6dce62ac1f18a0963461ff863bd836d29cf8763b2db15fe288cfe",
+      "intentWeight": 20,
+      "realityWeight": 15,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-TEST-001",
+        "DT-PROD-001",
+        "DT-UX-001",
+        "DT-LLM-001"
+      ]
+    },
+    {
+      "id": "evidence:c769a91e78958a94",
+      "eventId": "event:141d56d6db5a1525",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "human_correction",
+      "actor": "human",
+      "sequence": 96,
+      "excerpt": "kontynuuj, zrestartuj wszytskie uslugi i przetstuj czy dzialaja (wszytsko co tutaj pisze powinno byc zgodnie z oczekiwaniami standardu /home/tom/github/wellmanifest/new-project i /home/tom/github/wellmanifest/ticket-lifecycle) pisane w project/ticket-*/ aby było wiadomo co aktualnei jest robione",
+      "contentHash": "sha256:f65cf17edfda8f437dce141e0bb21bfe824ecdbd5430cd50f8658bd7fe99faf2",
+      "intentWeight": 100,
+      "realityWeight": 0,
+      "isCorrection": true,
+      "topicHints": [
+        "DT-GOV-001",
+        "DT-TEST-001",
+        "DT-CONTINUE-001",
+        "DT-LLM-001"
+      ]
+    },
+    {
+      "id": "evidence:b45a92184a5f9415",
+      "eventId": "event:1d52067a5833769e",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "accepted_command",
+      "actor": "human",
+      "sequence": 98,
+      "excerpt": "grep -rn \"IN_PROGRESS\" project/ticket-*/README.md",
+      "contentHash": "sha256:7f1d932129a8964e61f141a75aa36cc12c94c4ad5c8c1e2ae4b4fcd0063a4c24",
+      "intentWeight": 72,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-GOV-001"
+      ]
+    },
+    {
+      "id": "evidence:fc408a12b41912f1",
+      "eventId": "event:086d3005d1bb71c0",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "accepted_command",
+      "actor": "human",
+      "sequence": 99,
+      "excerpt": "cd /home/tom/github/subactor/www-sub-actor && ./project/new-ticket.sh -t \"Panel tab URL routing, API tokens, and LLM connection manager\" -w application -a antigravity --kind SERVICE --priority P2 --origin health --force-new",
+      "contentHash": "sha256:dacc4ba2011949ff73363592e410cd865e5d5c402c787acfb9c4dc882c2a1b35",
+      "intentWeight": 72,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-UX-001",
+        "DT-LLM-001"
+      ]
+    },
+    {
+      "id": "evidence:e36b2b90ce823fbf",
+      "eventId": "event:8cb32f4a410d88b7",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "accepted_command",
+      "actor": "human",
+      "sequence": 101,
+      "excerpt": "cd /home/tom/github/subactor/www-sub-actor && make testql",
+      "contentHash": "sha256:59a98195699c020cfbded0259a007c70c7218769ab94ef0fe1245800f2bac6d9",
+      "intentWeight": 72,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-TEST-001"
+      ]
+    },
+    {
+      "id": "evidence:06d2df98e5e6b549",
+      "eventId": "event:ec9acb54cd5e7883",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "accepted_command",
+      "actor": "human",
+      "sequence": 102,
+      "excerpt": "cd /home/tom/github/subactor/www-sub-actor && npm test",
+      "contentHash": "sha256:c971725a5339d6268cdd78bcf82fc68aa78f6ad1a3eeeb8d4b7ab9e9b86382af",
+      "intentWeight": 72,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-TEST-001"
+      ]
+    },
+    {
+      "id": "evidence:89aa4eaa39e61795",
+      "eventId": "event:80c576badb582187",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "agent_claim",
+      "actor": "agent",
+      "sequence": 103,
+      "excerpt": "Wszystkie usługi zostały poddane restartowi i weryfikacji testami, a przebieg prac został udokumentowany w dedykowanym zgłoszeniu zgodnie ze standardem `wellmanifest/ticket-lifecycle` w katalogu `project/ticket-045/`.\n\n---\n\n### Utworzony Ticket Governance:\nUtworzono i zainicjalizowano zgłoszenie `project/ticket-045/`:\n- **ID**: `ticket-045`\n- **Tytuł**: `Pa…",
+      "contentHash": "sha256:25eb3567141203f9dd981b36acd5b03a247f86e091035591b45a623b5ecb0ca6",
+      "intentWeight": 20,
+      "realityWeight": 15,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-GOV-001",
+        "DT-TEST-001",
+        "DT-REALITY-001",
+        "DT-UX-001",
+        "DT-LLM-001"
+      ]
+    },
+    {
+      "id": "evidence:3cf8983fb8fc51db",
+      "eventId": "event:c2d9d12c8532eb63",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "human_instruction_repeated",
+      "actor": "human",
+      "sequence": 104,
+      "excerpt": "kontynuuj",
+      "contentHash": "sha256:c6fb1ddbdd3e436f2c3b1f24a88974e449c47da8fb97dfb4976da3d9e3c5c8c9",
+      "intentWeight": 92,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-CONTINUE-001"
+      ]
+    },
+    {
+      "id": "evidence:929e07f0156ca4c2",
+      "eventId": "event:30259c646adbec76",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "accepted_command",
+      "actor": "human",
+      "sequence": 106,
+      "excerpt": "cd /home/tom/github/subactor/www-sub-actor && make testql && npm test",
+      "contentHash": "sha256:19c3ddc61d55b0522e0614222897edab3fa4c2192801ea361994aeef7496da86",
+      "intentWeight": 72,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-TEST-001"
+      ]
+    },
+    {
+      "id": "evidence:47de6deee36b3839",
+      "eventId": "event:9401a57325fb9f74",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "agent_claim",
+      "actor": "agent",
+      "sequence": 107,
+      "excerpt": "Zadanie zostało w pełni ukończone i zweryfikowane.\n\n### Podsumowanie podjętych działań:\n1. **Dopisanie wpisu do `TODO.md`**:\n - Dopisano pozycję `Ticket 045: ustandaryzować nawigację zakładkami z synchronicznym parametrem URL tab=..., dodać kartę Bearer API Token użytkownika w sekcji konta oraz dedykowaną zakładkę Kluczy i Proxy LLM z priorytetyzacją i otag…",
+      "contentHash": "sha256:3b2e3d86fe98e6f209629043f3903138b81cbd1d032acd15f6d194c02952e881",
+      "intentWeight": 20,
+      "realityWeight": 15,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-GOV-001",
+        "DT-TEST-001",
+        "DT-REALITY-001",
+        "DT-PROD-001",
+        "DT-UX-001",
+        "DT-LLM-001"
+      ]
+    },
+    {
+      "id": "evidence:a044e67804c1d66d",
+      "eventId": "event:314f4aeed3ab28e9",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "human_correction",
+      "actor": "human",
+      "sequence": 108,
+      "excerpt": "nie dziala http://127.0.0.1:8781/?action=panel&currency=PLN&tab=identities kontynuuj",
+      "contentHash": "sha256:9ab10027b75d84febfea27c9d113bd05a0323f460f82040955f705fb6bd0c50c",
+      "intentWeight": 100,
+      "realityWeight": 0,
+      "isCorrection": true,
+      "topicHints": [
+        "DT-UX-001",
+        "DT-CONTINUE-001"
+      ]
+    },
+    {
+      "id": "evidence:5786dd86f5b676d8",
+      "eventId": "event:9d59bb5d6ba26e72",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "accepted_command",
+      "actor": "human",
+      "sequence": 110,
+      "excerpt": "cd /home/tom/github/subactor/www-sub-actor && make testql",
+      "contentHash": "sha256:59a98195699c020cfbded0259a007c70c7218769ab94ef0fe1245800f2bac6d9",
+      "intentWeight": 72,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-TEST-001"
+      ]
+    },
+    {
+      "id": "evidence:25cb1db5699beac0",
+      "eventId": "event:036ec62e67fa779e",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "accepted_command",
+      "actor": "human",
+      "sequence": 111,
+      "excerpt": "cd /home/tom/github/subactor/www-sub-actor && npm test",
+      "contentHash": "sha256:c971725a5339d6268cdd78bcf82fc68aa78f6ad1a3eeeb8d4b7ab9e9b86382af",
+      "intentWeight": 72,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-TEST-001"
+      ]
+    },
+    {
+      "id": "evidence:e9c3c66d38c5d78d",
+      "eventId": "event:b9b8bb4b5c67e4fd",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "agent_claim",
+      "actor": "agent",
+      "sequence": 113,
+      "excerpt": "Problem został zidentyfikowany i natychmiast naprawiony:\n\n### Przyczyna błędu:\nPodczas renderowania zakładki `tab=identities` komponent `IdentitiesSection` nie otrzymywał właściwości `session` (`<IdentitiesSection providers={providers} />` zamiast `<IdentitiesSection session={session} providers={providers} />`), co przy próbie odczytu `session.tenant_slug`…",
+      "contentHash": "sha256:89f4288bc33bf7cee9b4db078c9839f8ef10e04de835e1ea200659dbbaec7ec7",
+      "intentWeight": 20,
+      "realityWeight": 15,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-GOV-001",
+        "DT-TEST-001",
+        "DT-PROD-001",
+        "DT-UX-001"
+      ]
+    },
+    {
+      "id": "evidence:0d1fc2882c906c22",
+      "eventId": "event:08d7a1701943d3ab",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "human_instruction_repeated",
+      "actor": "human",
+      "sequence": 114,
+      "excerpt": "kontynuuj",
+      "contentHash": "sha256:c6fb1ddbdd3e436f2c3b1f24a88974e449c47da8fb97dfb4976da3d9e3c5c8c9",
+      "intentWeight": 92,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-CONTINUE-001"
+      ]
+    },
+    {
+      "id": "evidence:9059fddacb00ec3d",
+      "eventId": "event:394b143697fa4173",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "accepted_command",
+      "actor": "human",
+      "sequence": 119,
+      "excerpt": "cd /home/tom/github/subactor/www-sub-actor && make testql && npm test",
+      "contentHash": "sha256:19c3ddc61d55b0522e0614222897edab3fa4c2192801ea361994aeef7496da86",
+      "intentWeight": 72,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-TEST-001"
+      ]
+    },
+    {
+      "id": "evidence:f00837535519d7de",
+      "eventId": "event:8285d05ec55b9bdd",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "agent_claim",
+      "actor": "agent",
+      "sequence": 120,
+      "excerpt": "Prace zostały zakończone i zweryfikowane:\n\n1. **Wszystkie Zakładki Panelu Operacyjnego Działają**:\n - `?action=panel&tab=account` (Konfiguracja konta & Subactor Bearer API Token)\n - `?action=panel&tab=integrations` (Dostępne i Połączone Integracje)\n - `?action=panel&tab=identities` (Tożsamości cyfrowe organizacji i dostawcy SSO)\n - `?action=panel&tab=twins`…",
+      "contentHash": "sha256:37319e34167b100d8b62bde26b9d119fa59f81f7e51e44bf69c629e7489ed039",
+      "intentWeight": 20,
+      "realityWeight": 15,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-TEST-001",
+        "DT-PROD-001",
+        "DT-UX-001",
+        "DT-LLM-001"
+      ]
+    },
+    {
+      "id": "evidence:55a58ca9b6a98ad1",
+      "eventId": "event:716bd602b9c2d8bb",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "human_instruction_repeated",
+      "actor": "human",
+      "sequence": 121,
+      "excerpt": "aktualnie etykiety w nmenu sa za dlugie, dodaj podpowiedzi podczas wchodzenia na konkrenty element menu, zeby wiadomo było co to jest, dodaj mozliwosc kontrolei menu dla mobilnej wersji z boku",
+      "contentHash": "sha256:d88c952a96504e3ab001a273e5585c83485cc64606f1bf9d6a3a4f945b92402d",
+      "intentWeight": 92,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-UX-001"
+      ]
+    },
+    {
+      "id": "evidence:2064786bcc201a40",
+      "eventId": "event:04991960592d6c04",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "human_instruction_repeated",
+      "actor": "human",
+      "sequence": 123,
+      "excerpt": "zrestartuj i prztetstuj prze4z testql",
+      "contentHash": "sha256:27d8fa4fdfec7ee62528d8c770432bcbdcbe306fbb5b3d92ab8022ceace5bbcd",
+      "intentWeight": 92,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-TEST-001"
+      ]
+    },
+    {
+      "id": "evidence:979bd6d1b4ca4755",
+      "eventId": "event:a7fafad4d9f27614",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "accepted_command",
+      "actor": "human",
+      "sequence": 125,
+      "excerpt": "cd /home/tom/github/subactor/www-sub-actor && make testql",
+      "contentHash": "sha256:59a98195699c020cfbded0259a007c70c7218769ab94ef0fe1245800f2bac6d9",
+      "intentWeight": 72,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-TEST-001"
+      ]
+    },
+    {
+      "id": "evidence:e7dde7f7e8c39cce",
+      "eventId": "event:4d4ef8a649f32d95",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "accepted_command",
+      "actor": "human",
+      "sequence": 126,
+      "excerpt": "cd /home/tom/github/subactor/www-sub-actor && npm test",
+      "contentHash": "sha256:c971725a5339d6268cdd78bcf82fc68aa78f6ad1a3eeeb8d4b7ab9e9b86382af",
+      "intentWeight": 72,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-TEST-001"
+      ]
+    },
+    {
+      "id": "evidence:663a22579793ead4",
+      "eventId": "event:bd8bb070d229ec18",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "accepted_command",
+      "actor": "human",
+      "sequence": 129,
+      "excerpt": "cd /home/tom/github/subactor/www-sub-actor && npm test",
+      "contentHash": "sha256:c971725a5339d6268cdd78bcf82fc68aa78f6ad1a3eeeb8d4b7ab9e9b86382af",
+      "intentWeight": 72,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-TEST-001"
+      ]
+    },
+    {
+      "id": "evidence:2b6adf8d63478ab2",
+      "eventId": "event:543b70df0eeb92b6",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "accepted_command",
+      "actor": "human",
+      "sequence": 130,
+      "excerpt": "cd /home/tom/github/subactor/www-sub-actor && make testql",
+      "contentHash": "sha256:59a98195699c020cfbded0259a007c70c7218769ab94ef0fe1245800f2bac6d9",
+      "intentWeight": 72,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-TEST-001"
+      ]
+    },
+    {
+      "id": "evidence:896bbc62ebeeba23",
+      "eventId": "event:43885e4981a202f8",
+      "sourceFile": "data/raw/history-portal.md",
+      "sourceClass": "agent_claim",
+      "actor": "agent",
+      "sequence": 132,
+      "excerpt": "Zostały zrealizowane następujące usprawnienia:\n\n### 1. Skrócenie Etykiet Menu & Podpowiedzi (Tooltips):\n- **Etykiety w `panel-tabs-bar`** zostały skrócone do zwięzłych słów kluczowych:\n - `Konto` (zamiast `Konfiguracja konta`)\n - `Integracje`\n - `Tożsamości` (zamiast `Tożsamości cyfrowe`)\n - `Bliźniaki` (zamiast `Digital Twins`)\n - `LLM Tokens` (zamiast `Kl…",
+      "contentHash": "sha256:be9d3b00df657432b82029748f82aeba6d442bc610290d32bf91251e42d61da0",
+      "intentWeight": 20,
+      "realityWeight": 15,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-TEST-001",
+        "DT-REALITY-001",
+        "DT-PROD-001",
+        "DT-UX-001",
+        "DT-LLM-001"
+      ]
+    },
+    {
+      "id": "evidence:e85aeb834c6d02f3",
+      "eventId": "event:fba9cd7138e34c91",
+      "sourceFile": "data/raw/history-cursor.json",
+      "sourceClass": "human_instruction_repeated",
+      "actor": "human",
+      "sequence": 134,
+      "excerpt": "jak mogę się zalogować do developerskiej wersji podobnie jak w auto.subactor.com lub sub.actor w celu realziadania, jako klient-founder saas, ktory powoluje po zakupie wswoja instancje i realziuje zdania swojej roganizacji majac d o dyspozycji sowwje urzdzenia lokalne poprzez node i digital twin urzadzen poprzez llm-acccoount-hub",
+      "contentHash": "sha256:43ba3b3905045e158dff0af1e35474db44551448a6b9621130926302e5c749ed",
+      "intentWeight": 92,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-REALITY-001",
+        "DT-REUSE-001",
+        "DT-LLM-001"
+      ]
+    },
+    {
+      "id": "evidence:6b38ab74f172ee84",
+      "eventId": "event:61d5fbd8990ce7e3",
+      "sourceFile": "data/raw/history-cursor.json",
+      "sourceClass": "human_instruction_repeated",
+      "actor": "human",
+      "sequence": 135,
+      "excerpt": "kontynuuj",
+      "contentHash": "sha256:c6fb1ddbdd3e436f2c3b1f24a88974e449c47da8fb97dfb4976da3d9e3c5c8c9",
+      "intentWeight": 92,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-CONTINUE-001"
+      ]
+    },
+    {
+      "id": "evidence:c4846ffe0920da33",
+      "eventId": "event:e19ab76162e60bf1",
+      "sourceFile": "data/raw/history-cursor.json",
+      "sourceClass": "human_instruction_repeated",
+      "actor": "human",
+      "sequence": 136,
+      "excerpt": "tak, ale nie używamy Mailpit, a prawdziwego emaila skonfigurowanego w .env",
+      "contentHash": "sha256:999d935d8cfca4fd69a886526c2e3c4b28e53f02b9a1987be20deee0d85f1c7f",
+      "intentWeight": 92,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-PROD-001"
+      ]
+    },
+    {
+      "id": "evidence:62e4528cd42e46ed",
+      "eventId": "event:f226db069f22809a",
+      "sourceFile": "data/raw/history-cursor.json",
+      "sourceClass": "human_instruction_repeated",
+      "actor": "human",
+      "sequence": 137,
+      "excerpt": "chce miec panel chroniony haslem, na ktory moge wejsc jako admin i widziec status wszystkich uslug i dostepu do sulgu i bledow systemu, chodzi o admin panel w ktorym moge zobaczyc czy system dzial apoporawnie i wrazie problemow szybko znajdywac rozwiazanie",
+      "contentHash": "sha256:7a67958f8344d5938abe3a75b4d033e082a5700fd20de31ea563fe0551abaf9a",
+      "intentWeight": 92,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-PROD-001"
+      ]
+    },
+    {
+      "id": "evidence:d2cb286a45eafd8e",
+      "eventId": "event:d9a07c7e9a66d02d",
+      "sourceFile": "data/raw/history-cursor.json",
+      "sourceClass": "human_instruction_repeated",
+      "actor": "human",
+      "sequence": 138,
+      "excerpt": "Ty jako LLM mozesz rownież mieć przez API dostep do tego panelu, żeby w razie deploymentu, lub zlego dziala nia w trakcie deploymentu ponaprawiać to co jest potrzebne a w razie awarii przyy normalnej pracy zadzialac szyybko aby nie eskalować problemow",
+      "contentHash": "sha256:fd1dfcdfd044c2a748dd4125e04cb9ef0cc7a843c3bf5c23ec06553733376e66",
+      "intentWeight": 92,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-LLM-001"
+      ]
+    },
+    {
+      "id": "evidence:384556423fffa5ff",
+      "eventId": "event:9516ab08feab3440",
+      "sourceFile": "data/raw/history-cursor.json",
+      "sourceClass": "human_instruction_repeated",
+      "actor": "human",
+      "sequence": 139,
+      "excerpt": "kontynuuj, chce miec wersje, ktora ulatwi deployment na pc produkcyjny, zrob docker testowy, ktory bedzie symulowal infrastrukutre produkcyjna i zrob na nim wdrozenie, razem z ingress domenami jak na produkcji bez portow,",
+      "contentHash": "sha256:de74e308fdb504c439d6e44a689debb18a40207c322a21c512c7f352b4f227df",
+      "intentWeight": 92,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-PROD-001",
+        "DT-CONTINUE-001",
+        "DT-DOCKER-001"
+      ]
+    },
+    {
+      "id": "evidence:9d80ef9bff859739",
+      "eventId": "event:ef19b7ba78d82436",
+      "sourceFile": "data/raw/history-cursor.json",
+      "sourceClass": "human_instruction_repeated",
+      "actor": "human",
+      "sequence": 140,
+      "excerpt": "przyjrzyj sie stronie http://127.0.0.1:8781/#offer-saas-start ona nie odpowiada tej, ktora była wczoraj, gdzie nie było on-premise i cena za basic była 59pln, czy mamy innną strone, czy jakiś nowy branch to napdisał?",
+      "contentHash": "sha256:784d837e2b34867727b827ce6634a3e6af059bce0f066dc1ca170b15f3f397f3",
+      "intentWeight": 92,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-SSOT-001",
+        "DT-REUSE-001"
+      ]
+    },
+    {
+      "id": "evidence:d32f7dd3e09d38e0",
+      "eventId": "event:2cdd5c7a63ee58bc",
+      "sourceFile": "data/raw/history-cursor.json",
+      "sourceClass": "human_instruction_repeated",
+      "actor": "human",
+      "sequence": 142,
+      "excerpt": "chce wrócić do oferty z worktree OTP (97/59), przywrócić poprzez porównanie side-by-side, co jest korzystdne a co nie, bo tez w tej poprzedniej wersji było rozdzielenie na pdstrony : Informacje prawne i zgodność UE",
+      "contentHash": "sha256:d45e484c762c5613e81cbcdbcf3b5342290f4f7e7af98274bdbcd2e785763e12",
+      "intentWeight": 92,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-REALITY-001",
+        "DT-PROD-001"
+      ]
+    },
+    {
+      "id": "evidence:a0721eb41ab7adaf",
+      "eventId": "event:b524eabbc1b86c42",
+      "sourceFile": "data/raw/history-cursor.json",
+      "sourceClass": "human_instruction_repeated",
+      "actor": "human",
+      "sequence": 143,
+      "excerpt": "z czego wyniknęły te nieporozumienia? Jak można im zapobiec w przyszłości, mimo rownoleglych zmian w systemie, czy mozna np od strony testowania okreslac co jest oczekiwane aa co nie i np rpzy kofliktach intencji wdrozen ui ticketow sygnalziowac błędy prze zwyslaniem nowych zmian na github merge? poprzez np baadnie intencji przez autogrammar/todo2code ? jak…",
+      "contentHash": "sha256:a5f32d56d25fd3ae86771ce95dfe012d07306505b5b068301f5f0cf959b11558",
+      "intentWeight": 92,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-SSOT-001",
+        "DT-LLM-001"
+      ]
+    },
+    {
+      "id": "evidence:ae874ca4eddd57ea",
+      "eventId": "event:57e397872bb769eb",
+      "sourceFile": "data/raw/history-cursor.json",
+      "sourceClass": "human_correction",
+      "actor": "human",
+      "sequence": 144,
+      "excerpt": "popraw projekty, aby tego typu problemow nie było , rowniez te projekty z wellmanifest, jesli dotychczas nie biora roznych niuansow pod uwage jako standardy",
+      "contentHash": "sha256:5e2a537c5e871841a905395d4e0621b18a0948ab19cff579feb03af83622404b",
+      "intentWeight": 100,
+      "realityWeight": 0,
+      "isCorrection": true,
+      "topicHints": [
+        "DT-LLM-001"
+      ]
+    },
+    {
+      "id": "evidence:9e9f8c0281c6df64",
+      "eventId": "event:002311da00d529a1",
+      "sourceFile": "data/raw/history-cursor.json",
+      "sourceClass": "human_instruction_repeated",
+      "actor": "human",
+      "sequence": 145,
+      "excerpt": "wyodrebnij projekt ktory bedzie mial nazwe offer i tam powinny byc przehcowywane rozne oferty, ktore potem beda przepinane do konkretnej strony",
+      "contentHash": "sha256:c8a4e667bbde2b57882f96ef43a257ba5b6bbe9748b473127153ac840a15b3c1",
+      "intentWeight": 92,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-SSOT-001"
+      ]
+    },
+    {
+      "id": "evidence:4990b17f356e4e48",
+      "eventId": "event:d7e383d10254d1cc",
+      "sourceFile": "data/raw/history-cursor.json",
+      "sourceClass": "human_instruction_repeated",
+      "actor": "human",
+      "sequence": 146,
+      "excerpt": "stworz rowniez projekt o nazwie brand, w ktorym beda przechowywane wszytskie infromacje brand: subactor jak kolory, logotypy, przykladoy uzycia i słownik / opis zakres slwonictwa okreslony zasob slow, ktory bedzie kierowany w ofertach i komunikactach z userami w soaial mediach w formacie /home/tom/github/wellmanifest/env-dsl /home/tom/github/wellmanifest/po…",
+      "contentHash": "sha256:5cde2b5f20ab8474a6f036d0a97cc724bd729f55e5f41bab185240bd2184f662",
+      "intentWeight": 92,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-SSOT-001",
+        "DT-LLM-001"
+      ]
+    },
+    {
+      "id": "evidence:fa80b06e21ef8564",
+      "eventId": "event:76094ef9d179a0d1",
+      "sourceFile": "data/raw/history-cursor.json",
+      "sourceClass": "human_correction",
+      "actor": "human",
+      "sequence": 147,
+      "excerpt": "nie wellmanifest/offer bo mowimy caly czas o subactor/offer i to stworz i wykonaj refakotryzacje ze strony www-sub-actor",
+      "contentHash": "sha256:8c4e6e956c6caa90d2406d9f0505c716b71ff9e48a29034b1b608a39122c370f",
+      "intentWeight": 100,
+      "realityWeight": 0,
+      "isCorrection": true,
+      "topicHints": [
+        "DT-SSOT-001",
+        "DT-LLM-001"
+      ]
+    },
+    {
+      "id": "evidence:43fd4a9245f3cd9f",
+      "eventId": "event:6a1ccb5bf9870174",
+      "sourceFile": "data/raw/history-cursor.json",
+      "sourceClass": "human_correction",
+      "actor": "human",
+      "sequence": 148,
+      "excerpt": "nie wellmanifest/brand , bo caly czas mowimy o subaactor/brand z uzyciem istniejacych standardow wellmanifest/*",
+      "contentHash": "sha256:0df95a87581004fe39d8795e6b5cf727e640b5ab895b4c4d89f4d877195485c4",
+      "intentWeight": 100,
+      "realityWeight": 0,
+      "isCorrection": true,
+      "topicHints": [
+        "DT-SSOT-001",
+        "DT-LLM-001"
+      ]
+    },
+    {
+      "id": "evidence:f6755ac3d4ba8b05",
+      "eventId": "event:b4accb30ade9f296",
+      "sourceFile": "data/raw/history-cursor.json",
+      "sourceClass": "human_instruction_repeated",
+      "actor": "human",
+      "sequence": 150,
+      "excerpt": "kontynuuj",
+      "contentHash": "sha256:c6fb1ddbdd3e436f2c3b1f24a88974e449c47da8fb97dfb4976da3d9e3c5c8c9",
+      "intentWeight": 92,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-CONTINUE-001"
+      ]
+    },
+    {
+      "id": "evidence:061bdd499581b8a2",
+      "eventId": "event:03b8ed3fd8ebe455",
+      "sourceFile": "data/raw/history-cursor.json",
+      "sourceClass": "human_instruction_repeated",
+      "actor": "human",
+      "sequence": 151,
+      "excerpt": "tak, a projekty standaryzacji po prostyu zmodyfikuj, aby narzucały standrady tam, gdzie zostana uzyte wedle wskazowek /home/tom/github/wellmanifest/offer /home/tom/github/wellmanifest/brand",
+      "contentHash": "sha256:2feba35f9f8fa3fe48c6fbd2bada00801a69a0a078e346f962964dff01d8fdbf",
+      "intentWeight": 92,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-SSOT-001",
+        "DT-LLM-001"
+      ]
+    },
+    {
+      "id": "evidence:e45054d61dc8b890",
+      "eventId": "event:03540eef24cf2a7b",
+      "sourceFile": "data/raw/history-cursor.json",
+      "sourceClass": "human_instruction_repeated",
+      "actor": "human",
+      "sequence": 152,
+      "excerpt": "wystartuj panel admina, zbadaj czy projekty standardyzacji są porpawnie wypchniete i wszytskie projekty dzialaja loklanie",
+      "contentHash": "sha256:3854500f0ddfc2fd5612bf22365bb8488f300a98968d4003e556b82f15a8e38b",
+      "intentWeight": 92,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-REALITY-001"
+      ]
+    },
+    {
+      "id": "evidence:fb46f0e2b4b3c6bb",
+      "eventId": "event:f2c033ed921df87e",
+      "sourceFile": "data/raw/history-cursor.json",
+      "sourceClass": "human_instruction_repeated",
+      "actor": "human",
+      "sequence": 153,
+      "excerpt": "kontynuuj",
+      "contentHash": "sha256:c6fb1ddbdd3e436f2c3b1f24a88974e449c47da8fb97dfb4976da3d9e3c5c8c9",
+      "intentWeight": 92,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-CONTINUE-001"
+      ]
+    },
+    {
+      "id": "evidence:14295c4267d25d29",
+      "eventId": "event:21c6027410e3c5ba",
+      "sourceFile": "data/raw/history-cursor.json",
+      "sourceClass": "human_instruction_repeated",
+      "actor": "human",
+      "sequence": 154,
+      "excerpt": "w zasadzie strona oferty sub.actor i logowania do panelu usera user.sub.actor powinna zwierać podstwowe funkjc ei byc odporna na spam a rownież korzystać ze stanrdu authentyfikacyjnego auth.subactor.com dopiero po rejestracji i zalogowaniu przez OTP powinna być mozliwosć opłacenia, czy aktualne standardy biora pod uwage taki lifecycle jako jeden z wielu opc…",
+      "contentHash": "sha256:27eb7ed1f20b5f866a2e8709ad79b05dffa761b87c2aad778ab32f3517ccd87a",
+      "intentWeight": 92,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-PROD-001",
+        "DT-LLM-001"
+      ]
+    },
+    {
+      "id": "evidence:d1eca7e0bf1cee8b",
+      "eventId": "event:f3e2b9e34389b4e4",
+      "sourceFile": "data/raw/history-cursor.json",
+      "sourceClass": "human_instruction_repeated",
+      "actor": "human",
+      "sequence": 155,
+      "excerpt": "czy mamu standaryzacje auth-lifecycle z otp , token-lifecycle, gdzie sa opisane cykle dla roznych form autoryzacji i athentyfikacji?",
+      "contentHash": "sha256:994be4fb8669dc4c3afb8a0cce95b279d838438a924b7f9a63676c522e40e081",
+      "intentWeight": 92,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-PROD-001"
+      ]
+    },
+    {
+      "id": "evidence:12a1b047f312ce07",
+      "eventId": "event:2802dff9092e1825",
+      "sourceFile": "data/raw/history-cursor.json",
+      "sourceClass": "human_instruction_repeated",
+      "actor": "human",
+      "sequence": 156,
+      "excerpt": "potrzebujemy analize zachowania runtime dla konkretnego stanrdu zywajacego DSL z /home/tom/github/wellmanifest z testami monitorujacycmi czy aktualne wdrozenie jest zgodne ze stanrdami opsianymi w /home/tom/github/wellmanifest",
+      "contentHash": "sha256:21be069ad2cba19abe22284a87af7795c96b12a4c35f078db89244adc73a43b1",
+      "intentWeight": 92,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-LLM-001"
+      ]
+    },
+    {
+      "id": "evidence:0897c050f01f8c4e",
+      "eventId": "event:6982222c941ef935",
+      "sourceFile": "data/raw/history-cursor.json",
+      "sourceClass": "human_instruction_repeated",
+      "actor": "human",
+      "sequence": 157,
+      "excerpt": "kontynuuj niezakonczone wdrozenia z planow",
+      "contentHash": "sha256:8576367a70b15e570ff785bdd08fd30d9e38a93ab8493ab17e19458be6e68626",
+      "intentWeight": 92,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-CONTINUE-001"
+      ]
+    },
+    {
+      "id": "evidence:b8a88f8702e5e9af",
+      "eventId": "event:5faa73d042407cb8",
+      "sourceFile": "data/raw/history-cursor.json",
+      "sourceClass": "human_instruction_repeated",
+      "actor": "human",
+      "sequence": 158,
+      "excerpt": "kontynuuj",
+      "contentHash": "sha256:c6fb1ddbdd3e436f2c3b1f24a88974e449c47da8fb97dfb4976da3d9e3c5c8c9",
+      "intentWeight": 92,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-CONTINUE-001"
+      ]
+    },
+    {
+      "id": "evidence:f88212ba744c3b5b",
+      "eventId": "event:8689a999bd66a0c4",
+      "sourceFile": "data/raw/history-cursor.json",
+      "sourceClass": "human_instruction_repeated",
+      "actor": "human",
+      "sequence": 159,
+      "excerpt": "kontynuuj",
+      "contentHash": "sha256:c6fb1ddbdd3e436f2c3b1f24a88974e449c47da8fb97dfb4976da3d9e3c5c8c9",
+      "intentWeight": 92,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-CONTINUE-001"
+      ]
+    },
+    {
+      "id": "evidence:08de1a94595be98b",
+      "eventId": "event:941ceb2e0ab355f9",
+      "sourceFile": "data/raw/history-cursor.json",
+      "sourceClass": "human_instruction_repeated",
+      "actor": "human",
+      "sequence": 160,
+      "excerpt": "uzyj autogrammar/todo2code do walidacji intencji kodu, dokumentacji z projektem w postaci DSL uzywanej dla LLM w celu zrozumienia roznic, zbierz infromacje rowniez odnosnie komplemntarnosci i zplanuj refaktoryzcje projektow",
+      "contentHash": "sha256:4c423d6e4ac773022284c23b38ad6ab49dcb382b6a71964ff773b6e190e0409b",
+      "intentWeight": 92,
+      "realityWeight": 0,
+      "isCorrection": false,
+      "topicHints": [
+        "DT-REALITY-001",
+        "DT-LLM-001"
+      ]
+    }
+  ],
+  "diagnostics": [
+    {
+      "code": "DT_AGENT_CLAIMS_NON_AUTHORITATIVE",
+      "severity": "info",
+      "message": "19 wypowiedzi agenta zachowano jako materiał audytowy, ale nie użyto ich do aktywacji reguł.",
+      "evidenceRefs": [
+        "evidence:a7f1988d7ebe83f6",
+        "evidence:f0abe12b078f8025",
+        "evidence:668f074aec05852d",
+        "evidence:bca68b7f03afa8e7",
+        "evidence:157da24c30f3a73f",
+        "evidence:252e34e830f02d13",
+        "evidence:08d3c226cb5ca51d",
+        "evidence:da42e7b3d20c52f5",
+        "evidence:254ef7476f27acdd",
+        "evidence:5f3fe4cc0e9eed35",
+        "evidence:50c2587e23f90219",
+        "evidence:9fa3981fde03ff4b",
+        "evidence:9a8f67c983ff4815",
+        "evidence:c166b8f3f0493044",
+        "evidence:89aa4eaa39e61795",
+        "evidence:47de6deee36b3839",
+        "evidence:e9c3c66d38c5d78d",
+        "evidence:f00837535519d7de",
+        "evidence:896bbc62ebeeba23"
+      ]
+    },
+    {
+      "code": "DT_CONTEXTUAL_CONFLICT_PRESERVED",
+      "severity": "review_required",
+      "message": "Historia zawiera polecenia usunięcia konkretnego kontenera i użycia Dockera do parity. Reguła pozostaje kontekstowa.",
+      "evidenceRefs": [
+        "evidence:87c8bb1e43f65669",
+        "evidence:384556423fffa5ff"
+      ]
+    },
+    {
+      "code": "DT_LLM_DISABLED",
+      "severity": "info",
+      "message": "Ekstrakcję wykonano deterministycznie; LLM nie był wywoływany."
+    }
+  ]
+}

@@ -1,0 +1,580 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/subactor.developer-twin/v1",
+  "title": "Subactor Developer Behavioral Twin DSL",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "generatedAt",
+    "generator",
+    "twin",
+    "sourcePolicy",
+    "rules",
+    "workflow",
+    "autonomy",
+    "modelRouting",
+    "evidenceCatalog",
+    "diagnostics"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "schemaVersion": {
+      "const": "subactor.developer-twin/v1"
+    },
+    "generatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "generator": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "version",
+        "mode"
+      ],
+      "properties": {
+        "name": {
+          "const": "developer-twin-runtime"
+        },
+        "version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "mode": {
+          "enum": [
+            "deterministic",
+            "prefer-llm",
+            "require-llm"
+          ]
+        },
+        "llmUsed": {
+          "type": "boolean"
+        },
+        "degraded": {
+          "type": "boolean"
+        }
+      }
+    },
+    "twin": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "purpose",
+        "scope",
+        "consent"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "kind": {
+          "const": "behavioral-execution-policy"
+        },
+        "purpose": {
+          "type": "string",
+          "minLength": 1
+        },
+        "scope": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "consent": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "basis",
+            "allowedUses",
+            "forbiddenUses"
+          ],
+          "properties": {
+            "basis": {
+              "type": "string",
+              "minLength": 1
+            },
+            "allowedUses": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "forbiddenUses": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "expiresAt": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date-time"
+            }
+          }
+        }
+      }
+    },
+    "sourcePolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "truthDomains",
+        "conflictResolution",
+        "epistemicRules"
+      ],
+      "properties": {
+        "truthDomains": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "humanIntent",
+            "projectReality"
+          ],
+          "properties": {
+            "humanIntent": {
+              "$ref": "#/$defs/truthDomain"
+            },
+            "projectReality": {
+              "$ref": "#/$defs/truthDomain"
+            }
+          }
+        },
+        "conflictResolution": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "when",
+              "winner",
+              "reason"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "when": {
+                "type": "string"
+              },
+              "winner": {
+                "type": "string"
+              },
+              "reason": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "epistemicRules": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "rules": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/rule"
+      }
+    },
+    "workflow": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "order",
+          "id",
+          "name",
+          "requiredWhen",
+          "actions",
+          "evidenceRequired"
+        ],
+        "properties": {
+          "order": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "requiredWhen": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "actions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "evidenceRequired": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "autonomy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "allowed",
+        "approvalRequired",
+        "forbidden",
+        "failClosedOn"
+      ],
+      "properties": {
+        "allowed": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "approvalRequired": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "forbidden": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "failClosedOn": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "modelRouting": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "policy",
+        "stages"
+      ],
+      "properties": {
+        "policy": {
+          "type": "string"
+        },
+        "stages": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "stage",
+              "purposeTags",
+              "modelAlias",
+              "routeOrder",
+              "structuredOutputRequired"
+            ],
+            "properties": {
+              "stage": {
+                "enum": [
+                  "intent-extraction",
+                  "guideline-generation",
+                  "code-editing",
+                  "validation"
+                ]
+              },
+              "purposeTags": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "routeOrder": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "structuredOutputRequired": {
+                "type": "boolean"
+              },
+              "modelAlias": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "evidenceCatalog": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/evidence"
+      }
+    },
+    "diagnostics": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "code",
+          "severity",
+          "message"
+        ],
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "severity": {
+            "enum": [
+              "info",
+              "warning",
+              "review_required",
+              "blocking"
+            ]
+          },
+          "message": {
+            "type": "string"
+          },
+          "evidenceRefs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "truthDomain": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "description",
+        "ranking"
+      ],
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "ranking": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "sourceClass",
+              "weight"
+            ],
+            "properties": {
+              "sourceClass": {
+                "type": "string"
+              },
+              "weight": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 100
+              },
+              "note": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "rule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "title",
+        "kind",
+        "scope",
+        "status",
+        "description",
+        "triggers",
+        "must",
+        "should",
+        "mustNot",
+        "evidenceRefs",
+        "supportCount",
+        "confidence"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^DT-[A-Z]+-[0-9]{3}$"
+        },
+        "title": {
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "obligation",
+            "prohibition",
+            "preference",
+            "decision-rule"
+          ]
+        },
+        "scope": {
+          "enum": [
+            "global",
+            "subactor",
+            "project",
+            "contextual"
+          ]
+        },
+        "status": {
+          "enum": [
+            "active",
+            "contextual",
+            "superseded",
+            "candidate"
+          ]
+        },
+        "description": {
+          "type": "string"
+        },
+        "triggers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "must": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "should": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "mustNot": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "supportCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "conflictPolicy": {
+          "type": "string"
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "eventId",
+        "sourceFile",
+        "sourceClass",
+        "actor",
+        "sequence",
+        "excerpt",
+        "contentHash",
+        "intentWeight",
+        "realityWeight"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "eventId": {
+          "type": "string"
+        },
+        "sourceFile": {
+          "type": "string"
+        },
+        "sourceClass": {
+          "type": "string"
+        },
+        "actor": {
+          "enum": [
+            "human",
+            "agent",
+            "system"
+          ]
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "excerpt": {
+          "type": "string"
+        },
+        "contentHash": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "intentWeight": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "realityWeight": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "isCorrection": {
+          "type": "boolean"
+        },
+        "topicHints": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

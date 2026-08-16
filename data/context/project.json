@@ -1,0 +1,62 @@
+{
+  "schemaVersion": "subactor.project-context/v1",
+  "projectId": "subactor/www-sub-actor-example",
+  "home": "subactor",
+  "shape": "runtime_service",
+  "adopts": [
+    "wellmanifest/new-project",
+    "wellmanifest/ticket-lifecycle",
+    "wellmanifest/modularity",
+    "wellmanifest/ssot",
+    "wellmanifest/project-ssot",
+    "wellmanifest/policy-dsl"
+  ],
+  "activeTicket": "project/ticket-001",
+  "truthOwners": [
+    {
+      "concern": "commercial offer",
+      "home": "data/context/subactor-cloud-v1.offer.json",
+      "role": "versioned_ssot"
+    },
+    {
+      "concern": "LLM aliases, purpose tags and default model routing",
+      "home": "config/model-registry.json",
+      "role": "versioned_ssot"
+    },
+    {
+      "concern": "developer execution policy",
+      "home": "data/output/developer-twin.dsl.json",
+      "role": "generated_policy_with_evidence"
+    },
+    {
+      "concern": "work intent",
+      "home": "project/ticket-001/intent.json",
+      "role": "ticket_intent"
+    },
+    {
+      "concern": "current source implementation",
+      "home": "adapter:git+ast@exact-revision",
+      "role": "required_project_reality_adapter"
+    },
+    {
+      "concern": "test status",
+      "home": "adapter:test-receipt@exact-revision",
+      "role": "required_project_reality_adapter"
+    },
+    {
+      "concern": "runtime health",
+      "home": "adapter:live-observation@environment+timestamp",
+      "role": "required_project_reality_adapter"
+    }
+  ],
+  "validationCommands": [
+    "make validate",
+    "make test",
+    "make demo"
+  ],
+  "productionConstraints": [
+    "No secret values in prompts, logs or DSL artifacts.",
+    "Agent claims are not test receipts.",
+    "LLM output is propose-only until deterministic validation passes."
+  ]
+}

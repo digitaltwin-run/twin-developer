@@ -1,0 +1,25 @@
+{
+  "name": "subactor-developer-digital-twin-example",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Evidence-grounded developer execution-policy twin for Subactor histories.",
+  "bin": {
+    "developer-twin": "dist/src/cli.js"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "demo": "TWIN_NOW=2026-08-16T12:00:00Z node dist/src/cli.js demo --mode deterministic",
+    "validate": "node dist/src/cli.js validate && python3 scripts/validate-schema.py",
+    "test:ts": "node --test dist/tests/*.test.js",
+    "test:py": "python3 -m unittest discover -s tests -p 'test_*.py'",
+    "test": "npm run build && npm run test:ts && npm run test:py"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3"
+  },
+  "engines": {
+    "node": ">=20",
+    "python": ">=3.10"
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "$schema": "../schemas/developer-twin.schema.json",
+  "schemaVersion": "subactor.developer-twin/v1",
+  "generatedAt": "2026-08-16T12:00:00.000Z",
+  "generator": {"name": "developer-twin-runtime", "version": "0.1.0", "mode": "deterministic", "llmUsed": false, "degraded": false},
+  "twin": {
+    "id": "developer-twin:test",
+    "kind": "behavioral-execution-policy",
+    "purpose": "test",
+    "scope": ["test"],
+    "consent": {"basis": "test", "allowedUses": ["test"], "forbiddenUses": ["test"], "expiresAt": null}
+  },
+  "sourcePolicy": {
+    "truthDomains": {
+      "humanIntent": {"description": "test", "ranking": [{"sourceClass": "human_instruction", "weight": 80}]},
+      "projectReality": {"description": "test", "ranking": [{"sourceClass": "versioned_ssot", "weight": 90}]}
+    },
+    "conflictResolution": [],
+    "epistemicRules": []
+  },
+  "rules": [{
+    "id": "DT-TEST-001",
+    "title": "test",
+    "kind": "obligation",
+    "scope": "project",
+    "status": "active",
+    "description": "test",
+    "triggers": [],
+    "must": ["test"],
+    "should": [],
+    "mustNot": [],
+    "evidenceRefs": ["evidence:1"],
+    "supportCount": 1,
+    "confidence": 0.8
+  }],
+  "workflow": [{"order": 1, "id": "test", "name": "test", "requiredWhen": ["always"], "actions": ["test"], "evidenceRequired": ["test"]}],
+  "autonomy": {"allowed": ["test"], "approvalRequired": [], "forbidden": [], "failClosedOn": []},
+  "modelRouting": {"policy": "test", "stages": []},
+  "evidenceCatalog": [{
+    "id": "evidence:1",
+    "eventId": "event:1",
+    "sourceFile": "test",
+    "sourceClass": "human_instruction",
+    "actor": "human",
+    "sequence": 1,
+    "excerpt": "test",
+    "contentHash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "intentWeight": 80,
+    "realityWeight": 0,
+    "isCorrection": false,
+    "topicHints": ["DT-TEST-001"]
+  }],
+  "diagnostics": []
+}

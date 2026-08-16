@@ -1,0 +1,215 @@
+{
+  "schemaVersion": "subactor.developer-twin.offer-reality/v1",
+  "sourceOfTruth": {
+    "path": "data/context/subactor-cloud-v1.offer.json",
+    "schema": "subactor.offer/catalog/v1",
+    "id": "subactor-cloud",
+    "version": 1,
+    "status": "current"
+  },
+  "currentPlans": [
+    {
+      "planId": "saas-start",
+      "name": "Basic",
+      "public": true,
+      "monthly": 97,
+      "currency": "PLN"
+    },
+    {
+      "planId": "saas-business",
+      "name": "Operations Plus",
+      "public": true,
+      "monthly": 59,
+      "currency": "PLN"
+    },
+    {
+      "planId": "prepaid-actions",
+      "name": "Twin Plus",
+      "public": true,
+      "monthly": 59,
+      "currency": "PLN"
+    },
+    {
+      "planId": "on-premise",
+      "name": "On-premise",
+      "public": false,
+      "monthly": 2900,
+      "currency": "EUR"
+    }
+  ],
+  "promptClaims": [
+    {
+      "eventId": "event:fb9d205caaa6d712",
+      "actor": "human",
+      "sourceClass": "human_correction",
+      "sequence": 2,
+      "planId": "saas-start",
+      "claimedMonthly": 10,
+      "currency": "PLN",
+      "matchesCurrent": false,
+      "excerpt": "ceny sie nie zgadzaja, kiedy zostały zmienione?\njakie powinny byc prawdziwe ceny, ktore wczoraj były? Jeden aktywny bliźniak, do 1 000 akcji miesięcznie\nBasic\n\nPełna platforma dla jednego aktywnego cyfrowego bliźniaka. Płacisz za jego pakiet zweryfikowanych akcji, nie za użytkowników.\n10,00 zł/ aktywny bliźniak / msc\n\nPłatne co miesiąc. Rezygnujesz w dowolnym momencie — bez okr"
+    },
+    {
+      "eventId": "event:fb9d205caaa6d712",
+      "actor": "human",
+      "sourceClass": "human_correction",
+      "sequence": 2,
+      "planId": "saas-business",
+      "claimedMonthly": 100,
+      "currency": "PLN",
+      "matchesCurrent": false,
+      "excerpt": "ceny sie nie zgadzaja, kiedy zostały zmienione?\njakie powinny byc prawdziwe ceny, ktore wczoraj były? Jeden aktywny bliźniak, do 1 000 akcji miesięcznie\nBasic\n\nPełna platforma dla jednego aktywnego cyfrowego bliźniaka. Płacisz za jego pakiet zweryfikowanych akcji, nie za użytkowników.\n10,00 zł/ aktywny bliźniak / msc\n\nPłatne co miesiąc. Rezygnujesz w dowolnym momencie — bez okr"
+    },
+    {
+      "eventId": "event:fb9d205caaa6d712",
+      "actor": "human",
+      "sourceClass": "human_correction",
+      "sequence": 2,
+      "planId": "prepaid-actions",
+      "claimedMonthly": 100,
+      "currency": "PLN",
+      "matchesCurrent": false,
+      "excerpt": "ceny sie nie zgadzaja, kiedy zostały zmienione?\njakie powinny byc prawdziwe ceny, ktore wczoraj były? Jeden aktywny bliźniak, do 1 000 akcji miesięcznie\nBasic\n\nPełna platforma dla jednego aktywnego cyfrowego bliźniaka. Płacisz za jego pakiet zweryfikowanych akcji, nie za użytkowników.\n10,00 zł/ aktywny bliźniak / msc\n\nPłatne co miesiąc. Rezygnujesz w dowolnym momencie — bez okr"
+    },
+    {
+      "eventId": "event:6d329d266b29a558",
+      "actor": "agent",
+      "sourceClass": "agent_claim",
+      "sequence": 10,
+      "planId": "saas-start",
+      "claimedMonthly": 10,
+      "currency": "PLN",
+      "matchesCurrent": false,
+      "excerpt": "Zmiana cennika została dokonana wczoraj w nocy (**15 sierpnia 2026 r. o godzinie 00:31 CEST**, commit `3387c35` w ramach ticketu `TICKET-044`).\n\nPrawdziwymi i aktualnymi cenami obowiązującymi od 15 sierpnia 2026 są **dokładnie te, które podałeś w zapytaniu** (nowy model rozliczania oparty na **aktywnych cyfrowych bliźniakach i zweryfikowanych akcjach**, bez opłat za stanowiska "
+    },
+    {
+      "eventId": "event:6d329d266b29a558",
+      "actor": "agent",
+      "sourceClass": "agent_claim",
+      "sequence": 10,
+      "planId": "saas-business",
+      "claimedMonthly": 100,
+      "currency": "PLN",
+      "matchesCurrent": false,
+      "excerpt": "Zmiana cennika została dokonana wczoraj w nocy (**15 sierpnia 2026 r. o godzinie 00:31 CEST**, commit `3387c35` w ramach ticketu `TICKET-044`).\n\nPrawdziwymi i aktualnymi cenami obowiązującymi od 15 sierpnia 2026 są **dokładnie te, które podałeś w zapytaniu** (nowy model rozliczania oparty na **aktywnych cyfrowych bliźniakach i zweryfikowanych akcjach**, bez opłat za stanowiska "
+    },
+    {
+      "eventId": "event:6d329d266b29a558",
+      "actor": "agent",
+      "sourceClass": "agent_claim",
+      "sequence": 10,
+      "planId": "prepaid-actions",
+      "claimedMonthly": 100,
+      "currency": "PLN",
+      "matchesCurrent": false,
+      "excerpt": "Zmiana cennika została dokonana wczoraj w nocy (**15 sierpnia 2026 r. o godzinie 00:31 CEST**, commit `3387c35` w ramach ticketu `TICKET-044`).\n\nPrawdziwymi i aktualnymi cenami obowiązującymi od 15 sierpnia 2026 są **dokładnie te, które podałeś w zapytaniu** (nowy model rozliczania oparty na **aktywnych cyfrowych bliźniakach i zweryfikowanych akcjach**, bez opłat za stanowiska "
+    },
+    {
+      "eventId": "event:553c6ca80f2c3bf5",
+      "actor": "agent",
+      "sourceClass": "agent_claim",
+      "sequence": 20,
+      "planId": "saas-start",
+      "claimedMonthly": 10,
+      "currency": "PLN",
+      "matchesCurrent": false,
+      "excerpt": "Wykonano wymagane zmiany:\n\n1. **Usunięto kontener Docker**:\n - Zawieszony/restartujący się kontener `subactor-platform-portal-1` został zatrzymany i całkowicie usunięty (`docker rm -f`).\n - Serwer uruchamia się teraz bezpośrednio jako czysty proces lokalny PHP/Node.\n\n2. **Wyłączono ofertę On-Premise z siatki planów**:\n - W pliku `src/php_app/config/plans.json` flaga planu `on-p"
+    },
+    {
+      "eventId": "event:553c6ca80f2c3bf5",
+      "actor": "agent",
+      "sourceClass": "agent_claim",
+      "sequence": 20,
+      "planId": "saas-business",
+      "claimedMonthly": 10,
+      "currency": "PLN",
+      "matchesCurrent": false,
+      "excerpt": "Wykonano wymagane zmiany:\n\n1. **Usunięto kontener Docker**:\n - Zawieszony/restartujący się kontener `subactor-platform-portal-1` został zatrzymany i całkowicie usunięty (`docker rm -f`).\n - Serwer uruchamia się teraz bezpośrednio jako czysty proces lokalny PHP/Node.\n\n2. **Wyłączono ofertę On-Premise z siatki planów**:\n - W pliku `src/php_app/config/plans.json` flaga planu `on-p"
+    },
+    {
+      "eventId": "event:553c6ca80f2c3bf5",
+      "actor": "agent",
+      "sourceClass": "agent_claim",
+      "sequence": 20,
+      "planId": "prepaid-actions",
+      "claimedMonthly": 100,
+      "currency": "PLN",
+      "matchesCurrent": false,
+      "excerpt": "Wykonano wymagane zmiany:\n\n1. **Usunięto kontener Docker**:\n - Zawieszony/restartujący się kontener `subactor-platform-portal-1` został zatrzymany i całkowicie usunięty (`docker rm -f`).\n - Serwer uruchamia się teraz bezpośrednio jako czysty proces lokalny PHP/Node.\n\n2. **Wyłączono ofertę On-Premise z siatki planów**:\n - W pliku `src/php_app/config/plans.json` flaga planu `on-p"
+    }
+  ],
+  "diagnostics": [
+    {
+      "code": "PROMPT_HISTORY_NOT_OFFER_SSOT",
+      "severity": "info",
+      "detail": "Historia promptów jest dowodem oczekiwań i korekt, ale bieżące ceny pochodzą wyłącznie z wersjonowanego katalogu HOME."
+    },
+    {
+      "code": "PROMPT_OFFER_CLAIM_CONTRADICTED_BY_HOME",
+      "severity": "review_required",
+      "detail": "Historia podaje 10.00 PLN dla saas-start, a wersjonowany HOME v1 podaje 97.00 PLN.",
+      "eventId": "event:fb9d205caaa6d712",
+      "planId": "saas-start"
+    },
+    {
+      "code": "PROMPT_OFFER_CLAIM_CONTRADICTED_BY_HOME",
+      "severity": "review_required",
+      "detail": "Historia podaje 100.00 PLN dla saas-business, a wersjonowany HOME v1 podaje 59.00 PLN.",
+      "eventId": "event:fb9d205caaa6d712",
+      "planId": "saas-business"
+    },
+    {
+      "code": "PROMPT_OFFER_CLAIM_CONTRADICTED_BY_HOME",
+      "severity": "review_required",
+      "detail": "Historia podaje 100.00 PLN dla prepaid-actions, a wersjonowany HOME v1 podaje 59.00 PLN.",
+      "eventId": "event:fb9d205caaa6d712",
+      "planId": "prepaid-actions"
+    },
+    {
+      "code": "PROMPT_OFFER_CLAIM_CONTRADICTED_BY_HOME",
+      "severity": "info",
+      "detail": "Historia podaje 10.00 PLN dla saas-start, a wersjonowany HOME v1 podaje 97.00 PLN.",
+      "eventId": "event:6d329d266b29a558",
+      "planId": "saas-start"
+    },
+    {
+      "code": "PROMPT_OFFER_CLAIM_CONTRADICTED_BY_HOME",
+      "severity": "info",
+      "detail": "Historia podaje 100.00 PLN dla saas-business, a wersjonowany HOME v1 podaje 59.00 PLN.",
+      "eventId": "event:6d329d266b29a558",
+      "planId": "saas-business"
+    },
+    {
+      "code": "PROMPT_OFFER_CLAIM_CONTRADICTED_BY_HOME",
+      "severity": "info",
+      "detail": "Historia podaje 100.00 PLN dla prepaid-actions, a wersjonowany HOME v1 podaje 59.00 PLN.",
+      "eventId": "event:6d329d266b29a558",
+      "planId": "prepaid-actions"
+    },
+    {
+      "code": "PROMPT_OFFER_CLAIM_CONTRADICTED_BY_HOME",
+      "severity": "info",
+      "detail": "Historia podaje 10.00 PLN dla saas-start, a wersjonowany HOME v1 podaje 97.00 PLN.",
+      "eventId": "event:553c6ca80f2c3bf5",
+      "planId": "saas-start"
+    },
+    {
+      "code": "PROMPT_OFFER_CLAIM_CONTRADICTED_BY_HOME",
+      "severity": "info",
+      "detail": "Historia podaje 10.00 PLN dla saas-business, a wersjonowany HOME v1 podaje 59.00 PLN.",
+      "eventId": "event:553c6ca80f2c3bf5",
+      "planId": "saas-business"
+    },
+    {
+      "code": "PROMPT_OFFER_CLAIM_CONTRADICTED_BY_HOME",
+      "severity": "info",
+      "detail": "Historia podaje 100.00 PLN dla prepaid-actions, a wersjonowany HOME v1 podaje 59.00 PLN.",
+      "eventId": "event:553c6ca80f2c3bf5",
+      "planId": "prepaid-actions"
+    }
+  ],
+  "publication": {
+    "allowed": true,
+    "reasonCodes": []
+  }
+}

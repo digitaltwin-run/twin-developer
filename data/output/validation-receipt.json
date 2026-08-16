@@ -1,0 +1,67 @@
+{
+  "schemaVersion": "subactor.developer-twin.validation-receipt/v1",
+  "observedAt": "2026-08-16T12:00:00.000Z",
+  "workspaceRevision": null,
+  "checks": [
+    {
+      "command": "make test",
+      "exitCode": 0,
+      "result": "passed",
+      "details": {
+        "typescript": "4/4",
+        "python": "3/3",
+        "modelRegistryParity": "passed"
+      }
+    },
+    {
+      "command": "make llm-fake-demo",
+      "exitCode": 0,
+      "result": "passed",
+      "details": {
+        "events": 161,
+        "deterministicRules": 10,
+        "candidateRules": 1,
+        "guidelineSteps": 7,
+        "llmUsed": true,
+        "degraded": false
+      }
+    },
+    {
+      "command": "make demo",
+      "exitCode": 0,
+      "result": "passed",
+      "details": {
+        "events": 161,
+        "rules": 10,
+        "evidence": 115,
+        "guidelineSteps": 7,
+        "llmUsed": false,
+        "degraded": false
+      }
+    },
+    {
+      "command": "make validate",
+      "exitCode": 0,
+      "result": "passed",
+      "details": {
+        "runtime": "passed",
+        "developerTwinSchema": "passed",
+        "guidelinesSchema": "passed"
+      }
+    }
+  ],
+  "notRun": [
+    {
+      "check": "live-openrouter",
+      "reason": "OPENROUTER_API_KEY not supplied"
+    },
+    {
+      "check": "aider-source-edit",
+      "reason": "aider executable not installed"
+    },
+    {
+      "check": "production-deployment",
+      "reason": "outside ticket scope"
+    }
+  ]
+}

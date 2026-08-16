@@ -1,0 +1,614 @@
+<body>
+<title>Audyt SSOT Wellmanifest</title>
+<style>
+  :root {
+    --paper:      #F3F4F7;
+    --surface:    #FFFFFF;
+    --ink:        #171A24;
+    --ink-muted:  #616779;
+    --hairline:   #D3D6E0;
+    --accent:     #2B3A67;
+    --accent-soft:#E4E8F3;
+    --ok:         #2C6146;
+    --drift:      #8A6210;
+    --broken:     #96341F;
+    --ok-bg:      #E3EFE8;
+    --drift-bg:   #F6EDD8;
+    --broken-bg:  #F7E3DE;
+
+    --font-display: Georgia, "Iowan Old Style", "Source Serif 4", "Times New Roman", serif;
+    --font-body: ui-sans-serif, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+
+    --measure: 68ch;
+    --step-0: 1rem;
+    --step-1: 1.1875rem;
+    --step-2: 1.4375rem;
+    --step-3: 1.875rem;
+    --step-4: 2.625rem;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper:      #12141B;
+      --surface:    #191C25;
+      --ink:        #E4E6EE;
+      --ink-muted:  #939AAF;
+      --hairline:   #2E3341;
+      --accent:     #9DB2E0;
+      --accent-soft:#232939;
+      --ok:         #7EBFA0;
+      --drift:      #D9AE5A;
+      --broken:     #E08D77;
+      --ok-bg:      #1B2A24;
+      --drift-bg:   #2C2618;
+      --broken-bg:  #2E1F1B;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper:      #12141B;
+    --surface:    #191C25;
+    --ink:        #E4E6EE;
+    --ink-muted:  #939AAF;
+    --hairline:   #2E3341;
+    --accent:     #9DB2E0;
+    --accent-soft:#232939;
+    --ok:         #7EBFA0;
+    --drift:      #D9AE5A;
+    --broken:     #E08D77;
+    --ok-bg:      #1B2A24;
+    --drift-bg:   #2C2618;
+    --broken-bg:  #2E1F1B;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: var(--step-0);
+    line-height: 1.65;
+    margin: 0;
+    padding: 0 1.5rem 6rem;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 60rem;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 3.5rem;
+  }
+
+  .prose { max-width: var(--measure); }
+
+  /* ---------- masthead ---------- */
+
+  header.masthead {
+    padding: 4rem 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 1.5rem;
+  }
+
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin: 0;
+  }
+
+  h1 {
+    font-family: var(--font-display);
+    font-size: var(--step-4);
+    line-height: 1.1;
+    font-weight: 600;
+    text-wrap: balance;
+    margin: 0;
+    letter-spacing: -0.015em;
+  }
+
+  .standfirst {
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    line-height: 1.5;
+    color: var(--ink-muted);
+    margin: 0;
+    max-width: var(--measure);
+  }
+
+  dl.meta {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+    gap: 1rem 2rem;
+    margin: 0.5rem 0 0;
+    font-size: 0.8125rem;
+  }
+  dl.meta dt {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin: 0 0 0.2rem;
+  }
+  dl.meta dd { margin: 0; font-variant-numeric: tabular-nums; }
+
+  /* ---------- sections ---------- */
+
+  section { display: flex; flex-direction: column; gap: 1.25rem; }
+
+  h2 {
+    font-family: var(--font-display);
+    font-size: var(--step-3);
+    line-height: 1.2;
+    font-weight: 600;
+    margin: 0;
+    text-wrap: balance;
+    letter-spacing: -0.01em;
+  }
+
+  h3 {
+    font-family: var(--font-body);
+    font-size: var(--step-1);
+    line-height: 1.35;
+    font-weight: 650;
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  p { margin: 0; }
+  .prose p + p { margin-top: 0.9rem; }
+
+  a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 0.15em; }
+  a:focus-visible, summary:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+
+  code, .mono { font-family: var(--font-mono); font-size: 0.875em; }
+  code {
+    background: var(--accent-soft);
+    padding: 0.08em 0.32em;
+    color: var(--ink);
+  }
+
+  ul, ol { margin: 0; padding-left: 1.3rem; display: flex; flex-direction: column; gap: 0.5rem; }
+  li { padding-left: 0.2rem; }
+
+  /* ---------- verdict callout ---------- */
+
+  .verdict {
+    background: var(--surface);
+    border: 1px solid var(--hairline);
+    border-top: 3px solid var(--accent);
+    padding: 1.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+  }
+  .verdict p { max-width: var(--measure); }
+
+  /* ---------- findings ledger ---------- */
+
+  .ledger { display: flex; flex-direction: column; gap: 0; border-top: 1px solid var(--hairline); }
+
+  article.finding {
+    display: grid;
+    grid-template-columns: 3.25rem 1fr;
+    gap: 0 1.25rem;
+    padding: 1.75rem 0;
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .rank {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink-muted);
+    padding-top: 0.3rem;
+  }
+
+  .finding-body { display: flex; flex-direction: column; gap: 0.85rem; min-width: 0; }
+  .finding-body > p { max-width: var(--measure); }
+
+  .tags { display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: center; }
+
+  .pill {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.18em 0.55em;
+    border: 1px solid currentColor;
+  }
+  .pill.broken { color: var(--broken); background: var(--broken-bg); }
+  .pill.drift  { color: var(--drift);  background: var(--drift-bg); }
+  .pill.ok     { color: var(--ok);     background: var(--ok-bg); }
+
+  .evidence {
+    background: var(--surface);
+    border: 1px solid var(--hairline);
+    border-left: 3px solid var(--ink-muted);
+    padding: 0.9rem 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    line-height: 1.6;
+    overflow-x: auto;
+    white-space: pre;
+    color: var(--ink);
+  }
+
+  .fix {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 0.35rem 0.9rem;
+    align-items: baseline;
+    font-size: 0.9375rem;
+    border-top: 1px dotted var(--hairline);
+    padding-top: 0.85rem;
+  }
+  .fix dt {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+  }
+  .fix dd { margin: 0; }
+
+  /* ---------- tables ---------- */
+
+  .table-scroll { overflow-x: auto; border: 1px solid var(--hairline); background: var(--surface); }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 0.8438rem;
+    font-variant-numeric: tabular-nums;
+  }
+  caption {
+    text-align: left;
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    padding-bottom: 0.6rem;
+  }
+  th, td {
+    text-align: left;
+    padding: 0.5rem 0.85rem;
+    border-bottom: 1px solid var(--hairline);
+    vertical-align: top;
+  }
+  thead th {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    font-weight: 500;
+    border-bottom: 1px solid var(--ink-muted);
+    white-space: nowrap;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  td.repo { font-family: var(--font-mono); white-space: nowrap; }
+  td.checks { font-family: var(--font-mono); font-size: 0.78rem; }
+  td.state { white-space: nowrap; }
+
+  .mark { font-family: var(--font-mono); font-weight: 700; }
+  .mark.ok { color: var(--ok); }
+  .mark.bad { color: var(--broken); }
+  .mark.none { color: var(--drift); }
+
+  /* ---------- ownership map ---------- */
+
+  .map { display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 1px; background: var(--hairline); border: 1px solid var(--hairline); }
+  .map > div { background: var(--surface); padding: 1.1rem 1.2rem; display: flex; flex-direction: column; gap: 0.4rem; }
+  .map h4 { margin: 0; font-size: 0.9375rem; font-weight: 650; }
+  .map .owner { font-family: var(--font-mono); font-size: 0.78rem; color: var(--accent); }
+  .map p { font-size: 0.875rem; color: var(--ink-muted); line-height: 1.5; }
+
+  /* ---------- action list ---------- */
+
+  ol.actions { counter-reset: act; list-style: none; padding: 0; gap: 0; }
+  ol.actions li {
+    counter-increment: act;
+    display: grid;
+    grid-template-columns: 2.5rem 1fr;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--hairline);
+    max-width: none;
+  }
+  ol.actions li::before {
+    content: counter(act, decimal-leading-zero);
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    color: var(--ink-muted);
+    font-variant-numeric: tabular-nums;
+  }
+  ol.actions li:first-child { border-top: 1px solid var(--hairline); }
+  .act-body { display: flex; flex-direction: column; gap: 0.3rem; max-width: var(--measure); }
+  .act-body .who { font-family: var(--font-mono); font-size: 0.6875rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-muted); }
+
+  footer { border-top: 1px solid var(--hairline); padding-top: 1.5rem; font-size: 0.8125rem; color: var(--ink-muted); max-width: var(--measure); }
+
+  @media (max-width: 34rem) {
+    article.finding { grid-template-columns: 1fr; gap: 0.75rem; }
+    .rank { padding-top: 0; }
+    ol.actions li { grid-template-columns: 1.75rem 1fr; gap: 0.6rem; }
+    h1 { font-size: var(--step-3); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+</style>
+
+<div class="wrap">
+
+  <header class="masthead">
+    <p class="eyebrow">Audyt organizacji · wellmanifest</p>
+    <h1>Jedno źródło prawdy, trzydzieści kopii</h1>
+    <p class="standfirst">Architektura standardów jest przemyślana i w większości komplementarna. Zawodzi jeden mechanizm: plik, który sam siebie ogłasza źródłem prawdy o wymaganych checkach, jest przypięty bajt‑w‑bajt do wszystkich repozytoriów — więc nie może być prawdziwy nigdzie poza jednym.</p>
+    <dl class="meta">
+      <div><dt>Data</dt><dd>16 sierpnia 2026</dd></div>
+      <div><dt>Zakres</dt><dd>29 repozytoriów</dd></div>
+      <div><dt>Standard</dt><dd>new-project 0.14.0–0.18.1</dd></div>
+      <div><dt>Metoda</dt><dd>GitHub API + pliki lokalne</dd></div>
+    </dl>
+  </header>
+
+  <section>
+    <h2>Werdykt</h2>
+    <div class="verdict">
+      <p><strong>Standardy są sensowne.</strong> Podział na warstwy jest czysty: <code>dsl</code> jest językiem bazowym, packi domenowe (<code>ssot</code>, <code>project-ssot</code>, <code>policy-dsl</code>, <code>code-dsl</code>, rodzina <code>*-lifecycle</code>) adoptują go bez wymyślania konkurencyjnej składni, a <code>new-project</code> dostarcza słownik governance. Każdy pack konsekwentnie deklaruje się jako <em>propose-only</em> — dokument opisuje, nigdy nie nadaje uprawnień. To rzadka i wartościowa dyscyplina.</p>
+      <p><strong>Słownik SSOT też już istnieje.</strong> <code>HOME</code> / <code>ADOPT</code> / <code>facade</code> jest zdefiniowany, a packi <code>offer</code> i <code>brand</code> stosują go wzorcowo — z jawnym zdaniem „never a second price SSOT" i tabelą, która dla każdego zagadnienia wskazuje jednego właściciela.</p>
+      <p><strong>Problem nie leży w projekcie, tylko w dystrybucji.</strong> Mechanizm, który miał egzekwować jedno źródło prawdy, jest rozprowadzany przez kopiowanie bajt‑w‑bajt. Plik z danymi specyficznymi dla repozytorium nie może być jednocześnie przypięty jako identyczny wszędzie. Ta jedna sprzeczność generuje trzy z czterech poniższych ustaleń.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Ustalenia</h2>
+    <div class="ledger">
+
+      <article class="finding">
+        <div class="rank">01</div>
+        <div class="finding-body">
+          <div class="tags">
+            <span class="pill broken">Sprzeczność projektowa</span>
+            <span class="pill drift">23 repozytoria</span>
+          </div>
+          <h3>Deklarowane SSOT wymaganych checków jest fałszywe w 21 z 23 repozytoriów</h3>
+          <p><code>.governance/required-checks.json</code> zawiera własną notę normatywną: zewnętrzni konsumenci (validator-agent, ruleset GitHuba) <em>muszą</em> czytać <code>requiredCheckNames</code> z tego pliku, a zahardkodowanie podzbioru jest „defektem governance tej samej klasy co ticket-025".</p>
+          <p>Plik jest jednak na liście <code>managedFiles</code> w <code>manifest.lock.json</code>, czyli przypięty po SHA-256 jako identyczny u wszystkich adoptujących. W efekcie w każdym z 23 repozytoriów deklaruje <code>repository: wellmanifest/new-project</code> i checki <code>test | windows-governance</code> — podczas gdy faktycznie egzekwowane rulesety wymagają zupełnie innych nazw.</p>
+          <div class="evidence">$ jq -r '.repository' */.governance/required-checks.json | sort -u
+wellmanifest/new-project        # wszystkie 23 repozytoria
+
+autonomy    deklaruje: test | windows-governance
+autonomy    egzekwuje: governance / remote lifecycle | standards / autonomy conformance
+merge       egzekwuje: conformance
+logs        egzekwuje: governance / governance / enforce | governance / remote lifecycle</div>
+          <p>Zgodność deklaracji z egzekwowaniem: <strong>2 z 23</strong> (<code>dsl</code>, <code>poa</code> — te dwa akurat używają checków standardu). Konsekwencja jest praktyczna: validator-agent, który potraktuje ten plik jako źródło prawdy, sprawdzi w 21 repozytoriach nazwy checków, które tam nie istnieją.</p>
+          <dl class="fix">
+            <dt>Przyczyna</dt><dd>Dane per-repo umieszczone w pliku zarządzanym (przypiętym), a nie w pliku instancji.</dd>
+            <dt>Naprawa</dt><dd>Rozdzielić na dwa artefakty: przypięty <code>required-checks.schema.json</code> (kontrakt, zarządzany) i nieprzypięty <code>.governance/required-checks.json</code> (instancja, własność repozytorium, walidowana względem schematu). Gate sprawdza zgodność ze schematem, nie identyczność bajtów.</dd>
+            <dt>HOME</dt><dd><code>wellmanifest/new-project</code> — schemat i reguła. Instancja: każde repozytorium osobno.</dd>
+          </dl>
+        </div>
+      </article>
+
+      <article class="finding">
+        <div class="rank">02</div>
+        <div class="finding-body">
+          <div class="tags">
+            <span class="pill broken">Martwy kod</span>
+            <span class="pill drift">22 repozytoria</span>
+          </div>
+          <h3>Gate, który miał tego pilnować, wskazuje na nieistniejącą ścieżkę</h3>
+          <p>Przypięty <code>.governance/check_required_checks.py</code> ma zaszyte <code>SOURCE_REL = Path("governance/required-checks.json")</code> — bez kropki. Katalog <code>governance/</code> istnieje wyłącznie w <code>new-project</code>; w pozostałych repozytoriach plik leży w <code>.governance/</code>. Skrypt kończy się wyjątkiem, a nie komunikatem gate'u.</p>
+          <div class="evidence">$ cd autonomy &amp;&amp; python3 .governance/check_required_checks.py
+FileNotFoundError: [Errno 2] No such file or directory:
+  '/home/tom/github/wellmanifest/autonomy/governance/required-checks.json'
+
+$ grep -rl check_required_checks autonomy --include=*.yml --include=*.sh
+(brak wyników — gate nie jest nigdzie wywoływany)</div>
+          <p>Ten sam skrypt działa poprawnie w <code>new-project</code>, bo tam ścieżka istnieje. Standard został napisany „od środka" swojego repozytorium źródłowego i nigdy nie zweryfikowany u adoptującego — ustalenie 01 przetrwało niezauważone właśnie dlatego, że jego strażnik jest martwy.</p>
+          <dl class="fix">
+            <dt>Naprawa</dt><dd>Ścieżka względem <code>Path(__file__).parent</code>, nie zgadywana od korzenia repo; plus wpięcie gate'u do <code>project/governance-check.sh</code>, żeby był faktycznie uruchamiany.</dd>
+            <dt>Reguła</dt><dd>Każdy przypięty skrypt musi mieć test wykonywany w repozytorium adoptującym, nie tylko w <code>new-project</code>.</dd>
+            <dt>HOME</dt><dd><code>wellmanifest/new-project</code></dd>
+          </dl>
+        </div>
+      </article>
+
+      <article class="finding">
+        <div class="rank">03</div>
+        <div class="finding-body">
+          <div class="tags">
+            <span class="pill drift">Fragmentacja tożsamości</span>
+            <span class="pill drift">56 schematów</span>
+          </div>
+          <h3>Pięć przestrzeni nazw dla jednej organizacji</h3>
+          <p><code>$id</code> schematów rozjeżdża się na pięć hostów. Identyfikator schematu jest jego tożsamością — dopóki nie ma jednego kanonicznego prefiksu, <code>$ref</code> między packami nie może się rozwiązać spójnie, a ten sam kontrakt bywa adresowalny pod dwoma nazwami.</p>
+          <div class="evidence">18  https://raw.githubusercontent.com/wellmanifest/wellm/v0.2.0rc4/...
+15  https://wellmanifest.com/schemas/...
+14  https://wellmanifest.dev/schemas/...
+ 7  https://wellmanifest.org/schemas/...
+ 2  https://github.com/wellmanifest/new-project/subprojects/...</div>
+          <p>Najpoważniejszy wariant to <code>wellm</code>: 18 schematów ma w <code>$id</code> zaszyty tag wydania <code>v0.2.0rc4</code>. Każde kolejne wydanie zmienia tożsamość każdego kontraktu, więc żaden zewnętrzny konsument nie może się do nich stabilnie odwołać. Migracja <code>.dev → .com</code> jest w połowie drogi: <code>merge</code>, <code>twin-lifecycle</code>, <code>authority-lifecycle</code>, <code>hostguard</code>, <code>ssot</code>, <code>project-ssot</code> już przeszły, <code>account-runtime</code>, <code>agent</code>, <code>deployment</code>, <code>dsl</code>, <code>poa</code>, <code>policy-dsl</code>, <code>saas-lifecycle</code>, <code>legal-lifecycle</code>, <code>product-lifecycle</code> jeszcze nie.</p>
+          <dl class="fix">
+            <dt>Naprawa</dt><dd>Jeden host kanoniczny (<code>wellmanifest.com</code>, zgodnie z kierunkiem już rozpoczętej migracji), wersja tylko w ścieżce (<code>/schemas/&lt;pack&gt;/v1</code>), nigdy tag wydania w <code>$id</code>. Osobny ticket na <code>wellm</code>, bo tam zmiana jest łamiąca.</dd>
+            <dt>Egzekwowanie</dt><dd>Gate odrzucający <code>$id</code> spoza kanonicznego prefiksu — dziś nic tego nie pilnuje.</dd>
+            <dt>HOME</dt><dd><code>wellmanifest/dsl</code> — reguła nazewnictwa <code>$id</code> dla wszystkich packów.</dd>
+          </dl>
+        </div>
+      </article>
+
+      <article class="finding">
+        <div class="rank">04</div>
+        <div class="finding-body">
+          <div class="tags">
+            <span class="pill drift">Duplikat bez właściciela</span>
+            <span class="pill drift">6 repozytoriów</span>
+          </div>
+          <h3>Silnik lifecycle skopiowany sześć razy, bez deklaracji kto go posiada</h3>
+          <p><code>standard/lifecycle.py</code> jest bajt‑w‑bajt identyczny w sześciu repozytoriach rodziny lifecycle. Sam w sobie nie jest to błąd — dokumentacja <code>wellmanifest/ssot</code> wprost dopuszcza „vendored copies that must stay identical". Problem w tym, że ta konkretna szóstka nie jest nigdzie sklasyfikowana: nie ma deklaracji HOME, nie ma testu parzystości, nie ma pinu. To jest dokładnie ten stan, który pack <code>ssot</code> nazywa „real SSOT work".</p>
+          <div class="evidence">$ md5sum */standard/lifecycle.py
+3a9c2fca1aac1ba262a02f5ad91092be  git-lifecycle/standard/lifecycle.py
+3a9c2fca1aac1ba262a02f5ad91092be  legal-lifecycle/standard/lifecycle.py
+3a9c2fca1aac1ba262a02f5ad91092be  product-lifecycle/standard/lifecycle.py
+3a9c2fca1aac1ba262a02f5ad91092be  saas-lifecycle/standard/lifecycle.py
+3a9c2fca1aac1ba262a02f5ad91092be  ticket-lifecycle/standard/lifecycle.py
+3a9c2fca1aac1ba262a02f5ad91092be  twin-lifecycle/standard/lifecycle.py</div>
+          <p>Powiązany objaw: tylko 3 z 32 katalogów (<code>offer</code>, <code>brand</code>, <code>project-ssot</code>) mają w README sekcję <code>## Placement</code> z tabelą HOME. Słownik SSOT istnieje i działa — po prostu prawie nikt go nie wypełnił.</p>
+          <dl class="fix">
+            <dt>Naprawa</dt><dd>Wskazać HOME dla silnika lifecycle (naturalnie <code>wellmanifest/lifecycle</code>), pozostałe pięć kopii oznaczyć jako <code>facade</code> z testem parzystości w CI, albo zastąpić zależnością.</dd>
+            <dt>Reguła</dt><dd>Sekcja <code>## Placement</code> z tabelą <code>Concern | HOME | Rola</code> obowiązkowa w każdym packu — wzorzec z <code>offer/README.md</code> nadaje się do promocji na regułę standardu.</dd>
+            <dt>HOME</dt><dd><code>wellmanifest/modularity</code> — kontrakty single-exporter. <code>wellmanifest/ssot</code> — klasyfikacja duplikatów.</dd>
+          </dl>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <section>
+    <h2>Deklaracja kontra egzekwowanie</h2>
+    <p class="prose">Kolumna „deklaruje" jest identyczna w każdym wierszu, bo plik jest przypięty. Kolumna „egzekwuje" pochodzi z rulesetów i klasycznej ochrony gałęzi odczytanych z GitHuba.</p>
+    <div class="table-scroll">
+      <table>
+        <caption>Wymagane checki: <code>.governance/required-checks.json</code> vs. rzeczywista ochrona gałęzi domyślnej</caption>
+        <thead>
+          <tr><th>Repozytorium</th><th>Egzekwowane checki</th><th>Zgodność</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="repo">dsl</td><td class="checks">test · windows-governance</td><td class="state"><span class="mark ok">✓</span> zgodne</td></tr>
+          <tr><td class="repo">poa</td><td class="checks">test · windows-governance</td><td class="state"><span class="mark ok">✓</span> zgodne</td></tr>
+          <tr><td class="repo">account-runtime</td><td class="checks">governance / remote lifecycle</td><td class="state"><span class="mark bad">✗</span> rozjazd</td></tr>
+          <tr><td class="repo">authority-lifecycle</td><td class="checks">governance / remote lifecycle · standards / authority conformance</td><td class="state"><span class="mark bad">✗</span> rozjazd</td></tr>
+          <tr><td class="repo">autonomy</td><td class="checks">governance / remote lifecycle · standards / autonomy conformance</td><td class="state"><span class="mark bad">✗</span> rozjazd</td></tr>
+          <tr><td class="repo">code-dsl</td><td class="checks">governance / remote lifecycle</td><td class="state"><span class="mark bad">✗</span> rozjazd</td></tr>
+          <tr><td class="repo">git-lifecycle</td><td class="checks">governance / remote lifecycle · standards / lifecycle conformance</td><td class="state"><span class="mark bad">✗</span> rozjazd</td></tr>
+          <tr><td class="repo">legal-lifecycle</td><td class="checks">governance / remote lifecycle · standards / lifecycle conformance</td><td class="state"><span class="mark bad">✗</span> rozjazd</td></tr>
+          <tr><td class="repo">logs</td><td class="checks">governance / governance / enforce · governance / remote lifecycle</td><td class="state"><span class="mark bad">✗</span> rozjazd</td></tr>
+          <tr><td class="repo">merge</td><td class="checks">conformance</td><td class="state"><span class="mark bad">✗</span> rozjazd</td></tr>
+          <tr><td class="repo">performance</td><td class="checks">governance / remote lifecycle</td><td class="state"><span class="mark bad">✗</span> rozjazd</td></tr>
+          <tr><td class="repo">policy-dsl</td><td class="checks">governance / remote lifecycle</td><td class="state"><span class="mark bad">✗</span> rozjazd</td></tr>
+          <tr><td class="repo">product-lifecycle</td><td class="checks">governance / remote lifecycle · standards / lifecycle conformance</td><td class="state"><span class="mark bad">✗</span> rozjazd</td></tr>
+          <tr><td class="repo">repair-lifecycle</td><td class="checks">governance / remote lifecycle · standards / repair conformance</td><td class="state"><span class="mark bad">✗</span> rozjazd</td></tr>
+          <tr><td class="repo">saas-lifecycle</td><td class="checks">governance / remote lifecycle · standards / lifecycle conformance</td><td class="state"><span class="mark bad">✗</span> rozjazd</td></tr>
+          <tr><td class="repo">ticket-lifecycle</td><td class="checks">governance / remote lifecycle · standards / lifecycle conformance</td><td class="state"><span class="mark bad">✗</span> rozjazd</td></tr>
+          <tr><td class="repo">twin-lifecycle</td><td class="checks">governance / remote lifecycle · standards / lifecycle conformance</td><td class="state"><span class="mark bad">✗</span> rozjazd</td></tr>
+          <tr><td class="repo">validation-attestation</td><td class="checks">governance / remote lifecycle · standards / attestation conformance</td><td class="state"><span class="mark bad">✗</span> rozjazd</td></tr>
+          <tr><td class="repo">agent</td><td class="checks">— brak ochrony</td><td class="state"><span class="mark none">○</span> niewymuszane</td></tr>
+          <tr><td class="repo">deployment</td><td class="checks">— brak ochrony</td><td class="state"><span class="mark none">○</span> niewymuszane</td></tr>
+          <tr><td class="repo">env-dsl</td><td class="checks">— brak ochrony, brak gałęzi <code>main</code></td><td class="state"><span class="mark none">○</span> niewymuszane</td></tr>
+          <tr><td class="repo">lifecycle</td><td class="checks">ochrona bez reguł</td><td class="state"><span class="mark none">○</span> niewymuszane</td></tr>
+          <tr><td class="repo">modularity</td><td class="checks">ochrona bez reguł</td><td class="state"><span class="mark none">○</span> niewymuszane</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>Docelowa mapa własności</h2>
+    <p class="prose">Granice są w większości już zadeklarowane w README poszczególnych packów i nie kolidują ze sobą — poniżej to, co warto utrwalić jako jawną tabelę HOME. Jedyne realne nakładanie się dotyczy definicji samego słownika: <code>HOME</code> / <code>ADOPT</code> / <code>facade</code> jest dziś opisany w czterech miejscach (<code>new-project</code>, <code>modularity</code>, <code>offer</code>, <code>brand</code>). To metapoziomowe naruszenie zasady, którą ten słownik ustanawia.</p>
+    <div class="map">
+      <div>
+        <h4>Słownik placement i governance</h4>
+        <p class="owner">HOME: wellmanifest/new-project</p>
+        <p><code>home</code>, <code>shape</code>, <code>runtimeOwner</code>, <code>adopt</code>, cykl ticket → PR → exact-head approval. Pozostałe packi <em>cytują</em>, nie redefiniują.</p>
+      </div>
+      <div>
+        <h4>Kontrakty single-exporter</h4>
+        <p class="owner">HOME: wellmanifest/modularity</p>
+        <p>Kto jest eksporterem, kto konsumentem, kiedy kopia jest fasadą. Reguła „drift gate must fail before merge".</p>
+      </div>
+      <div>
+        <h4>Klasyfikacja duplikatów</h4>
+        <p class="owner">HOME: wellmanifest/ssot</p>
+        <p>Wywiad i decyzja: mirror generowany, kopia vendorowana z parzystością, czy dozwolona rozbieżność.</p>
+      </div>
+      <div>
+        <h4>Opis projektu</h4>
+        <p class="owner">HOME: wellmanifest/project-ssot</p>
+        <p>Jeden opis złożony z typowanych dowodów; README jest projekcją AST, nie drugim źródłem.</p>
+      </div>
+      <div>
+        <h4>Język bazowy i reguła <code>$id</code></h4>
+        <p class="owner">HOME: wellmanifest/dsl</p>
+        <p>Składnia i kanoniczna przestrzeń nazw schematów. Packi domenowe adoptują, nie rozszerzają składni.</p>
+      </div>
+      <div>
+        <h4>Katalogi komercyjne</h4>
+        <p class="owner">HOME: subactor/offer</p>
+        <p>Ceny i uprawnienia. <code>wellmanifest/offer</code> to sam wskaźnik standardu; <code>policy-dsl</code> adoptuje identyfikatory planów i nie staje się drugim cennikiem.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Kolejność działań</h2>
+    <ol class="actions">
+      <li>
+        <div class="act-body">
+          <span class="who">Ticket w new-project · blokuje resztę</span>
+          <strong>Rozdzielić <code>required-checks</code> na schemat i instancję.</strong>
+          <span>Bez tego każde repozytorium musi wybierać między zgodnością z lockiem a prawdziwością pliku. Naprawa ścieżki w <code>check_required_checks.py</code> i wpięcie gate'u wchodzi w ten sam ticket — inaczej regresja wróci niezauważona.</span>
+        </div>
+      </li>
+      <li>
+        <div class="act-body">
+          <span class="who">Ticket w new-project</span>
+          <strong>Uzupełnić instancje w 21 repozytoriach.</strong>
+          <span>Wpisać faktyczne nazwy checków odczytane z rulesetów. Dopiero wtedy nota o zewnętrznych konsumentach staje się prawdziwa i validator-agent może na niej polegać.</span>
+        </div>
+      </li>
+      <li>
+        <div class="act-body">
+          <span class="who">Decyzja właściciela</span>
+          <strong>Domknąć migrację <code>$id</code> na jeden host.</strong>
+          <span>Dziewięć packów zostało na <code>wellmanifest.dev</code>. <code>wellm</code> wymaga osobnego ticketu, bo usunięcie <code>v0.2.0rc4</code> z <code>$id</code> jest zmianą łamiącą.</span>
+        </div>
+      </li>
+      <li>
+        <div class="act-body">
+          <span class="who">Ticket w new-project</span>
+          <strong>Wymagać sekcji <code>## Placement</code> w każdym packu.</strong>
+          <span>Wzorzec z <code>offer/README.md</code> promowany do reguły standardu, z gate'em sprawdzającym obecność tabeli HOME. To najtańszy sposób, żeby każde zagadnienie miało jawnie jednego właściciela.</span>
+        </div>
+      </li>
+      <li>
+        <div class="act-body">
+          <span class="who">Ticket w modularity</span>
+          <strong>Sklasyfikować sześć kopii <code>lifecycle.py</code>.</strong>
+          <span>HOME plus test parzystości, albo zależność. Do rozstrzygnięcia procedurą z <code>wellmanifest/ssot</code> — to jej pierwszy realny przypadek użycia wewnątrz organizacji.</span>
+        </div>
+      </li>
+      <li>
+        <div class="act-body">
+          <span class="who">Higiena, niezależne od powyższych</span>
+          <strong>Włączyć ochronę w 10 repozytoriach i naprawić <code>env-dsl</code>.</strong>
+          <span><code>env-dsl</code> nie ma gałęzi <code>main</code> — domyślną jest <code>ticket/001-env-dsl-standard</code>, co uniemożliwia jakąkolwiek ochronę i łamie konwencję całego workspace'u.</span>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <footer>
+    <p>Stan odczytany 16 sierpnia 2026 z GitHub API (rulesety i klasyczna ochrona gałęzi) oraz z drzew roboczych w <code>/home/tom/github/wellmanifest</code>. Ustalenia 01, 02 i 04 zweryfikowane wykonaniem; ustalenie 03 policzone z <code>$id</code> w 56 plikach schematów.</p>
+  </footer>
+
+</div>
+
+</body>

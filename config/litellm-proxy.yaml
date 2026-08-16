@@ -1,0 +1,34 @@
+# GENERATED FACADE — HOME: config/model-registry.json
+# Regenerate with: python3 scripts/render-litellm-config.py
+model_list:
+  - model_name: twin-intent
+    litellm_params:
+      model: openrouter/openrouter/auto
+      api_key: os.environ/OPENROUTER_API_KEY
+      temperature: 0
+  - model_name: twin-guidelines
+    litellm_params:
+      model: openrouter/openrouter/auto
+      api_key: os.environ/OPENROUTER_API_KEY
+      temperature: 0
+  - model_name: twin-code
+    litellm_params:
+      model: openrouter/openrouter/auto
+      api_key: os.environ/OPENROUTER_API_KEY
+  - model_name: twin-validation
+    litellm_params:
+      model: openrouter/openrouter/auto
+      api_key: os.environ/OPENROUTER_API_KEY
+      temperature: 0
+
+router_settings:
+  routing_strategy: simple-shuffle
+  num_retries: 2
+  timeout: 90
+
+litellm_settings:
+  drop_params: true
+  set_verbose: false
+
+general_settings:
+  master_key: os.environ/LITELLM_MASTER_KEY

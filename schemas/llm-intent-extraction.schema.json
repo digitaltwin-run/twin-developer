@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/subactor.developer-twin.intent-candidates/v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "candidates"],
+  "properties": {
+    "schemaVersion": { "const": "subactor.developer-twin.intent-candidates/v1" },
+    "candidates": {
+      "type": "array",
+      "maxItems": 30,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["candidateId", "title", "description", "scope", "kind", "evidenceRefs", "confidence", "generalizationRisk"],
+        "properties": {
+          "candidateId": { "type": "string" },
+          "title": { "type": "string" },
+          "description": { "type": "string" },
+          "scope": { "enum": ["global", "subactor", "project", "contextual"] },
+          "kind": { "enum": ["obligation", "prohibition", "preference", "decision-rule"] },
+          "must": { "type": "array", "items": { "type": "string" } },
+          "should": { "type": "array", "items": { "type": "string" } },
+          "mustNot": { "type": "array", "items": { "type": "string" } },
+          "evidenceRefs": { "type": "array", "minItems": 1, "items": { "type": "string" }, "uniqueItems": true },
+          "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+          "generalizationRisk": { "enum": ["low", "medium", "high"] },
+          "conflictsWith": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    }
+  }
+}

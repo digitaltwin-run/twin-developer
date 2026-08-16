@@ -1,0 +1,61 @@
+{
+  "truthDomains": {
+    "humanIntent": {
+      "description": "Co człowiek chce, jak pracuje i jak rozstrzyga konflikt intencji.",
+      "ranking": [
+        { "sourceClass": "human_correction", "weight": 100, "note": "Nowsza jawna korekta wygrywa w tym samym zakresie." },
+        { "sourceClass": "human_instruction_repeated", "weight": 92, "note": "Powtarzalne zachowanie w wielu zadaniach." },
+        { "sourceClass": "human_instruction", "weight": 84, "note": "Jawne polecenie, ale może być jednorazowe i kontekstowe." },
+        { "sourceClass": "accepted_command", "weight": 72, "note": "Dowód akceptacji operacji, nie zawsze trwała preferencja." },
+        { "sourceClass": "ticket_intent", "weight": 70, "note": "Wersjonowana intencja projektu." },
+        { "sourceClass": "agent_claim", "weight": 20, "note": "Opis agenta nie może sam ustanowić preferencji człowieka." }
+      ]
+    },
+    "projectReality": {
+      "description": "Co faktycznie istnieje i działa w projekcie.",
+      "ranking": [
+        { "sourceClass": "live_runtime_observation", "weight": 100, "note": "Odtwarzalny odczyt endpointu lub środowiska z czasem i zakresem." },
+        { "sourceClass": "test_receipt", "weight": 96, "note": "Wynik wykonanej bramki z kodem wyjścia i rewizją." },
+        { "sourceClass": "versioned_ssot", "weight": 92, "note": "Kanoniczny HOME, przypięta rewizja i walidowany schemat." },
+        { "sourceClass": "code_or_config", "weight": 88, "note": "Bieżący kod/config na znanej rewizji." },
+        { "sourceClass": "git_history", "weight": 80, "note": "Dowód zmiany, nie pełny dowód aktualnego runtime." },
+        { "sourceClass": "documentation", "weight": 55, "note": "Twierdzenie wymagające porównania z kodem i runtime." },
+        { "sourceClass": "human_prompt_fact", "weight": 40, "note": "Wskazówka lub oczekiwanie; nie stan systemu rekordowego." },
+        { "sourceClass": "agent_claim", "weight": 15, "note": "Claim, dopóki nie ma receipt/obserwacji." }
+      ]
+    }
+  },
+  "conflictResolution": [
+    {
+      "id": "CR-INTENT-NEWER-CORRECTION",
+      "when": "Dwie wypowiedzi człowieka dotyczą tego samego zakresu i nowsza jest jawną korektą.",
+      "winner": "Nowsza jawna korekta człowieka.",
+      "reason": "Historia ma zachować supersession, a nie głosowanie większościowe." 
+    },
+    {
+      "id": "CR-REALITY-OBSERVED",
+      "when": "Prompt lub dokumentacja przeczy odtwarzalnej obserwacji runtime albo kanonicznemu SSOT.",
+      "winner": "Odtwarzalna obserwacja lub wersjonowany HOME właściwy dla danego claimu.",
+      "reason": "Prompt opisuje oczekiwanie; nie jest automatycznie stanem rzeczywistym." 
+    },
+    {
+      "id": "CR-CONTEXT-NOT-GLOBAL",
+      "when": "Polecenie dotyczy jednego kontenera, ekranu, oferty lub incydentu.",
+      "winner": "Reguła kontekstowa, bez generalizacji na wszystkie projekty.",
+      "reason": "Zapobiega błędnym regułom typu 'nigdy Docker' wyprowadzonym z jednego incydentu." 
+    },
+    {
+      "id": "CR-AUTHORITATIVE-DISAGREEMENT",
+      "when": "Dwa autorytatywne źródła rzeczywistości o równym zakresie są sprzeczne.",
+      "winner": "Brak automatycznego zwycięzcy; wynik review_required lub blocking.",
+      "reason": "Digital twin nie może arbitralnie wymyślić prawdy." 
+    }
+  ],
+  "epistemicRules": [
+    "Claim agenta pozostaje claimem, dopóki nie ma odtwarzalnego dowodu.",
+    "Brak dowodu nie oznacza false ani DONE.",
+    "LLM może proponować kandydatów reguł, ale nie może nadawać im autorytetu ani wykonywać efektów.",
+    "Sekrety są redagowane przed wysłaniem do LLM i nigdy nie trafiają do artefaktów audytowych.",
+    "Każda reguła ma evidenceRefs, confidence, scope i status supersession."
+  ]
+}

@@ -1,0 +1,89 @@
+{
+  "schemaVersion": "subactor.developer-twin.guidelines/v1",
+  "summary": "Wykonaj zadanie w 7 etapach, stosując reguły developer twin jako ograniczenia i wymagając dowodów po zmianie.",
+  "steps": [
+    {
+      "order": 1,
+      "action": "Utworzyć lub wskazać aktywny project/ticket-* przed implementacją.",
+      "reason": "Wieloetapowa zmiana ma być prowadzona w aktywnym project/ticket-* zgodnie z new-project i ticket-lifecycle.",
+      "ruleRefs": [
+        "DT-GOV-001"
+      ]
+    },
+    {
+      "order": 2,
+      "action": "Wskazać jeden HOME dla każdego concernu.",
+      "reason": "Dane produktu pozostają w kanonicznym HOME; standardy definiują kontrakty, a projekcje są fasadami z bramką driftu.",
+      "ruleRefs": [
+        "DT-SSOT-001"
+      ]
+    },
+    {
+      "order": 3,
+      "action": "Zidentyfikować istniejący kontrakt lub projekt referencyjny.",
+      "reason": "Przed tworzeniem nowej implementacji należy zbadać i wykorzystać istniejące kontrakty oraz projekty referencyjne.",
+      "ruleRefs": [
+        "DT-REUSE-001"
+      ]
+    },
+    {
+      "order": 4,
+      "action": "Odzwierciedlić aktywny widok w URL i obsłużyć deep-link/back-forward.",
+      "reason": "W panelu Subactor użytkownik preferuje osobne zakładki, stan w URL, krótkie etykiety, podpowiedzi i boczne menu mobilne.",
+      "ruleRefs": [
+        "DT-UX-001"
+      ]
+    },
+    {
+      "order": 5,
+      "action": "Wymagać structured output i walidacji lokalnej.",
+      "reason": "LLM może generować kandydatów DSL i wytyczne, ale runtime deterministyczny waliduje schemat, cytowania, zakres i bramki efektów.",
+      "ruleRefs": [
+        "DT-LLM-001"
+      ]
+    },
+    {
+      "order": 6,
+      "action": "Odczytać aktywny ticket i ostatnie potwierdzone kryteria.",
+      "reason": "Samo 'kontynuuj' nie ustanawia nowego celu; runtime ma odczytać aktywny ticket, diff, testy i niedomknięte kryteria.",
+      "ruleRefs": [
+        "DT-CONTINUE-001"
+      ]
+    },
+    {
+      "order": 7,
+      "action": "Uruchomić deklarowany restart lub odtworzyć równoważny lifecycle usługi.",
+      "reason": "Po zmianach runtime/UI/usług użytkownik oczekuje restartu i odtwarzalnej weryfikacji, szczególnie przez TestQL.",
+      "ruleRefs": [
+        "DT-TEST-001"
+      ],
+      "commands": [
+        "make validate",
+        "make test",
+        "make demo"
+      ]
+    }
+  ],
+  "gates": [
+    "brak aktywnego ticketu dla wieloetapowej zmiany",
+    "nieznane evidenceRefs",
+    "sprzeczność równorzędnych źródeł autorytatywnych",
+    "niepoprawny structured output",
+    "nieudane testy lub brak wymaganych receiptów",
+    "Nie promuj kandydatów LLM do active bez jawnej decyzji w ticket/intent.",
+    "Nie uznawaj outputu Aider ani opisu agenta za receipt testowy."
+  ],
+  "unknowns": [
+    "Historia promptów nie dowodzi bieżącego stanu kodu, środowiska ani wdrożenia; trzeba je obserwować w repozytorium docelowym.",
+    "Aktywny ticket deklarowany przez kontekst: project/ticket-001."
+  ],
+  "ruleRefs": [
+    "DT-GOV-001",
+    "DT-SSOT-001",
+    "DT-REUSE-001",
+    "DT-UX-001",
+    "DT-LLM-001",
+    "DT-CONTINUE-001",
+    "DT-TEST-001"
+  ]
+}
