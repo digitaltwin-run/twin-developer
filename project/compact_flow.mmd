@@ -1,0 +1,11 @@
+flowchart TD
+%% generated in 0.01s
+    llm_service__app["llm_service.app<br/>5 funcs"]
+    llm_service__audit["llm_service.audit<br/>3 funcs"]
+    llm_service__cli["llm_service.cli<br/>5 funcs"]
+    llm_service__core["llm_service.core<br/>22 funcs"]
+    src__ingest["src.ingest<br/>49 funcs"]
+    llm_service__cli ==>|6| llm_service__core
+    llm_service__core ==>|6| llm_service__audit
+    llm_service__app ==>|4| llm_service__core
+    llm_service__core -->|1| src__ingest

@@ -1,0 +1,812 @@
+name: Code Quality Improvement
+project_name: ''
+project_type: prefactoring
+domain: dev-tools
+goal: Improve code quality using prefact
+goals:
+- Fix all prefact-detected issues
+- Improve code maintainability
+- Ensure consistent code style
+quality_gates:
+- metric: Prefact Issues
+  threshold: '0'
+sprints:
+- id: sprint-1
+  name: Code Quality Improvements
+  duration: 2 weeks
+  objectives:
+  - Fix code quality issues
+  task_patterns:
+  - id: ticket-dc59dc09
+    name: Fix relative-imports issues
+    description: Resolve 2 relative-imports issues in llm_service/cli.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - llm_service/cli.py
+    rule_id: relative-imports
+    count: 2
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-b79074b9
+    name: Fix ast-unused-imports issues
+    description: Resolve 3 ast-unused-imports issues in llm_service/cli.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - llm_service/cli.py
+    rule_id: ast-unused-imports
+    count: 3
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-ca46d31f
+    name: Fix ast-sorted-imports issues
+    description: Resolve 1 ast-sorted-imports issues in llm_service/cli.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - llm_service/cli.py
+    rule_id: ast-sorted-imports
+    count: 1
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-72eea790
+    name: Fix ast-string-concat issues
+    description: Resolve 1 ast-string-concat issues in llm_service/cli.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - llm_service/cli.py
+    rule_id: ast-string-concat
+    count: 1
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-eb083a5b
+    name: Fix ast-print-statements issues
+    description: Resolve 2 ast-print-statements issues in llm_service/cli.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - llm_service/cli.py
+    rule_id: ast-print-statements
+    count: 2
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-992ebe29
+    name: Fix ruff-print-statements issues
+    description: Resolve 2 ruff-print-statements issues in llm_service/cli.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - llm_service/cli.py
+    rule_id: ruff-print-statements
+    count: 2
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-9a10c57d
+    name: Fix ruff-sorted-imports issues
+    description: Resolve 1 ruff-sorted-imports issues in llm_service/cli.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - llm_service/cli.py
+    rule_id: ruff-sorted-imports
+    count: 1
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-9b304417
+    name: Fix string-concat-fstring issues
+    description: Resolve 2 string-concat-fstring issues in llm_service/cli.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - llm_service/cli.py
+    rule_id: string-concat-fstring
+    count: 2
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-e76ad577
+    name: Fix magic-numbers issues
+    description: Resolve 1 magic-numbers issues in llm_service/cli.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - llm_service/cli.py
+    rule_id: magic-numbers
+    count: 1
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-437b12b7
+    name: Fix ai-boilerplate issues
+    description: Resolve 1 ai-boilerplate issues in llm_service/cli.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - llm_service/cli.py
+    rule_id: ai-boilerplate
+    count: 1
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-db6fa9e4
+    name: Fix import-optimization issues
+    description: Resolve 1 import-optimization issues in llm_service/cli.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - llm_service/cli.py
+    rule_id: import-optimization
+    count: 1
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-b0d42e17
+    name: Fix no-relative-imports issues
+    description: Resolve 1 no-relative-imports issues in llm_service/cli.py
+    task_type: bugfix
+    priority: critical
+    estimate: 1d
+    files:
+    - llm_service/cli.py
+    rule_id: no-relative-imports
+    count: 1
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-17c555b6
+    name: Fix ast-unused-imports issues
+    description: Resolve 3 ast-unused-imports issues in llm_service/audit.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - llm_service/audit.py
+    rule_id: ast-unused-imports
+    count: 3
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-b07b2360
+    name: Fix ast-sorted-imports issues
+    description: Resolve 1 ast-sorted-imports issues in llm_service/audit.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - llm_service/audit.py
+    rule_id: ast-sorted-imports
+    count: 1
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-3761b5d9
+    name: Fix ast-string-concat issues
+    description: Resolve 1 ast-string-concat issues in llm_service/audit.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - llm_service/audit.py
+    rule_id: ast-string-concat
+    count: 1
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-84c0371e
+    name: Fix string-concat-fstring issues
+    description: Resolve 4 string-concat-fstring issues in llm_service/audit.py
+    task_type: prefactor
+    priority: medium
+    estimate: 2d
+    files:
+    - llm_service/audit.py
+    rule_id: string-concat-fstring
+    count: 4
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-355d48c5
+    name: Fix import-optimization issues
+    description: Resolve 3 import-optimization issues in llm_service/audit.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - llm_service/audit.py
+    rule_id: import-optimization
+    count: 3
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-e45af667
+    name: Fix relative-imports issues
+    description: Resolve 4 relative-imports issues in llm_service/app.py
+    task_type: prefactor
+    priority: medium
+    estimate: 2d
+    files:
+    - llm_service/app.py
+    rule_id: relative-imports
+    count: 4
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-6e382ca6
+    name: Fix ast-unused-imports issues
+    description: Resolve 3 ast-unused-imports issues in llm_service/app.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - llm_service/app.py
+    rule_id: ast-unused-imports
+    count: 3
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-4d981c8d
+    name: Fix ast-sorted-imports issues
+    description: Resolve 1 ast-sorted-imports issues in llm_service/app.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - llm_service/app.py
+    rule_id: ast-sorted-imports
+    count: 1
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-7a70b24b
+    name: Fix magic-numbers issues
+    description: Resolve 4 magic-numbers issues in llm_service/app.py
+    task_type: prefactor
+    priority: medium
+    estimate: 2d
+    files:
+    - llm_service/app.py
+    rule_id: magic-numbers
+    count: 4
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-5d28ddee
+    name: Fix import-optimization issues
+    description: Resolve 2 import-optimization issues in llm_service/app.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - llm_service/app.py
+    rule_id: import-optimization
+    count: 2
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-89fe866a
+    name: Fix no-relative-imports issues
+    description: Resolve 2 no-relative-imports issues in llm_service/app.py
+    task_type: bugfix
+    priority: critical
+    estimate: 1d
+    files:
+    - llm_service/app.py
+    rule_id: no-relative-imports
+    count: 2
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-68fc3ef8
+    name: Fix relative-imports issues
+    description: Resolve 2 relative-imports issues in llm_service/core.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - llm_service/core.py
+    rule_id: relative-imports
+    count: 2
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-df4703d7
+    name: Fix ast-unused-imports issues
+    description: Resolve 3 ast-unused-imports issues in llm_service/core.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - llm_service/core.py
+    rule_id: ast-unused-imports
+    count: 3
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-f46a99cf
+    name: Fix ast-sorted-imports issues
+    description: Resolve 1 ast-sorted-imports issues in llm_service/core.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - llm_service/core.py
+    rule_id: ast-sorted-imports
+    count: 1
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-eb7f1a5e
+    name: Fix ast-string-concat issues
+    description: Resolve 2 ast-string-concat issues in llm_service/core.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - llm_service/core.py
+    rule_id: ast-string-concat
+    count: 2
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-9e9b5435
+    name: Fix string-concat-fstring issues
+    description: Resolve 6 string-concat-fstring issues in llm_service/core.py
+    task_type: prefactor
+    priority: high
+    estimate: 2d
+    files:
+    - llm_service/core.py
+    rule_id: string-concat-fstring
+    count: 6
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-b5ee8a69
+    name: Fix llm-hallucinations issues
+    description: Resolve 1 llm-hallucinations issues in llm_service/core.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - llm_service/core.py
+    rule_id: llm-hallucinations
+    count: 1
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-d285f41f
+    name: Fix magic-numbers issues
+    description: Resolve 1 magic-numbers issues in llm_service/core.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - llm_service/core.py
+    rule_id: magic-numbers
+    count: 1
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-c9b71cd0
+    name: Fix import-optimization issues
+    description: Resolve 1 import-optimization issues in llm_service/core.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - llm_service/core.py
+    rule_id: import-optimization
+    count: 1
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-47ab8622
+    name: Fix no-relative-imports issues
+    description: Resolve 1 no-relative-imports issues in llm_service/core.py
+    task_type: bugfix
+    priority: critical
+    estimate: 1d
+    files:
+    - llm_service/core.py
+    rule_id: no-relative-imports
+    count: 1
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-37ce0788
+    name: Fix ast-unused-imports issues
+    description: Resolve 3 ast-unused-imports issues in scripts/render-litellm-config.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - scripts/render-litellm-config.py
+    rule_id: ast-unused-imports
+    count: 3
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-f6b47461
+    name: Fix ast-print-statements issues
+    description: Resolve 2 ast-print-statements issues in scripts/render-litellm-config.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - scripts/render-litellm-config.py
+    rule_id: ast-print-statements
+    count: 2
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-a1ab7869
+    name: Fix ruff-print-statements issues
+    description: Resolve 2 ruff-print-statements issues in scripts/render-litellm-config.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - scripts/render-litellm-config.py
+    rule_id: ruff-print-statements
+    count: 2
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-32e0f7c8
+    name: Fix ai-boilerplate issues
+    description: Resolve 1 ai-boilerplate issues in scripts/render-litellm-config.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - scripts/render-litellm-config.py
+    rule_id: ai-boilerplate
+    count: 1
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-3dd230df
+    name: Fix import-optimization issues
+    description: Resolve 1 import-optimization issues in scripts/render-litellm-config.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - scripts/render-litellm-config.py
+    rule_id: import-optimization
+    count: 1
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-85d67943
+    name: Fix ast-unused-imports issues
+    description: Resolve 3 ast-unused-imports issues in scripts/validate-schema.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - scripts/validate-schema.py
+    rule_id: ast-unused-imports
+    count: 3
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-6efb6ba2
+    name: Fix ast-print-statements issues
+    description: Resolve 1 ast-print-statements issues in scripts/validate-schema.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - scripts/validate-schema.py
+    rule_id: ast-print-statements
+    count: 1
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-6dd56f43
+    name: Fix ruff-print-statements issues
+    description: Resolve 1 ruff-print-statements issues in scripts/validate-schema.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - scripts/validate-schema.py
+    rule_id: ruff-print-statements
+    count: 1
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-15224347
+    name: Fix ai-boilerplate issues
+    description: Resolve 1 ai-boilerplate issues in scripts/validate-schema.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - scripts/validate-schema.py
+    rule_id: ai-boilerplate
+    count: 1
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-ff6d9dac
+    name: Fix import-optimization issues
+    description: Resolve 1 import-optimization issues in scripts/validate-schema.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - scripts/validate-schema.py
+    rule_id: import-optimization
+    count: 1
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-8539470e
+    name: Fix ast-unused-imports issues
+    description: Resolve 3 ast-unused-imports issues in tests/test_llm_service.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - tests/test_llm_service.py
+    rule_id: ast-unused-imports
+    count: 3
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-4a9752ca
+    name: Fix ast-sorted-imports issues
+    description: Resolve 1 ast-sorted-imports issues in tests/test_llm_service.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - tests/test_llm_service.py
+    rule_id: ast-sorted-imports
+    count: 1
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-088bb0a4
+    name: Fix ai-boilerplate issues
+    description: Resolve 1 ai-boilerplate issues in tests/test_llm_service.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - tests/test_llm_service.py
+    rule_id: ai-boilerplate
+    count: 1
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-c2435678
+    name: Fix import-optimization issues
+    description: Resolve 1 import-optimization issues in tests/test_llm_service.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - tests/test_llm_service.py
+    rule_id: import-optimization
+    count: 1
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-2dace28d
+    name: Fix ast-unused-imports issues
+    description: Resolve 3 ast-unused-imports issues in llm_service/models.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - llm_service/models.py
+    rule_id: ast-unused-imports
+    count: 3
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-5d6f5541
+    name: Fix ast-unused-imports issues
+    description: Resolve 3 ast-unused-imports issues in scripts/check-flag-parity.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - scripts/check-flag-parity.py
+    rule_id: ast-unused-imports
+    count: 3
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-5ac8edf0
+    name: Fix ast-sorted-imports issues
+    description: Resolve 1 ast-sorted-imports issues in scripts/check-flag-parity.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - scripts/check-flag-parity.py
+    rule_id: ast-sorted-imports
+    count: 1
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-8d208083
+    name: Fix ast-print-statements issues
+    description: Resolve 3 ast-print-statements issues in scripts/check-flag-parity.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - scripts/check-flag-parity.py
+    rule_id: ast-print-statements
+    count: 3
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-7aba6bf1
+    name: Fix ruff-print-statements issues
+    description: Resolve 3 ruff-print-statements issues in scripts/check-flag-parity.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - scripts/check-flag-parity.py
+    rule_id: ruff-print-statements
+    count: 3
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-66a464c2
+    name: Fix ai-boilerplate issues
+    description: Resolve 1 ai-boilerplate issues in scripts/check-flag-parity.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - scripts/check-flag-parity.py
+    rule_id: ai-boilerplate
+    count: 1
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-cbf99da9
+    name: Fix import-optimization issues
+    description: Resolve 1 import-optimization issues in scripts/check-flag-parity.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - scripts/check-flag-parity.py
+    rule_id: import-optimization
+    count: 1
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-df755cf4
+    name: Fix ast-unused-imports issues
+    description: Resolve 3 ast-unused-imports issues in scripts/check-schema-identity.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - scripts/check-schema-identity.py
+    rule_id: ast-unused-imports
+    count: 3
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-9a2e2e5d
+    name: Fix ast-sorted-imports issues
+    description: Resolve 1 ast-sorted-imports issues in scripts/check-schema-identity.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - scripts/check-schema-identity.py
+    rule_id: ast-sorted-imports
+    count: 1
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-ca5455d4
+    name: Fix ast-print-statements issues
+    description: Resolve 3 ast-print-statements issues in scripts/check-schema-identity.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - scripts/check-schema-identity.py
+    rule_id: ast-print-statements
+    count: 3
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-85164899
+    name: Fix ast-missing-return-type issues
+    description: Resolve 1 ast-missing-return-type issues in scripts/check-schema-identity.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - scripts/check-schema-identity.py
+    rule_id: ast-missing-return-type
+    count: 1
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-8e4e661c
+    name: Fix ruff-print-statements issues
+    description: Resolve 3 ruff-print-statements issues in scripts/check-schema-identity.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - scripts/check-schema-identity.py
+    rule_id: ruff-print-statements
+    count: 3
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-056b19d4
+    name: Fix smart-return-type issues
+    description: Resolve 1 smart-return-type issues in scripts/check-schema-identity.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - scripts/check-schema-identity.py
+    rule_id: smart-return-type
+    count: 1
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-39348c95
+    name: Fix ai-boilerplate issues
+    description: Resolve 1 ai-boilerplate issues in scripts/check-schema-identity.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - scripts/check-schema-identity.py
+    rule_id: ai-boilerplate
+    count: 1
+    model_hints:
+      planning: balanced
+      implementation: balanced
+  - id: ticket-cd7d3f7b
+    name: Fix import-optimization issues
+    description: Resolve 1 import-optimization issues in scripts/check-schema-identity.py
+    task_type: prefactor
+    priority: medium
+    estimate: 1d
+    files:
+    - scripts/check-schema-identity.py
+    rule_id: import-optimization
+    count: 1
+    model_hints:
+      planning: balanced
+      implementation: balanced

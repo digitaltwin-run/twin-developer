@@ -1,0 +1,131 @@
+// LESS format — define @variables here as needed
+
+app {
+  name: twin-developer;
+  version: 0.1.0;
+}
+
+entity[name="StrictModel"] {
+
+}
+
+interface[type="api"] {
+  type: rest;
+  framework: fastapi;
+}
+
+workflow[name="setup"] {
+  trigger: manual;
+  step-1: run cmd=$(NPM) install;
+  step-2: run cmd=$(PYTHON) -m venv .venv;
+  step-3: run cmd=.venv/bin/python -m pip install --upgrade pip;
+  step-4: run cmd=.venv/bin/python -m pip install -r requirements.txt;
+}
+
+workflow[name="build"] {
+  trigger: manual;
+  step-1: run cmd=$(PYTHON) scripts/render-litellm-config.py --check;
+  step-2: run cmd=$(NPM) run build;
+}
+
+workflow[name="demo"] {
+  trigger: manual;
+  step-1: run cmd=TWIN_NOW=2026-08-16T12:00:00Z $(NODE) dist/src/cli.js demo --mode deterministic;
+}
+
+workflow[name="validate"] {
+  trigger: manual;
+  step-1: run cmd=$(NODE) dist/src/cli.js validate;
+  step-2: run cmd=$(PYTHON) scripts/validate-schema.py;
+  step-3: run cmd=$(PYTHON) scripts/check-schema-identity.py;
+  step-4: run cmd=$(PYTHON) scripts/check-flag-parity.py;
+  step-5: run cmd=$(MAKE) verify-artifacts;
+}
+
+workflow[name="verify-artifacts"] {
+  trigger: manual;
+  step-1: run cmd=scripts/verify-artifacts.sh;
+}
+
+workflow[name="test-ts"] {
+  trigger: manual;
+  step-1: run cmd=$(NODE) --test dist/tests/*.test.js;
+}
+
+workflow[name="test-py"] {
+  trigger: manual;
+  step-1: run cmd=$(PYTHON) -m unittest discover -s tests -p 'test_*.py';
+}
+
+workflow[name="test"] {
+  trigger: manual;
+  step-1: depend target=test-ts;
+  step-2: depend target=test-py;
+}
+
+workflow[name="guidelines"] {
+  trigger: manual;
+  step-1: run cmd=$(NODE) dist/src/cli.js guidelines --mode deterministic;
+}
+
+workflow[name="reality"] {
+  trigger: manual;
+  step-1: run cmd=$(NODE) dist/src/cli.js reality-offer;
+}
+
+workflow[name="aider-context"] {
+  trigger: manual;
+  step-1: run cmd=$(NODE) dist/src/cli.js aider-context;
+}
+
+workflow[name="llm-health"] {
+  trigger: manual;
+  step-1: run cmd=$(PYTHON) -m llm_service.cli health;
+}
+
+workflow[name="llm-api"] {
+  trigger: manual;
+  step-1: run cmd=$(PYTHON) -m llm_service.cli serve --host 127.0.0.1 --port $(TWIN_LLM_PORT);
+}
+
+workflow[name="llm-fake-demo"] {
+  trigger: manual;
+  step-1: run cmd=TWIN_LLM_PORT=$(TWIN_LLM_PORT) scripts/run-fake-llm-demo.sh;
+}
+
+workflow[name="litellm-proxy"] {
+  trigger: manual;
+  step-1: run cmd=scripts/run-litellm-proxy.sh;
+}
+
+workflow[name="aider"] {
+  trigger: manual;
+  step-1: run cmd=scripts/run-aider.sh $(AIDER_ARGS);
+}
+
+workflow[name="clean"] {
+  trigger: manual;
+  step-1: run cmd=rm -rf dist __pycache__ llm_service/__pycache__ tests/__pycache__;
+  step-2: run cmd=rm -f data/output/*.json data/output/*.md data/output/*.jsonl data/output/*.log data/output/*.yaml;
+  step-3: run cmd=rm -f data/normalized/*.json data/normalized/*.jsonl;
+}
+
+tests {
+  import: testql-scenarios/**/*.testql.toon.yaml;
+}
+
+env_vars {
+  keys: TWIN_LLM_URL, TWIN_LLM_AUDIT_PATH, TWIN_LLM_EVENT_WINDOW, TWIN_API_TOKEN, TWIN_ALLOW_REMOTE, LITELLM_PROXY_URL, LITELLM_MASTER_KEY, OPENROUTER_API_KEY, OPENROUTER_INTENT_MODEL, OPENROUTER_GUIDELINES_MODEL, OPENROUTER_CODE_MODEL, OPENROUTER_VALIDATION_MODEL, LOCAL_LLM_API_BASE, LOCAL_LLM_MODEL, LOCAL_LLM_API_KEY, LOCAL_LLM_ENABLED, LITELLM_PROXY_ENABLED, OPENROUTER_DIRECT_ENABLED, AIDER_MODEL, AIDER_APPLY;
+}
+
+deploy {
+  target: makefile;
+}
+
+environment[name="local"] {
+  runtime: python;
+  env_file: .env.example;
+  template_file: .env.example;
+  vars: AIDER_APPLY, AIDER_MODEL, LITELLM_MASTER_KEY, LITELLM_PROXY_ENABLED, LITELLM_PROXY_URL, LOCAL_LLM_API_BASE, LOCAL_LLM_API_KEY, LOCAL_LLM_ENABLED, LOCAL_LLM_MODEL, OPENROUTER_API_KEY, OPENROUTER_CODE_MODEL, OPENROUTER_DIRECT_ENABLED, OPENROUTER_GUIDELINES_MODEL, OPENROUTER_INTENT_MODEL, OPENROUTER_VALIDATION_MODEL, TWIN_ALLOW_REMOTE, TWIN_API_TOKEN, TWIN_LLM_AUDIT_PATH, TWIN_LLM_EVENT_WINDOW, TWIN_LLM_URL;
+  runtime_llm: OPENROUTER_API_KEY, OPENROUTER_CODE_MODEL, OPENROUTER_DIRECT_ENABLED, OPENROUTER_GUIDELINES_MODEL, OPENROUTER_INTENT_MODEL, OPENROUTER_VALIDATION_MODEL;
+}

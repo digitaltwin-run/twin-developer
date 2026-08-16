@@ -1,0 +1,1732 @@
+project: /home/tom/github/subactor/twin-developer
+generated_from: code2llm call graph analysis
+stats:
+  total_nodes: 133
+  total_edges: 142
+  modules_count: 21
+nodes:
+  src.cli.commandValidate:
+    name: commandValidate
+    module: src.cli
+    line: 261
+    cyclomatic_complexity: 2
+    calls_out: 6
+    calls_in: 1
+  src.cli.llmUrl:
+    name: llmUrl
+    module: src.cli
+    line: 292
+    cyclomatic_complexity: 1
+    calls_out: 1
+    calls_in: 0
+  src.cli.flags:
+    name: flags
+    module: src.cli
+    line: 42
+    cyclomatic_complexity: 4
+    calls_out: 1
+    calls_in: 1
+  src.util.hash.sha256:
+    name: sha256
+    module: src.util.hash
+    line: 3
+    cyclomatic_complexity: 1
+    calls_out: 3
+    calls_in: 1
+  src.util.text.excerpt:
+    name: excerpt
+    module: src.util.text
+    line: 31
+    cyclomatic_complexity: 2
+    calls_out: 4
+    calls_in: 0
+  llm_service.core._stage_entry:
+    name: _stage_entry
+    module: llm_service.core
+    line: 105
+    cyclomatic_complexity: 3
+    calls_out: 5
+    calls_in: 1
+  src.reality.offer.reconcileOfferHistory:
+    name: reconcileOfferHistory
+    module: src.reality.offer
+    line: 63
+    cyclomatic_complexity: 14
+    calls_out: 13
+    calls_in: 0
+  src.util.text.normalizeForMatch:
+    name: normalizeForMatch
+    module: src.util.text
+    line: 21
+    cyclomatic_complexity: 1
+    calls_out: 4
+    calls_in: 1
+  src.llm.client.LlmServiceError.timer:
+    name: timer
+    module: src.llm.client
+    line: 76
+    cyclomatic_complexity: 7
+    calls_out: 6
+    calls_in: 0
+  src.cli.rootPath:
+    name: rootPath
+    module: src.cli
+    line: 50
+    cyclomatic_complexity: 2
+    calls_out: 2
+    calls_in: 6
+  src.twin.render.escapeCell:
+    name: escapeCell
+    module: src.twin.render
+    line: 3
+    cyclomatic_complexity: 1
+    calls_out: 1
+    calls_in: 1
+  src.llm.client.LlmServiceError.authHeaders:
+    name: authHeaders
+    module: src.llm.client
+    line: 38
+    cyclomatic_complexity: 2
+    calls_out: 0
+    calls_in: 1
+  scripts.render-litellm-config.litellm_openrouter_model:
+    name: litellm_openrouter_model
+    module: scripts.render-litellm-config
+    line: 14
+    cyclomatic_complexity: 2
+    calls_out: 1
+    calls_in: 1
+  scripts.check-flag-parity.main:
+    name: main
+    module: scripts.check-flag-parity
+    line: 34
+    cyclomatic_complexity: 11
+    calls_out: 21
+    calls_in: 0
+  src.extract.deterministic.evidenceByEvent:
+    name: evidenceByEvent
+    module: src.extract.deterministic
+    line: 55
+    cyclomatic_complexity: 5
+    calls_out: 11
+    calls_in: 0
+  scripts.validate-schema.validate:
+    name: validate
+    module: scripts.validate-schema
+    line: 29
+    cyclomatic_complexity: 4
+    calls_out: 15
+    calls_in: 1
+  src.extract.deterministic.extractDeterministicRules:
+    name: extractDeterministicRules
+    module: src.extract.deterministic
+    line: 37
+    cyclomatic_complexity: 25
+    calls_out: 22
+    calls_in: 0
+  src.cli.rawEvents:
+    name: rawEvents
+    module: src.cli
+    line: 103
+    cyclomatic_complexity: 1
+    calls_out: 3
+    calls_in: 0
+  src.util.text.compactWhitespace:
+    name: compactWhitespace
+    module: src.util.text
+    line: 17
+    cyclomatic_complexity: 1
+    calls_out: 2
+    calls_in: 1
+  llm_service.core.flag_enabled:
+    name: flag_enabled
+    module: llm_service.core
+    line: 73
+    cyclomatic_complexity: 4
+    calls_out: 4
+    calls_in: 3
+  src.reality.offer.extractPlanPrice:
+    name: extractPlanPrice
+    module: src.reality.offer
+    line: 52
+    cyclomatic_complexity: 5
+    calls_out: 4
+    calls_in: 3
+  scripts.render-litellm-config.render:
+    name: render
+    module: scripts.render-litellm-config
+    line: 18
+    cyclomatic_complexity: 4
+    calls_out: 10
+    calls_in: 1
+  src.cli.readEventsJsonl:
+    name: readEventsJsonl
+    module: src.cli
+    line: 73
+    cyclomatic_complexity: 1
+    calls_out: 5
+    calls_in: 1
+  src.ingest.cursor.decodeJsonString:
+    name: decodeJsonString
+    module: src.ingest.cursor
+    line: 12
+    cyclomatic_complexity: 2
+    calls_out: 2
+    calls_in: 1
+  src.cli.modeFromArgs:
+    name: modeFromArgs
+    module: src.cli
+    line: 58
+    cyclomatic_complexity: 2
+    calls_out: 4
+    calls_in: 3
+  src.extract.deterministic.sourceClass:
+    name: sourceClass
+    module: src.extract.deterministic
+    line: 60
+    cyclomatic_complexity: 1
+    calls_out: 6
+    calls_in: 0
+  src.extract.deterministic.rankingWeight:
+    name: rankingWeight
+    module: src.extract.deterministic
+    line: 19
+    cyclomatic_complexity: 3
+    calls_out: 1
+    calls_in: 5
+  llm_service.core.complete_chat:
+    name: complete_chat
+    module: llm_service.core
+    line: 315
+    cyclomatic_complexity: 9
+    calls_out: 16
+    calls_in: 3
+  src.cli.commandDemo:
+    name: commandDemo
+    module: src.cli
+    line: 289
+    cyclomatic_complexity: 3
+    calls_out: 10
+    calls_in: 1
+  src.cli.commandReality:
+    name: commandReality
+    module: src.cli
+    line: 277
+    cyclomatic_complexity: 1
+    calls_out: 4
+    calls_in: 1
+  src.twin.aggregate.buildDeveloperTwin:
+    name: buildDeveloperTwin
+    module: src.twin.aggregate
+    line: 140
+    cyclomatic_complexity: 21
+    calls_out: 9
+    calls_in: 0
+  src.llm.client.LlmServiceError.controller:
+    name: controller
+    module: src.llm.client
+    line: 75
+    cyclomatic_complexity: 7
+    calls_out: 6
+    calls_in: 0
+  src.cli.commandAider:
+    name: commandAider
+    module: src.cli
+    line: 283
+    cyclomatic_complexity: 1
+    calls_out: 4
+    calls_in: 1
+  src.extract.deterministic.repeated:
+    name: repeated
+    module: src.extract.deterministic
+    line: 59
+    cyclomatic_complexity: 1
+    calls_out: 6
+    calls_in: 0
+  llm_service.audit._path:
+    name: _path
+    module: llm_service.audit
+    line: 13
+    cyclomatic_complexity: 2
+    calls_out: 3
+    calls_in: 1
+  src.cli.buildAiderArtifacts:
+    name: buildAiderArtifacts
+    module: src.cli
+    line: 237
+    cyclomatic_complexity: 3
+    calls_out: 7
+    calls_in: 2
+  src.ingest.cursor.parsed:
+    name: parsed
+    module: src.ingest.cursor
+    line: 30
+    cyclomatic_complexity: 8
+    calls_out: 6
+    calls_in: 0
+  src.twin.validate.TwinValidationError.validateGenerator:
+    name: validateGenerator
+    module: src.twin.validate
+    line: 85
+    cyclomatic_complexity: 2
+    calls_out: 3
+    calls_in: 1
+  llm_service.core.health:
+    name: health
+    module: llm_service.core
+    line: 343
+    cyclomatic_complexity: 5
+    calls_out: 15
+    calls_in: 2
+  src.llm.client.LlmServiceError.postJson:
+    name: postJson
+    module: src.llm.client
+    line: 43
+    cyclomatic_complexity: 12
+    calls_out: 14
+    calls_in: 0
+  src.ingest.markdown.role:
+    name: role
+    module: src.ingest.markdown
+    line: 22
+    cyclomatic_complexity: 6
+    calls_out: 4
+    calls_in: 0
+  src.ingest.markdown.human:
+    name: human
+    module: src.ingest.markdown
+    line: 28
+    cyclomatic_complexity: 1
+    calls_out: 2
+    calls_in: 0
+  llm_service.core.fake_mode:
+    name: fake_mode
+    module: llm_service.core
+    line: 252
+    cyclomatic_complexity: 1
+    calls_out: 1
+    calls_in: 3
+  src.cli.flag:
+    name: flag
+    module: src.cli
+    line: 36
+    cyclomatic_complexity: 4
+    calls_out: 1
+    calls_in: 8
+  scripts.validate-schema.validate_tickets:
+    name: validate_tickets
+    module: scripts.validate-schema
+    line: 41
+    cyclomatic_complexity: 2
+    calls_out: 5
+    calls_in: 0
+  src.ingest.markdown.text:
+    name: text
+    module: src.ingest.markdown
+    line: 14
+    cyclomatic_complexity: 10
+    calls_out: 6
+    calls_in: 0
+  llm_service.audit.append_audit:
+    name: append_audit
+    module: llm_service.audit
+    line: 29
+    cyclomatic_complexity: 3
+    calls_out: 9
+    calls_in: 6
+  src.ingest.markdown.sequence:
+    name: sequence
+    module: src.ingest.markdown
+    line: 17
+    cyclomatic_complexity: 10
+    calls_out: 6
+    calls_in: 0
+  src.ingest.cursor.ingestCursorExport:
+    name: ingestCursorExport
+    module: src.ingest.cursor
+    line: 29
+    cyclomatic_complexity: 8
+    calls_out: 8
+    calls_in: 0
+  src.llm.client.LlmServiceError.text:
+    name: text
+    module: src.llm.client
+    line: 53
+    cyclomatic_complexity: 3
+    calls_out: 3
+    calls_in: 1
+  llm_service.core.complete_guidelines:
+    name: complete_guidelines
+    module: llm_service.core
+    line: 304
+    cyclomatic_complexity: 1
+    calls_out: 1
+    calls_in: 2
+  llm_service.core._sha:
+    name: _sha
+    module: llm_service.core
+    line: 54
+    cyclomatic_complexity: 1
+    calls_out: 4
+    calls_in: 8
+  src.util.text.redactSecrets:
+    name: redactSecrets
+    module: src.util.text
+    line: 9
+    cyclomatic_complexity: 2
+    calls_out: 1
+    calls_in: 1
+  src.ingest.cursor.extractTipTapText:
+    name: extractTipTapText
+    module: src.ingest.cursor
+    line: 20
+    cyclomatic_complexity: 6
+    calls_out: 7
+    calls_in: 4
+  scripts.check-schema-identity.walk:
+    name: walk
+    module: scripts.check-schema-identity
+    line: 48
+    cyclomatic_complexity: 7
+    calls_out: 7
+    calls_in: 3
+  src.twin.validate.TwinValidationError.validateRules:
+    name: validateRules
+    module: src.twin.validate
+    line: 87
+    cyclomatic_complexity: 2
+    calls_out: 3
+    calls_in: 1
+  src.extract.deterministic.matches:
+    name: matches
+    module: src.extract.deterministic
+    line: 42
+    cyclomatic_complexity: 4
+    calls_out: 5
+    calls_in: 0
+  src.twin.aggregate.candidateRules:
+    name: candidateRules
+    module: src.twin.aggregate
+    line: 17
+    cyclomatic_complexity: 10
+    calls_out: 9
+    calls_in: 1
+  src.twin.validate.TwinValidationError.evidenceIndex:
+    name: evidenceIndex
+    module: src.twin.validate
+    line: 38
+    cyclomatic_complexity: 2
+    calls_out: 3
+    calls_in: 1
+  scripts.check-flag-parity.env_example_values:
+    name: env_example_values
+    module: scripts.check-flag-parity
+    line: 23
+    cyclomatic_complexity: 5
+    calls_out: 7
+    calls_in: 1
+  src.ingest.markdown.block:
+    name: block
+    module: src.ingest.markdown
+    line: 25
+    cyclomatic_complexity: 6
+    calls_out: 4
+    calls_in: 0
+  src.reality.offer.currentById:
+    name: currentById
+    module: src.reality.offer
+    line: 71
+    cyclomatic_complexity: 13
+    calls_out: 9
+    calls_in: 0
+  llm_service.app.extract_intents:
+    name: extract_intents
+    module: llm_service.app
+    line: 42
+    cyclomatic_complexity: 2
+    calls_out: 8
+    calls_in: 0
+  llm_service.app.healthz:
+    name: healthz
+    module: llm_service.app
+    line: 37
+    cyclomatic_complexity: 1
+    calls_out: 2
+    calls_in: 0
+  src.cli.commandBuild:
+    name: commandBuild
+    module: src.cli
+    line: 253
+    cyclomatic_complexity: 3
+    calls_out: 6
+    calls_in: 1
+  src.twin.aggregate.buildWorkflow:
+    name: buildWorkflow
+    module: src.twin.aggregate
+    line: 73
+    cyclomatic_complexity: 2
+    calls_out: 0
+    calls_in: 1
+  src.twin.guidelines.selectRules:
+    name: selectRules
+    module: src.twin.guidelines
+    line: 15
+    cyclomatic_complexity: 8
+    calls_out: 10
+    calls_in: 1
+  llm_service.app.generate_guidelines:
+    name: generate_guidelines
+    module: llm_service.app
+    line: 51
+    cyclomatic_complexity: 2
+    calls_out: 8
+    calls_in: 0
+  src.cli.buildArtifacts:
+    name: buildArtifacts
+    module: src.cli
+    line: 99
+    cyclomatic_complexity: 7
+    calls_out: 27
+    calls_in: 5
+  llm_service.cli.main:
+    name: main
+    module: llm_service.cli
+    line: 66
+    cyclomatic_complexity: 11
+    calls_out: 22
+    calls_in: 0
+  src.ingest.cursor.blobIndex:
+    name: blobIndex
+    module: src.ingest.cursor
+    line: 33
+    cyclomatic_complexity: 8
+    calls_out: 6
+    calls_in: 0
+  llm_service.core._provenance:
+    name: _provenance
+    module: llm_service.core
+    line: 256
+    cyclomatic_complexity: 4
+    calls_out: 7
+    calls_in: 4
+  llm_service.core._real_structured:
+    name: _real_structured
+    module: llm_service.core
+    line: 209
+    cyclomatic_complexity: 7
+    calls_out: 16
+    calls_in: 1
+  scripts.check-schema-identity.main:
+    name: main
+    module: scripts.check-schema-identity
+    line: 63
+    cyclomatic_complexity: 11
+    calls_out: 23
+    calls_in: 0
+  src.twin.aggregate.buildModelStages:
+    name: buildModelStages
+    module: src.twin.aggregate
+    line: 126
+    cyclomatic_complexity: 2
+    calls_out: 4
+    calls_in: 1
+  llm_service.core._run_stage:
+    name: _run_stage
+    module: llm_service.core
+    line: 265
+    cyclomatic_complexity: 3
+    calls_out: 14
+    calls_in: 2
+  src.reality.offer.normalized:
+    name: normalized
+    module: src.reality.offer
+    line: 76
+    cyclomatic_complexity: 8
+    calls_out: 7
+    calls_in: 0
+  llm_service.core._schema:
+    name: _schema
+    module: llm_service.core
+    line: 114
+    cyclomatic_complexity: 1
+    calls_out: 3
+    calls_in: 2
+  src.util.command.checkCommand:
+    name: checkCommand
+    module: src.util.command
+    line: 32
+    cyclomatic_complexity: 11
+    calls_out: 8
+    calls_in: 1
+  src.extract.deterministic.effectiveClass:
+    name: effectiveClass
+    module: src.extract.deterministic
+    line: 32
+    cyclomatic_complexity: 3
+    calls_out: 0
+    calls_in: 2
+  src.cli.rel:
+    name: rel
+    module: src.cli
+    line: 54
+    cyclomatic_complexity: 1
+    calls_out: 2
+    calls_in: 3
+  src.util.command.tokens:
+    name: tokens
+    module: src.util.command
+    line: 47
+    cyclomatic_complexity: 6
+    calls_out: 6
+    calls_in: 0
+  src.cli.loadCore:
+    name: loadCore
+    module: src.cli
+    line: 82
+    cyclomatic_complexity: 1
+    calls_out: 2
+    calls_in: 2
+  src.llm.client.LlmServiceError.eventWindowSize:
+    name: eventWindowSize
+    module: src.llm.client
+    line: 92
+    cyclomatic_complexity: 4
+    calls_out: 3
+    calls_in: 1
+  src.cli.result:
+    name: result
+    module: src.cli
+    line: 273
+    cyclomatic_complexity: 1
+    calls_out: 1
+    calls_in: 0
+  src.extract.deterministic.matchedEntriesByEvent:
+    name: matchedEntriesByEvent
+    module: src.extract.deterministic
+    line: 43
+    cyclomatic_complexity: 4
+    calls_out: 5
+    calls_in: 0
+  src.twin.validate.TwinValidationError.validateWorkflow:
+    name: validateWorkflow
+    module: src.twin.validate
+    line: 88
+    cyclomatic_complexity: 2
+    calls_out: 3
+    calls_in: 1
+  src.twin.render.renderTwinMarkdown:
+    name: renderTwinMarkdown
+    module: src.twin.render
+    line: 7
+    cyclomatic_complexity: 12
+    calls_out: 6
+    calls_in: 0
+  src.cli.commandGuidelines:
+    name: commandGuidelines
+    module: src.cli
+    line: 269
+    cyclomatic_complexity: 3
+    calls_out: 6
+    calls_in: 1
+  src.ingest.markdown.start:
+    name: start
+    module: src.ingest.markdown
+    line: 23
+    cyclomatic_complexity: 6
+    calls_out: 4
+    calls_in: 0
+  src.twin.validate.TwinValidationError.validateTwin:
+    name: validateTwin
+    module: src.twin.validate
+    line: 83
+    cyclomatic_complexity: 4
+    calls_out: 9
+    calls_in: 0
+  src.util.command.tokenizeCommand:
+    name: tokenizeCommand
+    module: src.util.command
+    line: 28
+    cyclomatic_complexity: 1
+    calls_out: 3
+    calls_in: 2
+  src.ingest.markdown.next:
+    name: next
+    module: src.ingest.markdown
+    line: 21
+    cyclomatic_complexity: 6
+    calls_out: 4
+    calls_in: 1
+  llm_service.audit.audit_ref:
+    name: audit_ref
+    module: llm_service.audit
+    line: 24
+    cyclomatic_complexity: 1
+    calls_out: 4
+    calls_in: 1
+  src.cli.command:
+    name: command
+    module: src.cli
+    line: 315
+    cyclomatic_complexity: 2
+    calls_out: 1
+    calls_in: 0
+  llm_service.core._root:
+    name: _root
+    module: llm_service.core
+    line: 59
+    cyclomatic_complexity: 1
+    calls_out: 2
+    calls_in: 3
+  src.llm.client.LlmServiceError.clearTimeout:
+    name: clearTimeout
+    module: src.llm.client
+    line: 86
+    cyclomatic_complexity: 1
+    calls_out: 0
+    calls_in: 4
+  src.llm.client.LlmServiceError.serviceHealth:
+    name: serviceHealth
+    module: src.llm.client
+    line: 74
+    cyclomatic_complexity: 7
+    calls_out: 9
+    calls_in: 0
+  src.cli.buildOfferRealityArtifacts:
+    name: buildOfferRealityArtifacts
+    module: src.cli
+    line: 227
+    cyclomatic_complexity: 1
+    calls_out: 6
+    calls_in: 2
+  src.cli.usage:
+    name: usage
+    module: src.cli
+    line: 310
+    cyclomatic_complexity: 1
+    calls_out: 0
+    calls_in: 1
+  llm_service.core._route_enabled:
+    name: _route_enabled
+    module: llm_service.core
+    line: 91
+    cyclomatic_complexity: 5
+    calls_out: 8
+    calls_in: 6
+  src.util.hash.stableId:
+    name: stableId
+    module: src.util.hash
+    line: 7
+    cyclomatic_complexity: 1
+    calls_out: 2
+    calls_in: 0
+  scripts.check-flag-parity.routing_flags:
+    name: routing_flags
+    module: scripts.check-flag-parity
+    line: 18
+    cyclomatic_complexity: 3
+    calls_out: 4
+    calls_in: 1
+  src.util.command.isAllowedCommand:
+    name: isAllowedCommand
+    module: src.util.command
+    line: 63
+    cyclomatic_complexity: 1
+    calls_out: 1
+    calls_in: 0
+  src.ingest.cursor.sequence:
+    name: sequence
+    module: src.ingest.cursor
+    line: 32
+    cyclomatic_complexity: 8
+    calls_out: 6
+    calls_in: 0
+  llm_service.cli._read:
+    name: _read
+    module: llm_service.cli
+    line: 32
+    cyclomatic_complexity: 3
+    calls_out: 4
+    calls_in: 2
+  src.extract.deterministic.entries:
+    name: entries
+    module: src.extract.deterministic
+    line: 57
+    cyclomatic_complexity: 1
+    calls_out: 6
+    calls_in: 0
+  src.ingest.markdown.cleanHumanBlock:
+    name: cleanHumanBlock
+    module: src.ingest.markdown
+    line: 8
+    cyclomatic_complexity: 3
+    calls_out: 2
+    calls_in: 10
+  src.cli.guidelines:
+    name: guidelines
+    module: src.cli
+    line: 294
+    cyclomatic_complexity: 1
+    calls_out: 1
+    calls_in: 0
+  src.cli.mode:
+    name: mode
+    module: src.cli
+    line: 291
+    cyclomatic_complexity: 1
+    calls_out: 1
+    calls_in: 0
+  src.cli.main:
+    name: main
+    module: src.cli
+    line: 314
+    cyclomatic_complexity: 8
+    calls_out: 8
+    calls_in: 1
+  src.ingest.markdown.ingestMarkdownTranscript:
+    name: ingestMarkdownTranscript
+    module: src.ingest.markdown
+    line: 13
+    cyclomatic_complexity: 10
+    calls_out: 7
+    calls_in: 0
+  llm_service.app.chat_completions:
+    name: chat_completions
+    module: llm_service.app
+    line: 60
+    cyclomatic_complexity: 3
+    calls_out: 8
+    calls_in: 0
+  llm_service.core.complete_intents:
+    name: complete_intents
+    module: llm_service.core
+    line: 293
+    cyclomatic_complexity: 1
+    calls_out: 1
+    calls_in: 2
+  src.reality.offer.price:
+    name: price
+    module: src.reality.offer
+    line: 47
+    cyclomatic_complexity: 1
+    calls_out: 2
+    calls_in: 1
+  src.twin.guidelines.generateDeterministicGuidelines:
+    name: generateDeterministicGuidelines
+    module: src.twin.guidelines
+    line: 32
+    cyclomatic_complexity: 9
+    calls_out: 4
+    calls_in: 0
+  scripts.render-litellm-config.main:
+    name: main
+    module: scripts.render-litellm-config
+    line: 59
+    cyclomatic_complexity: 5
+    calls_out: 17
+    calls_in: 0
+  llm_service.core._registry:
+    name: _registry
+    module: llm_service.core
+    line: 101
+    cyclomatic_complexity: 1
+    calls_out: 3
+    calls_in: 2
+  src.extract.deterministic.eventMatches:
+    name: eventMatches
+    module: src.extract.deterministic
+    line: 23
+    cyclomatic_complexity: 1
+    calls_out: 3
+    calls_in: 3
+  llm_service.cli._write:
+    name: _write
+    module: llm_service.cli
+    line: 38
+    cyclomatic_complexity: 3
+    calls_out: 6
+    calls_in: 4
+  src.cli.buildGuidelineArtifacts:
+    name: buildGuidelineArtifacts
+    module: src.cli
+    line: 189
+    cyclomatic_complexity: 7
+    calls_out: 12
+    calls_in: 4
+  src.ingest.markdown.end:
+    name: end
+    module: src.ingest.markdown
+    line: 24
+    cyclomatic_complexity: 6
+    calls_out: 4
+    calls_in: 0
+  src.util.text.isLikelyCorrection:
+    name: isLikelyCorrection
+    module: src.util.text
+    line: 37
+    cyclomatic_complexity: 4
+    calls_out: 3
+    calls_in: 0
+  llm_service.cli.parser:
+    name: parser
+    module: llm_service.cli
+    line: 47
+    cyclomatic_complexity: 2
+    calls_out: 14
+    calls_in: 1
+  src.cli.root:
+    name: root
+    module: src.cli
+    line: 290
+    cyclomatic_complexity: 1
+    calls_out: 1
+    calls_in: 0
+  src.ingest.markdown.current:
+    name: current
+    module: src.ingest.markdown
+    line: 20
+    cyclomatic_complexity: 6
+    calls_out: 4
+    calls_in: 0
+  llm_service.core.resolve_route:
+    name: resolve_route
+    module: llm_service.core
+    line: 128
+    cyclomatic_complexity: 11
+    calls_out: 26
+    calls_in: 2
+  src.llm.client.LlmServiceError.extractIntentCandidatesWithLlm:
+    name: extractIntentCandidatesWithLlm
+    module: src.llm.client
+    line: 100
+    cyclomatic_complexity: 1
+    calls_out: 4
+    calls_in: 0
+  src.cli.defaultInputPaths:
+    name: defaultInputPaths
+    module: src.cli
+    line: 64
+    cyclomatic_complexity: 2
+    calls_out: 7
+    calls_in: 1
+  llm_service.core._routing:
+    name: _routing
+    module: llm_service.core
+    line: 65
+    cyclomatic_complexity: 1
+    calls_out: 3
+    calls_in: 1
+  llm_service.core._extract_text:
+    name: _extract_text
+    module: llm_service.core
+    line: 196
+    cyclomatic_complexity: 6
+    calls_out: 7
+    calls_in: 1
+  src.cli.absoluteInputs:
+    name: absoluteInputs
+    module: src.cli
+    line: 102
+    cyclomatic_complexity: 1
+    calls_out: 3
+    calls_in: 0
+  llm_service.cli._guard_bind:
+    name: _guard_bind
+    module: llm_service.cli
+    line: 15
+    cyclomatic_complexity: 4
+    calls_out: 5
+    calls_in: 1
+edges:
+- caller: llm_service.cli._guard_bind
+  callee: llm_service.core.flag_enabled
+  call_type: resolved
+- caller: llm_service.cli.main
+  callee: llm_service.cli._write
+  call_type: resolved
+- caller: llm_service.cli.main
+  callee: llm_service.cli.parser
+  call_type: resolved
+- caller: llm_service.cli.main
+  callee: llm_service.core.health
+  call_type: resolved
+- caller: llm_service.cli.main
+  callee: llm_service.core.complete_intents
+  call_type: resolved
+- caller: llm_service.cli.main
+  callee: llm_service.cli._read
+  call_type: resolved
+- caller: llm_service.cli.main
+  callee: llm_service.core.complete_guidelines
+  call_type: resolved
+- caller: llm_service.app.healthz
+  callee: llm_service.core.health
+  call_type: resolved
+- caller: llm_service.app.extract_intents
+  callee: llm_service.core.complete_intents
+  call_type: resolved
+- caller: llm_service.app.generate_guidelines
+  callee: llm_service.core.complete_guidelines
+  call_type: resolved
+- caller: llm_service.app.chat_completions
+  callee: llm_service.core.complete_chat
+  call_type: resolved
+- caller: llm_service.core._routing
+  callee: llm_service.core._root
+  call_type: resolved
+- caller: llm_service.core._route_enabled
+  callee: src.ingest.markdown.next
+  call_type: resolved
+- caller: llm_service.core._route_enabled
+  callee: llm_service.core.flag_enabled
+  call_type: resolved
+- caller: llm_service.core._route_enabled
+  callee: llm_service.core._routing
+  call_type: resolved
+- caller: llm_service.core._registry
+  callee: llm_service.core._root
+  call_type: resolved
+- caller: llm_service.core._stage_entry
+  callee: llm_service.core._registry
+  call_type: resolved
+- caller: llm_service.core._schema
+  callee: llm_service.core._root
+  call_type: resolved
+- caller: llm_service.core.resolve_route
+  callee: llm_service.core._stage_entry
+  call_type: resolved
+- caller: llm_service.core.resolve_route
+  callee: llm_service.core._route_enabled
+  call_type: resolved
+- caller: llm_service.core._real_structured
+  callee: llm_service.core.resolve_route
+  call_type: resolved
+- caller: llm_service.core._real_structured
+  callee: llm_service.core._extract_text
+  call_type: resolved
+- caller: llm_service.core._real_structured
+  callee: llm_service.core._sha
+  call_type: resolved
+- caller: llm_service.core.fake_mode
+  callee: llm_service.core.flag_enabled
+  call_type: resolved
+- caller: llm_service.core._run_stage
+  callee: llm_service.core.fake_mode
+  call_type: resolved
+- caller: llm_service.core._run_stage
+  callee: llm_service.core._real_structured
+  call_type: resolved
+- caller: llm_service.core._run_stage
+  callee: llm_service.core._provenance
+  call_type: resolved
+- caller: llm_service.core._run_stage
+  callee: llm_service.core._sha
+  call_type: resolved
+- caller: llm_service.core._run_stage
+  callee: llm_service.core._schema
+  call_type: resolved
+- caller: llm_service.core._run_stage
+  callee: llm_service.audit.append_audit
+  call_type: resolved
+- caller: llm_service.core.complete_intents
+  callee: llm_service.core._run_stage
+  call_type: resolved
+- caller: llm_service.core.complete_guidelines
+  callee: llm_service.core._run_stage
+  call_type: resolved
+- caller: llm_service.core.complete_chat
+  callee: llm_service.core.fake_mode
+  call_type: resolved
+- caller: llm_service.core.complete_chat
+  callee: llm_service.core.resolve_route
+  call_type: resolved
+- caller: llm_service.core.complete_chat
+  callee: llm_service.core._sha
+  call_type: resolved
+- caller: llm_service.core.complete_chat
+  callee: llm_service.core._provenance
+  call_type: resolved
+- caller: llm_service.core.health
+  callee: llm_service.core.fake_mode
+  call_type: resolved
+- caller: llm_service.core.health
+  callee: llm_service.core._route_enabled
+  call_type: resolved
+- caller: llm_service.audit.append_audit
+  callee: llm_service.audit._path
+  call_type: resolved
+- caller: llm_service.audit.append_audit
+  callee: llm_service.audit.audit_ref
+  call_type: resolved
+- caller: src.cli.rootPath
+  callee: src.cli.flag
+  call_type: resolved
+- caller: src.cli.modeFromArgs
+  callee: src.cli.flag
+  call_type: resolved
+- caller: src.cli.mode
+  callee: src.cli.buildArtifacts
+  call_type: resolved
+- caller: src.cli.defaultInputPaths
+  callee: src.cli.flags
+  call_type: resolved
+- caller: src.cli.buildArtifacts
+  callee: src.cli.loadCore
+  call_type: resolved
+- caller: src.cli.buildArtifacts
+  callee: src.cli.defaultInputPaths
+  call_type: resolved
+- caller: src.cli.buildArtifacts
+  callee: src.cli.rel
+  call_type: resolved
+- caller: src.cli.absoluteInputs
+  callee: src.cli.rel
+  call_type: resolved
+- caller: src.cli.rawEvents
+  callee: src.cli.rel
+  call_type: resolved
+- caller: src.cli.buildGuidelineArtifacts
+  callee: src.cli.loadCore
+  call_type: resolved
+- caller: src.cli.buildGuidelineArtifacts
+  callee: src.cli.flag
+  call_type: resolved
+- caller: src.cli.guidelines
+  callee: src.cli.buildGuidelineArtifacts
+  call_type: resolved
+- caller: src.cli.buildOfferRealityArtifacts
+  callee: src.cli.readEventsJsonl
+  call_type: resolved
+- caller: src.cli.buildAiderArtifacts
+  callee: src.cli.flag
+  call_type: resolved
+- caller: src.cli.commandBuild
+  callee: src.cli.rootPath
+  call_type: resolved
+- caller: src.cli.commandBuild
+  callee: src.cli.modeFromArgs
+  call_type: resolved
+- caller: src.cli.commandBuild
+  callee: src.cli.flag
+  call_type: resolved
+- caller: src.cli.commandBuild
+  callee: src.cli.buildArtifacts
+  call_type: resolved
+- caller: src.cli.root
+  callee: src.cli.buildArtifacts
+  call_type: resolved
+- caller: src.cli.llmUrl
+  callee: src.cli.buildArtifacts
+  call_type: resolved
+- caller: src.cli.result
+  callee: src.cli.buildGuidelineArtifacts
+  call_type: resolved
+- caller: src.cli.commandValidate
+  callee: src.cli.rootPath
+  call_type: resolved
+- caller: src.cli.commandValidate
+  callee: src.cli.flag
+  call_type: resolved
+- caller: src.cli.commandGuidelines
+  callee: src.cli.rootPath
+  call_type: resolved
+- caller: src.cli.commandGuidelines
+  callee: src.cli.modeFromArgs
+  call_type: resolved
+- caller: src.cli.commandGuidelines
+  callee: src.cli.flag
+  call_type: resolved
+- caller: src.cli.commandGuidelines
+  callee: src.cli.buildGuidelineArtifacts
+  call_type: resolved
+- caller: src.cli.commandReality
+  callee: src.cli.rootPath
+  call_type: resolved
+- caller: src.cli.commandReality
+  callee: src.cli.buildOfferRealityArtifacts
+  call_type: resolved
+- caller: src.cli.commandAider
+  callee: src.cli.rootPath
+  call_type: resolved
+- caller: src.cli.commandAider
+  callee: src.cli.buildAiderArtifacts
+  call_type: resolved
+- caller: src.cli.commandDemo
+  callee: src.cli.rootPath
+  call_type: resolved
+- caller: src.cli.commandDemo
+  callee: src.cli.modeFromArgs
+  call_type: resolved
+- caller: src.cli.commandDemo
+  callee: src.cli.flag
+  call_type: resolved
+- caller: src.cli.commandDemo
+  callee: src.cli.buildArtifacts
+  call_type: resolved
+- caller: src.cli.commandDemo
+  callee: src.cli.buildGuidelineArtifacts
+  call_type: resolved
+- caller: src.cli.commandDemo
+  callee: src.cli.buildOfferRealityArtifacts
+  call_type: resolved
+- caller: src.cli.commandDemo
+  callee: src.cli.buildAiderArtifacts
+  call_type: resolved
+- caller: src.cli.main
+  callee: src.cli.commandBuild
+  call_type: resolved
+- caller: src.cli.main
+  callee: src.cli.commandValidate
+  call_type: resolved
+- caller: src.cli.main
+  callee: src.cli.commandGuidelines
+  call_type: resolved
+- caller: src.cli.main
+  callee: src.cli.commandReality
+  call_type: resolved
+- caller: src.cli.main
+  callee: src.cli.commandAider
+  call_type: resolved
+- caller: src.cli.main
+  callee: src.cli.commandDemo
+  call_type: resolved
+- caller: src.cli.main
+  callee: src.cli.usage
+  call_type: resolved
+- caller: src.cli.command
+  callee: src.cli.main
+  call_type: resolved
+- caller: src.extract.deterministic.extractDeterministicRules
+  callee: src.extract.deterministic.eventMatches
+  call_type: resolved
+- caller: src.extract.deterministic.extractDeterministicRules
+  callee: src.extract.deterministic.effectiveClass
+  call_type: resolved
+- caller: src.extract.deterministic.matches
+  callee: src.extract.deterministic.eventMatches
+  call_type: resolved
+- caller: src.extract.deterministic.matchedEntriesByEvent
+  callee: src.extract.deterministic.eventMatches
+  call_type: resolved
+- caller: src.extract.deterministic.evidenceByEvent
+  callee: src.extract.deterministic.effectiveClass
+  call_type: resolved
+- caller: src.extract.deterministic.evidenceByEvent
+  callee: src.extract.deterministic.rankingWeight
+  call_type: resolved
+- caller: src.extract.deterministic.entries
+  callee: src.extract.deterministic.rankingWeight
+  call_type: resolved
+- caller: src.extract.deterministic.repeated
+  callee: src.extract.deterministic.rankingWeight
+  call_type: resolved
+- caller: src.extract.deterministic.sourceClass
+  callee: src.extract.deterministic.rankingWeight
+  call_type: resolved
+- caller: src.reality.offer.extractPlanPrice
+  callee: src.reality.offer.price
+  call_type: resolved
+- caller: src.reality.offer.reconcileOfferHistory
+  callee: src.reality.offer.extractPlanPrice
+  call_type: resolved
+- caller: src.reality.offer.currentById
+  callee: src.reality.offer.extractPlanPrice
+  call_type: resolved
+- caller: src.reality.offer.normalized
+  callee: src.reality.offer.extractPlanPrice
+  call_type: resolved
+- caller: src.twin.guidelines.generateDeterministicGuidelines
+  callee: src.twin.guidelines.selectRules
+  call_type: resolved
+- caller: src.twin.aggregate.buildDeveloperTwin
+  callee: src.twin.aggregate.candidateRules
+  call_type: resolved
+- caller: src.twin.aggregate.buildDeveloperTwin
+  callee: src.twin.aggregate.buildWorkflow
+  call_type: resolved
+- caller: src.twin.aggregate.buildDeveloperTwin
+  callee: src.twin.aggregate.buildModelStages
+  call_type: resolved
+- caller: src.twin.render.renderTwinMarkdown
+  callee: src.twin.render.escapeCell
+  call_type: resolved
+- caller: src.llm.client.LlmServiceError.postJson
+  callee: src.llm.client.LlmServiceError.authHeaders
+  call_type: resolved
+- caller: src.llm.client.LlmServiceError.postJson
+  callee: src.llm.client.LlmServiceError.text
+  call_type: resolved
+- caller: src.llm.client.LlmServiceError.controller
+  callee: src.llm.client.LlmServiceError.clearTimeout
+  call_type: resolved
+- caller: src.llm.client.LlmServiceError.timer
+  callee: src.llm.client.LlmServiceError.clearTimeout
+  call_type: resolved
+- caller: src.llm.client.LlmServiceError.serviceHealth
+  callee: src.llm.client.LlmServiceError.clearTimeout
+  call_type: resolved
+- caller: src.llm.client.LlmServiceError.extractIntentCandidatesWithLlm
+  callee: src.llm.client.LlmServiceError.eventWindowSize
+  call_type: resolved
+- caller: src.ingest.markdown.ingestMarkdownTranscript
+  callee: src.ingest.markdown.cleanHumanBlock
+  call_type: resolved
+- caller: src.ingest.markdown.text
+  callee: src.ingest.markdown.cleanHumanBlock
+  call_type: resolved
+- caller: src.ingest.markdown.sequence
+  callee: src.ingest.markdown.cleanHumanBlock
+  call_type: resolved
+- caller: src.ingest.markdown.current
+  callee: src.ingest.markdown.cleanHumanBlock
+  call_type: resolved
+- caller: src.ingest.markdown.next
+  callee: src.ingest.markdown.cleanHumanBlock
+  call_type: resolved
+- caller: src.ingest.markdown.role
+  callee: src.ingest.markdown.cleanHumanBlock
+  call_type: resolved
+- caller: src.ingest.markdown.start
+  callee: src.ingest.markdown.cleanHumanBlock
+  call_type: resolved
+- caller: src.ingest.markdown.end
+  callee: src.ingest.markdown.cleanHumanBlock
+  call_type: resolved
+- caller: src.ingest.markdown.block
+  callee: src.ingest.markdown.cleanHumanBlock
+  call_type: resolved
+- caller: src.ingest.markdown.human
+  callee: src.ingest.markdown.cleanHumanBlock
+  call_type: resolved
+- caller: src.ingest.cursor.extractTipTapText
+  callee: src.ingest.cursor.decodeJsonString
+  call_type: resolved
+- caller: src.ingest.cursor.ingestCursorExport
+  callee: src.ingest.cursor.extractTipTapText
+  call_type: resolved
+- caller: src.ingest.cursor.parsed
+  callee: src.ingest.cursor.extractTipTapText
+  call_type: resolved
+- caller: src.ingest.cursor.sequence
+  callee: src.ingest.cursor.extractTipTapText
+  call_type: resolved
+- caller: src.ingest.cursor.blobIndex
+  callee: src.ingest.cursor.extractTipTapText
+  call_type: resolved
+- caller: src.util.hash.stableId
+  callee: src.util.hash.sha256
+  call_type: resolved
+- caller: src.util.text.excerpt
+  callee: src.util.text.compactWhitespace
+  call_type: resolved
+- caller: src.util.text.excerpt
+  callee: src.util.text.redactSecrets
+  call_type: resolved
+- caller: src.util.text.isLikelyCorrection
+  callee: src.util.text.normalizeForMatch
+  call_type: resolved
+- caller: src.util.command.checkCommand
+  callee: src.util.command.tokenizeCommand
+  call_type: resolved
+- caller: src.util.command.tokens
+  callee: src.util.command.tokenizeCommand
+  call_type: resolved
+- caller: src.util.command.isAllowedCommand
+  callee: src.util.command.checkCommand
+  call_type: resolved
+- caller: scripts.render-litellm-config.render
+  callee: scripts.render-litellm-config.litellm_openrouter_model
+  call_type: resolved
+- caller: scripts.render-litellm-config.main
+  callee: scripts.render-litellm-config.render
+  call_type: resolved
+- caller: src.twin.validate.TwinValidationError.validateTwin
+  callee: src.twin.validate.TwinValidationError.validateGenerator
+  call_type: resolved
+- caller: src.twin.validate.TwinValidationError.validateTwin
+  callee: src.twin.validate.TwinValidationError.evidenceIndex
+  call_type: resolved
+- caller: src.twin.validate.TwinValidationError.validateTwin
+  callee: src.twin.validate.TwinValidationError.validateRules
+  call_type: resolved
+- caller: src.twin.validate.TwinValidationError.validateTwin
+  callee: src.twin.validate.TwinValidationError.validateWorkflow
+  call_type: resolved
+- caller: scripts.validate-schema.validate_tickets
+  callee: scripts.validate-schema.validate
+  call_type: resolved
+- caller: scripts.check-schema-identity.main
+  callee: scripts.check-schema-identity.walk
+  call_type: resolved
+- caller: scripts.check-flag-parity.main
+  callee: scripts.check-flag-parity.routing_flags
+  call_type: resolved
+- caller: scripts.check-flag-parity.main
+  callee: scripts.check-flag-parity.env_example_values
+  call_type: resolved
+modules:
+  llm_service.app:
+  - llm_service.app.chat_completions
+  - llm_service.app.extract_intents
+  - llm_service.app.generate_guidelines
+  - llm_service.app.healthz
+  llm_service.audit:
+  - llm_service.audit._path
+  - llm_service.audit.append_audit
+  - llm_service.audit.audit_ref
+  llm_service.cli:
+  - llm_service.cli._guard_bind
+  - llm_service.cli._read
+  - llm_service.cli._write
+  - llm_service.cli.main
+  - llm_service.cli.parser
+  llm_service.core:
+  - llm_service.core._extract_text
+  - llm_service.core._provenance
+  - llm_service.core._real_structured
+  - llm_service.core._registry
+  - llm_service.core._root
+  - llm_service.core._route_enabled
+  - llm_service.core._routing
+  - llm_service.core._run_stage
+  - llm_service.core._schema
+  - llm_service.core._sha
+  - llm_service.core._stage_entry
+  - llm_service.core.complete_chat
+  - llm_service.core.complete_guidelines
+  - llm_service.core.complete_intents
+  - llm_service.core.fake_mode
+  - llm_service.core.flag_enabled
+  - llm_service.core.health
+  - llm_service.core.resolve_route
+  scripts.check-flag-parity:
+  - scripts.check-flag-parity.env_example_values
+  - scripts.check-flag-parity.main
+  - scripts.check-flag-parity.routing_flags
+  scripts.check-schema-identity:
+  - scripts.check-schema-identity.main
+  - scripts.check-schema-identity.walk
+  scripts.render-litellm-config:
+  - scripts.render-litellm-config.litellm_openrouter_model
+  - scripts.render-litellm-config.main
+  - scripts.render-litellm-config.render
+  scripts.validate-schema:
+  - scripts.validate-schema.validate
+  - scripts.validate-schema.validate_tickets
+  src.cli:
+  - src.cli.absoluteInputs
+  - src.cli.buildAiderArtifacts
+  - src.cli.buildArtifacts
+  - src.cli.buildGuidelineArtifacts
+  - src.cli.buildOfferRealityArtifacts
+  - src.cli.command
+  - src.cli.commandAider
+  - src.cli.commandBuild
+  - src.cli.commandDemo
+  - src.cli.commandGuidelines
+  - src.cli.commandReality
+  - src.cli.commandValidate
+  - src.cli.defaultInputPaths
+  - src.cli.flag
+  - src.cli.flags
+  - src.cli.guidelines
+  - src.cli.llmUrl
+  - src.cli.loadCore
+  - src.cli.main
+  - src.cli.mode
+  - src.cli.modeFromArgs
+  - src.cli.rawEvents
+  - src.cli.readEventsJsonl
+  - src.cli.rel
+  - src.cli.result
+  - src.cli.root
+  - src.cli.rootPath
+  - src.cli.usage
+  src.extract.deterministic:
+  - src.extract.deterministic.effectiveClass
+  - src.extract.deterministic.entries
+  - src.extract.deterministic.eventMatches
+  - src.extract.deterministic.evidenceByEvent
+  - src.extract.deterministic.extractDeterministicRules
+  - src.extract.deterministic.matchedEntriesByEvent
+  - src.extract.deterministic.matches
+  - src.extract.deterministic.rankingWeight
+  - src.extract.deterministic.repeated
+  - src.extract.deterministic.sourceClass
+  src.ingest.cursor:
+  - src.ingest.cursor.blobIndex
+  - src.ingest.cursor.decodeJsonString
+  - src.ingest.cursor.extractTipTapText
+  - src.ingest.cursor.ingestCursorExport
+  - src.ingest.cursor.parsed
+  - src.ingest.cursor.sequence
+  src.ingest.markdown:
+  - src.ingest.markdown.block
+  - src.ingest.markdown.cleanHumanBlock
+  - src.ingest.markdown.current
+  - src.ingest.markdown.end
+  - src.ingest.markdown.human
+  - src.ingest.markdown.ingestMarkdownTranscript
+  - src.ingest.markdown.next
+  - src.ingest.markdown.role
+  - src.ingest.markdown.sequence
+  - src.ingest.markdown.start
+  - src.ingest.markdown.text
+  src.llm.client:
+  - src.llm.client.LlmServiceError.authHeaders
+  - src.llm.client.LlmServiceError.clearTimeout
+  - src.llm.client.LlmServiceError.controller
+  - src.llm.client.LlmServiceError.eventWindowSize
+  - src.llm.client.LlmServiceError.extractIntentCandidatesWithLlm
+  - src.llm.client.LlmServiceError.postJson
+  - src.llm.client.LlmServiceError.serviceHealth
+  - src.llm.client.LlmServiceError.text
+  - src.llm.client.LlmServiceError.timer
+  src.reality.offer:
+  - src.reality.offer.currentById
+  - src.reality.offer.extractPlanPrice
+  - src.reality.offer.normalized
+  - src.reality.offer.price
+  - src.reality.offer.reconcileOfferHistory
+  src.twin.aggregate:
+  - src.twin.aggregate.buildDeveloperTwin
+  - src.twin.aggregate.buildModelStages
+  - src.twin.aggregate.buildWorkflow
+  - src.twin.aggregate.candidateRules
+  src.twin.guidelines:
+  - src.twin.guidelines.generateDeterministicGuidelines
+  - src.twin.guidelines.selectRules
+  src.twin.render:
+  - src.twin.render.escapeCell
+  - src.twin.render.renderTwinMarkdown
+  src.twin.validate:
+  - src.twin.validate.TwinValidationError.evidenceIndex
+  - src.twin.validate.TwinValidationError.validateGenerator
+  - src.twin.validate.TwinValidationError.validateRules
+  - src.twin.validate.TwinValidationError.validateTwin
+  - src.twin.validate.TwinValidationError.validateWorkflow
+  src.util.command:
+  - src.util.command.checkCommand
+  - src.util.command.isAllowedCommand
+  - src.util.command.tokenizeCommand
+  - src.util.command.tokens
+  src.util.hash:
+  - src.util.hash.sha256
+  - src.util.hash.stableId
+  src.util.text:
+  - src.util.text.compactWhitespace
+  - src.util.text.excerpt
+  - src.util.text.isLikelyCorrection
+  - src.util.text.normalizeForMatch
+  - src.util.text.redactSecrets
+entry_points:
+- llm_service.app.chat_completions
+- llm_service.app.extract_intents
+- llm_service.app.generate_guidelines
+- llm_service.app.healthz
+- llm_service.app.require_token
+- llm_service.cli.main
+- llm_service.core.Provenance.headers
+- llm_service.core._fake_guidelines
+- llm_service.core._fake_intents
+- scripts.check-flag-parity.main
+- scripts.check-schema-identity.main
+- scripts.render-litellm-config.main
+- scripts.run-fake-llm-demo.cleanup
+- scripts.validate-schema.validate_tickets
+- src.aider.prompt.buildAiderMessage
+- src.aider.prompt.selected
+- src.cli.absoluteInputs
+- src.cli.catalog
+- src.cli.command
+- src.cli.content
+- src.cli.degraded
+- src.cli.deterministic
+- src.cli.diagnostics
+- src.cli.events
+- src.cli.eventsPath
+- src.cli.extraction
+- src.cli.guidelines
+- src.cli.index
+- src.cli.llmCandidates
+- src.cli.llmUrl
+- src.cli.llmUsed
+- src.cli.mode
+- src.cli.path
+- src.cli.project
+- src.cli.provided
+- src.cli.rawEvents
+- src.cli.report
+- src.cli.response
+- src.cli.result
+- src.cli.root
+- src.cli.sourceFile
+- src.cli.task
+- src.cli.text
+- src.cli.twin
+- src.cli.values
+- src.extract.deterministic.avgIntentWeight
+- src.extract.deterministic.confidence
+- src.extract.deterministic.correctionBoost
+- src.extract.deterministic.current
+- src.extract.deterministic.dockerRule
+- src.extract.deterministic.entries
+- src.extract.deterministic.evidenceByEvent
+- src.extract.deterministic.extractDeterministicRules
+- src.extract.deterministic.haystack
+- src.extract.deterministic.matchedEntriesByEvent
+- src.extract.deterministic.matches
+- src.extract.deterministic.refs
+- src.extract.deterministic.repeated
+- src.extract.deterministic.repetitionBoost
+- src.extract.deterministic.rows
+- src.extract.deterministic.sourceClass
+- src.extract.deterministic.supportingEvent
+- src.ingest.common.contentHash
+- src.ingest.common.createEvent
+- src.ingest.common.id
+- src.ingest.common.isCorrection
+- src.ingest.common.redactedText
+- src.ingest.common.sourceClass
+- src.ingest.common.text
+- src.ingest.cursor.blobIndex
+- src.ingest.cursor.combined
+- src.ingest.cursor.event
+- src.ingest.cursor.ingestCursorExport
+- src.ingest.cursor.message
+- src.ingest.cursor.parsed
+- src.ingest.cursor.sequence
+- src.ingest.ingestFiles
+- src.ingest.jsonl.event
+- src.ingest.jsonl.eventSequence
+- src.ingest.jsonl.ingestJsonl
+- src.ingest.jsonl.lines
+- src.ingest.jsonl.parsed
+- src.ingest.jsonl.sequence
+- src.ingest.lower
+- src.ingest.markdown.agent
+- src.ingest.markdown.beforeTrace
+- src.ingest.markdown.block
+- src.ingest.markdown.current
+- src.ingest.markdown.end
+- src.ingest.markdown.event
+- src.ingest.markdown.human
+- src.ingest.markdown.ingestMarkdownTranscript
+- src.ingest.markdown.role
+- src.ingest.markdown.sequence
+- src.ingest.markdown.start
+- src.ingest.markdown.text
+- src.ingest.plain.blocks
+- src.ingest.plain.event
+- src.ingest.plain.ingestPlainText
+- src.ingest.plain.sequence
+- src.ingest.plain.text
+- src.ingest.sequence
+- src.ingest.shell.command
+- src.ingest.shell.event
+- src.ingest.shell.ingestShellHistory
+- src.ingest.shell.lines
+- src.ingest.shell.sequence
+- src.llm.client.LlmServiceError.DEFAULT_EVENT_WINDOW
+- src.llm.client.LlmServiceError.controller
+- src.llm.client.LlmServiceError.detail
+- src.llm.client.LlmServiceError.extractIntentCandidatesWithLlm
+- src.llm.client.LlmServiceError.generateGuidelinesWithLlm
+- src.llm.client.LlmServiceError.humanEvents
+- src.llm.client.LlmServiceError.model
+- src.llm.client.LlmServiceError.parsed
+- src.llm.client.LlmServiceError.postJson
+- src.llm.client.LlmServiceError.provider
+- src.llm.client.LlmServiceError.raw
+- src.llm.client.LlmServiceError.response
+- src.llm.client.LlmServiceError.result
+- src.llm.client.LlmServiceError.serviceHealth
+- src.llm.client.LlmServiceError.super
+- src.llm.client.LlmServiceError.timer
+- src.llm.client.LlmServiceError.token
+- src.llm.client.LlmServiceError.window
+- src.llm.client.LlmServiceError.windowSize
+- src.node-shims.d.basename
+- src.node-shims.d.createHash
+- src.node-shims.d.dirname
+- src.node-shims.d.extname
+- src.node-shims.d.join
+- src.node-shims.d.mkdir
+- src.node-shims.d.mkdtemp
+- src.node-shims.d.readFile
+- src.node-shims.d.relative
+- src.node-shims.d.resolve
+- src.node-shims.d.rm
+- src.node-shims.d.tmpdir
+- src.node-shims.d.writeFile
+- src.reality.offer.backward
+- src.reality.offer.blocking
+- src.reality.offer.claimed
+- src.reality.offer.cleaned
+- src.reality.offer.current
+- src.reality.offer.currentById
+- src.reality.offer.currentPlans
+- src.reality.offer.escaped
+- src.reality.offer.forward
+- src.reality.offer.matchesCurrent
+- src.reality.offer.normalized
+- src.reality.offer.reconcileOfferHistory
+- src.reality.offer.renderOfferRealityMarkdown
+- src.twin.aggregate.buildDeveloperTwin
+- src.twin.aggregate.candidateResult
+- src.twin.aggregate.id
+- src.twin.aggregate.index
+- src.twin.aggregate.known
+- src.twin.aggregate.missing
+- src.twin.guidelines.catalogById
+- src.twin.guidelines.commands
+- src.twin.guidelines.entry
+- src.twin.guidelines.fallback
+- src.twin.guidelines.generateDeterministicGuidelines
+- src.twin.guidelines.left
+- src.twin.guidelines.needles
+- src.twin.guidelines.normalized
+- src.twin.guidelines.order
+- src.twin.guidelines.right
+- src.twin.guidelines.ruleRefs
+- src.twin.guidelines.rules
+- src.twin.guidelines.selected
+- src.twin.guidelines.validationCommands
+- src.twin.render.renderGuidelinesMarkdown
+- src.twin.render.renderTwinMarkdown
+- src.twin.validate.TwinValidationError.agentOnly
+- src.twin.validate.TwinValidationError.candidate
+- src.twin.validate.TwinValidationError.evidenceActors
+- src.twin.validate.TwinValidationError.evidenceIds
+- src.twin.validate.TwinValidationError.evidenceSet
+- src.twin.validate.TwinValidationError.knownRules
+- src.twin.validate.TwinValidationError.missing
+- src.twin.validate.TwinValidationError.orders
+- src.twin.validate.TwinValidationError.row
+- src.twin.validate.TwinValidationError.ruleIds
+- src.twin.validate.TwinValidationError.step
+- src.twin.validate.TwinValidationError.super
+- src.twin.validate.TwinValidationError.validateGuidelines
+- src.twin.validate.TwinValidationError.validateIntentCandidates
+- src.twin.validate.TwinValidationError.validateTwin
+- src.twin.validate.TwinValidationError.verdict
+- src.util.command.MAX_LENGTH
+- src.util.command.allowedTokens
+- src.util.command.extra
+- src.util.command.isAllowedCommand
+- src.util.command.syntax
+- src.util.command.tokens
+- src.util.command.unsafe
+- src.util.files.absolute
+- src.util.files.forced
+- src.util.files.nowIso
+- src.util.files.parsed
+- src.util.files.readJson
+- src.util.files.text
+- src.util.files.writeJson
+- src.util.files.writeText
+- src.util.hash.stableId
+- src.util.text.excerpt
+- src.util.text.isLikelyCorrection
+- src.util.text.normalized
+- src.util.text.output
+- src.util.text.uniqueStrings

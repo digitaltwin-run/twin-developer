@@ -1,0 +1,238 @@
+# code2llm | 93f 18066L | json:28,typescript:22,md:19,python:11,shell:6,yaml:4,txt:2 | 2026-08-16
+# generated in 0.05s
+# CC̅=3.5 | critical:4/294 | dups:0 | cycles:1
+
+HEALTH[4]:
+  🟡 CC    extractDeterministicRules CC=25 (limit:15)
+  🟡 CC    buildDeveloperTwin CC=21 (limit:15)
+  🟡 CC    validateIntentCandidates CC=17 (limit:15)
+  🟡 CC    validateGuidelines CC=20 (limit:15)
+
+REFACTOR[2]:
+  1. split 4 high-CC methods  (CC>15)
+  2. break 1 circular dependencies
+
+PIPELINES[171]:
+  [1] Src [main]: main → _write
+      PURITY: 100% pure
+  [2] Src [require_token]: require_token
+      PURITY: 100% pure
+  [3] Src [healthz]: healthz → health → fake_mode → flag_enabled
+      PURITY: 100% pure
+  [4] Src [extract_intents]: extract_intents → complete_intents → _run_stage → fake_mode → ...(1 more)
+      PURITY: 100% pure
+  [5] Src [generate_guidelines]: generate_guidelines → complete_guidelines → _run_stage → fake_mode → ...(1 more)
+      PURITY: 100% pure
+  [6] Src [chat_completions]: chat_completions → complete_chat → fake_mode → flag_enabled
+      PURITY: 100% pure
+  [7] Src [_fake_intents]: _fake_intents
+      PURITY: 100% pure
+  [8] Src [_fake_guidelines]: _fake_guidelines
+      PURITY: 100% pure
+  [9] Src [mode]: mode → buildArtifacts → loadCore
+      PURITY: 100% pure
+  [10] Src [absoluteInputs]: absoluteInputs → rel
+      PURITY: 100% pure
+  [11] Src [rawEvents]: rawEvents → rel
+      PURITY: 100% pure
+  [12] Src [content]: content
+      PURITY: 100% pure
+  [13] Src [sourceFile]: sourceFile
+      PURITY: 100% pure
+  [14] Src [response]: response
+      PURITY: 100% pure
+  [15] Src [twin]: twin
+      PURITY: 100% pure
+  [16] Src [task]: task
+      PURITY: 100% pure
+  [17] Src [deterministic]: deterministic
+      PURITY: 100% pure
+  [18] Src [guidelines]: guidelines → buildGuidelineArtifacts → loadCore
+      PURITY: 100% pure
+  [19] Src [project]: project
+      PURITY: 100% pure
+  [20] Src [root]: root → buildArtifacts → loadCore
+      PURITY: 100% pure
+  [21] Src [llmUrl]: llmUrl → buildArtifacts → loadCore
+      PURITY: 100% pure
+  [22] Src [result]: result → buildGuidelineArtifacts → loadCore
+      PURITY: 100% pure
+  [23] Src [path]: path
+      PURITY: 100% pure
+  [24] Src [diagnostics]: diagnostics
+      PURITY: 100% pure
+  [25] Src [command]: command → main → commandBuild → rootPath → ...(1 more)
+      PURITY: 100% pure
+  [26] Src [createHash]: createHash
+      PURITY: 100% pure
+  [27] Src [supportingEvent]: supportingEvent
+      PURITY: 100% pure
+  [28] Src [extractDeterministicRules]: extractDeterministicRules → eventMatches
+      PURITY: 100% pure
+  [29] Src [matches]: matches → eventMatches
+      PURITY: 100% pure
+  [30] Src [matchedEntriesByEvent]: matchedEntriesByEvent → eventMatches
+      PURITY: 100% pure
+  [31] Src [rows]: rows
+      PURITY: 100% pure
+  [32] Src [evidenceByEvent]: evidenceByEvent → effectiveClass
+      PURITY: 100% pure
+  [33] Src [entries]: entries → rankingWeight
+      PURITY: 100% pure
+  [34] Src [repeated]: repeated → rankingWeight
+      PURITY: 100% pure
+  [35] Src [sourceClass]: sourceClass → rankingWeight
+      PURITY: 100% pure
+  [36] Src [refs]: refs
+      PURITY: 100% pure
+  [37] Src [correctionBoost]: correctionBoost
+      PURITY: 100% pure
+  [38] Src [repetitionBoost]: repetitionBoost
+      PURITY: 100% pure
+  [39] Src [avgIntentWeight]: avgIntentWeight
+      PURITY: 100% pure
+  [40] Src [confidence]: confidence
+      PURITY: 100% pure
+  [41] Src [dockerRule]: dockerRule
+      PURITY: 100% pure
+  [42] Src [escaped]: escaped
+      PURITY: 100% pure
+  [43] Src [forward]: forward
+      PURITY: 100% pure
+  [44] Src [backward]: backward
+      PURITY: 100% pure
+  [45] Src [reconcileOfferHistory]: reconcileOfferHistory → extractPlanPrice → price
+      PURITY: 100% pure
+  [46] Src [currentPlans]: currentPlans
+      PURITY: 100% pure
+  [47] Src [currentById]: currentById → extractPlanPrice → price
+      PURITY: 100% pure
+  [48] Src [normalized]: normalized → extractPlanPrice → price
+      PURITY: 100% pure
+  [49] Src [claimed]: claimed
+      PURITY: 100% pure
+  [50] Src [current]: current
+      PURITY: 100% pure
+
+LAYERS:
+  scripts/                        CC̄=4.7    ←in:0  →out:0
+  │ check-schema-identity      101L  0C    3m  CC=11     ←0
+  │ render-litellm-config       80L  0C    3m  CC=5      ←0
+  │ check-flag-parity           70L  0C    3m  CC=11     ←0
+  │ verify-artifacts.sh         57L  0C    0m  CC=0.0    ←0
+  │ validate-schema             56L  0C    2m  CC=4      ←0
+  │ run-aider.sh                37L  0C    0m  CC=0.0    ←0
+  │ run-fake-llm-demo.sh        24L  0C    1m  CC=0.0    ←0
+  │ run-litellm-proxy.sh        10L  0C    0m  CC=0.0    ←0
+  │ llmctl.sh                    5L  0C    0m  CC=0.0    ←0
+  │
+  llm_service/                    CC̄=3.5    ←in:0  →out:1
+  │ core                       368L  4C   22m  CC=11     ←2
+  │ cli                         99L  0C    5m  CC=11     ←0
+  │ app                         70L  0C    5m  CC=4      ←0
+  │ models                      51L  7C    0m  CC=0.0    ←0
+  │ audit                       46L  0C    3m  CC=3      ←1
+  │ __init__                     3L  0C    0m  CC=0.0    ←0
+  │ __main__                     3L  0C    0m  CC=0.0    ←0
+  │
+  src/                            CC̄=3.5    ←in:0  →out:0
+  │ cli.ts                     329L  2C   50m  CC=8      ←0
+  │ types.ts                   232L  16C    0m  CC=0.0    ←0
+  │ !! aggregate.ts               199L  0C    9m  CC=21     ←0
+  │ !! deterministic.ts           146L  1C   20m  CC=25     ←0
+  │ offer.ts                   144L  3C   15m  CC=14     ←0
+  │ client.ts                  138L  3C   24m  CC=12     ←0
+  │ !! validate.ts                136L  1C   20m  CC=20     ←0
+  │ guidelines.ts               71L  1C   15m  CC=9      ←0
+  │ markdown.ts                 66L  0C   14m  CC=10     ←1
+  │ cursor.ts                   65L  1C    9m  CC=8      ←0
+  │ command.ts                  65L  1C    9m  CC=11     ←0
+  │ render.ts                   55L  0C    3m  CC=12     ←0
+  │ text.ts                     47L  0C    8m  CC=4      ←0
+  │ node-shims.d.ts             45L  0C   13m  CC=4      ←0
+  │ prompt.ts                   45L  0C    2m  CC=5      ←0
+  │ common.ts                   35L  0C    7m  CC=7      ←0
+  │ index.ts                    32L  0C    3m  CC=12     ←0
+  │ files.ts                    29L  0C    8m  CC=3      ←0
+  │ jsonl.ts                    27L  0C    6m  CC=11     ←0
+  │ shell.ts                    27L  0C    5m  CC=6      ←0
+  │ plain.ts                    22L  0C    5m  CC=3      ←0
+  │ hash.ts                      9L  0C    2m  CC=1      ←0
+  │
+  ./                              CC̄=0.0    ←in:0  →out:0
+  │ !! planfile.yaml              630L  0C    0m  CC=0.0    ←0
+  │ README.md                  446L  0C    0m  CC=0.0    ←0
+  │ prefact.yaml                94L  0C    0m  CC=0.0    ←0
+  │ Makefile                    89L  0C    0m  CC=0.0    ←0
+  │ TODO.md                     78L  0C    0m  CC=0.0    ←0
+  │ project2.sh                 55L  0C    0m  CC=0.0    ←0
+  │ CHANGELOG.md                52L  0C    0m  CC=0.0    ←0
+  │ package.json                25L  0C    0m  CC=0.0    ←0
+  │ tsconfig.json               18L  0C    0m  CC=0.0    ←0
+  │ requirements.txt             5L  0C    0m  CC=0.0    ←0
+  │
+  schemas/                        CC̄=0.0    ←in:0  →out:0
+  │ !! developer-twin.schema.json   609L  0C    0m  CC=0.0    ←0
+  │ source-policy.schema.json    64L  0C    0m  CC=0.0    ←0
+  │ rule-catalog.schema.json    53L  0C    0m  CC=0.0    ←0
+  │ llm-routing.schema.json     44L  0C    0m  CC=0.0    ←0
+  │ model-registry.schema.json    38L  0C    0m  CC=0.0    ←0
+  │ project-context.schema.json    36L  0C    0m  CC=0.0    ←0
+  │ local-ticket-intent.schema.json    35L  0C    0m  CC=0.0    ←0
+  │ llm-intent-extraction.schema.json    33L  0C    0m  CC=0.0    ←0
+  │ guidelines.schema.json      29L  0C    0m  CC=0.0    ←0
+  │
+  docs/                           CC̄=0.0    ←in:0  →out:0
+  │ !! AUDIT_AND_AUTONOMY_PLAN.md   784L  0C    0m  CC=0.0    ←0
+  │ !! README.md                  512L  0C    0m  CC=0.0    ←0
+  │ SECURITY.md                 51L  0C    0m  CC=0.0    ←0
+  │ NEXT_STEPS.md               49L  0C    0m  CC=0.0    ←0
+  │ ARCHITECTURE.md             35L  0C    0m  CC=0.0    ←0
+  │ DSL.md                      18L  0C    0m  CC=0.0    ←0
+  │ SOURCE_TRUTH.md             17L  0C    0m  CC=0.0    ←0
+  │
+  testql-scenarios/               CC̄=0.0    ←in:0  →out:0
+  │ generated-from-pytests.testql.toon.yaml    10L  0C    0m  CC=0.0    ←0
+  │
+  config/                         CC̄=0.0    ←in:0  →out:0
+  │ rule-catalog.json          346L  0C    0m  CC=0.0    ←0
+  │ llm-routing.json            71L  0C    0m  CC=0.0    ←0
+  │ source-policy.json          61L  0C    0m  CC=0.0    ←0
+  │ litellm-proxy.yaml          34L  0C    0m  CC=0.0    ←0
+  │ model-registry.json         34L  0C    0m  CC=0.0    ←0
+  │
+  data/                           CC̄=0.0    ←in:0  →out:0
+  │ !! developer-twin.dsl.json   2701L  0C    0m  CC=0.0    ←0
+  │ !! developer-twin.dsl.json   2680L  0C    0m  CC=0.0    ←0
+  │ !! history-portal.md         1569L  0C    0m  CC=0.0    ←0
+  │ !! history-cursor.json       1404L  0C    0m  CC=0.0    ←0
+  │ !! todo2code.README.md        927L  0C    0m  CC=0.0    ←0
+  │ developer-twin.md          246L  0C    0m  CC=0.0    ←0
+  │ developer-twin.md          236L  0C    0m  CC=0.0    ←0
+  │ subactor-cloud-v1.offer.json    97L  0C    0m  CC=0.0    ←0
+  │ extraction-map.json         91L  0C    0m  CC=0.0    ←0
+  │ guidelines.json             89L  0C    0m  CC=0.0    ←0
+  │ guidelines.json             89L  0C    0m  CC=0.0    ←0
+  │ aider-message.md            80L  0C    0m  CC=0.0    ←0
+  │ validation-receipt.json     67L  0C    0m  CC=0.0    ←0
+  │ project.json                62L  0C    0m  CC=0.0    ←0
+  │ VALIDATION.md               54L  0C    0m  CC=0.0    ←0
+  │ minimal-twin.json           54L  0C    0m  CC=0.0    ←0
+  │ offer-reality.md            39L  0C    0m  CC=0.0    ←0
+  │ policy-dsl.README.md        35L  0C    0m  CC=0.0    ←0
+  │ source-manifest.json        24L  0C    0m  CC=0.0    ←0
+  │ guidelines.audit.json       10L  0C    0m  CC=0.0    ←0
+  │ guidelines.audit.json        6L  0C    0m  CC=0.0    ←0
+  │ shell-history.txt            4L  0C    0m  CC=0.0    ←0
+  │ example-task.md              3L  0C    0m  CC=0.0    ←0
+  │
+
+COUPLING:
+               llm_service   src.ingest
+  llm_service           ──            1
+   src.ingest           ←1           ──
+  CYCLES: 1
+
+EXTERNAL:
+  validation: run `vallm batch .` → validation.toon
+  duplication: run `redup scan .` → duplication.toon

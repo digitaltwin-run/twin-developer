@@ -1,0 +1,52 @@
+# twin-developer | 294 func | 30f | 18066L | json | 2026-08-16
+# generated in 0.00s
+
+HEALTH:
+  CC̄=3.5  critical=23 (limit:10)  dup=1  cycles=1
+
+ALERTS[20]:
+  !!! high_fan_out     buildArtifacts = 27 (limit:10)
+  !!! cc_exceeded      extractDeterministicRules = 25 (limit:15)
+  !!! high_fan_out     extractDeterministicRules = 22 (limit:10)
+  !!  cc_exceeded      buildDeveloperTwin = 21 (limit:15)
+  !!  cc_exceeded      TwinValidationError.validateGuidelines = 20 (limit:15)
+  !!  high_fan_out     main = 17 (limit:10)
+  !   cc_exceeded      TwinValidationError.validateIntentCandidates = 17 (limit:15)
+  !   high_fan_out     main = 14 (limit:10)
+  !   high_fan_out     _real_structured = 14 (limit:10)
+  !   high_fan_out     LlmServiceError.postJson = 14 (limit:10)
+
+MODULES[93] (top by size):
+  M[data/output/examples/llm-fake/developer-twin.dsl.json] 2701L C:0 F:0 CC↑0 D:0 (json)
+  M[data/output/developer-twin.dsl.json] 2680L C:0 F:0 CC↑0 D:0 (json)
+  M[data/raw/history-portal.md] 1569L C:0 F:0 CC↑0 D:0 (md)
+  M[data/raw/history-cursor.json] 1404L C:0 F:0 CC↑0 D:0 (json)
+  M[data/context/todo2code.README.md] 927L C:0 F:0 CC↑0 D:0 (md)
+  M[docs/AUDIT_AND_AUTONOMY_PLAN.md] 784L C:0 F:0 CC↑0 D:0 (md)
+  M[planfile.yaml] 630L C:0 F:0 CC↑0 D:0 (yaml)
+  M[schemas/developer-twin.schema.json] 609L C:0 F:0 CC↑0 D:0 (json)
+  M[docs/README.md] 512L C:0 F:0 CC↑0 D:0 (md)
+  M[README.md] 446L C:0 F:0 CC↑0 D:0 (md)
+  M[llm_service/core.py] 368L C:4 F:22 CC↑11 D:2 (python)
+  M[config/rule-catalog.json] 346L C:0 F:0 CC↑0 D:0 (json)
+  M[src/cli.ts] 329L C:2 F:50 CC↑8 D:0 (typescript)
+  M[data/output/examples/llm-fake/developer-twin.md] 246L C:0 F:0 CC↑0 D:0 (md)
+  M[data/output/developer-twin.md] 236L C:0 F:0 CC↑0 D:0 (md)
+  LANGS: json:28/typescript:22/md:19/python:11/shell:6/yaml:4/txt:2/other:1
+
+HOTSPOTS[10]:
+  ★ buildArtifacts fan=27  // Orchestrates 27 calls
+  ★ extractDeterministicRules fan=22  // Orchestrates 22 calls
+  ★ main fan=17  // Orchestrates 17 calls
+  ★ main fan=14  // Orchestrates 14 calls
+  ★ _real_structured fan=14  // Orchestrates 14 calls
+
+REFACTOR[15]:
+  [1] H/L Split extractDeterministicRules (CC=25)
+  [2] H/H Split god module data/context/todo2code.README.md (927L, 0 classes)
+  [3] H/H Split god module data/output/developer-twin.dsl.json (2680L, 0 classes)
+  [4] H/H Split god module data/output/examples/llm-fake/developer-twin.dsl.json (2701L, 0 classes)
+  [5] H/H Split god module data/raw/history-cursor.json (1404L, 0 classes)
+
+EVOLUTION:
+  2026-08-16 CC̄=3.5 crit=23 18066L // Automated analysis

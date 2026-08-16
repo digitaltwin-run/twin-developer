@@ -1,0 +1,307 @@
+flowchart LR
+%% generated in 0.01s
+    subgraph llm_service__app
+        llm_service__app__extract_intents["extract_intents"]
+        llm_service__app__healthz["healthz"]
+        llm_service__app__generate_guidelines["generate_guidelines"]
+        llm_service__app__chat_completions["chat_completions"]
+    end
+    subgraph llm_service__audit
+        llm_service__audit___path["_path"]
+        llm_service__audit__append_audit["append_audit"]
+        llm_service__audit__audit_ref["audit_ref"]
+    end
+    subgraph llm_service__cli
+        llm_service__cli__main["main"]
+        llm_service__cli___read["_read"]
+        llm_service__cli___write["_write"]
+        llm_service__cli__parser["parser"]
+        llm_service__cli___guard_bind["_guard_bind"]
+    end
+    subgraph llm_service__core
+        llm_service__core___stage_entry["_stage_entry"]
+        llm_service__core__flag_enabled["flag_enabled"]
+        llm_service__core__complete_chat["complete_chat"]
+        llm_service__core__health["health"]
+        llm_service__core__fake_mode["fake_mode"]
+        llm_service__core__complete_guidelines["complete_guidelines"]
+        llm_service__core___sha["_sha"]
+        llm_service__core___provenance["_provenance"]
+        llm_service__core___real_structured["_real_structured"]
+        llm_service__core___run_stage["_run_stage"]
+        llm_service__core___schema["_schema"]
+        llm_service__core___root["_root"]
+        llm_service__core___route_enabled["_route_enabled"]
+        llm_service__core__complete_intents["complete_intents"]
+        llm_service__core___registry["_registry"]
+        llm_service__core__resolve_route["resolve_route"]
+        llm_service__core___routing["_routing"]
+        llm_service__core___extract_text["_extract_text"]
+    end
+    subgraph scripts__check_flag_parity
+        scripts__check_flag_parity__main["main"]
+        scripts__check_flag_parity__env_example_values["env_example_values"]
+        scripts__check_flag_parity__routing_flags["routing_flags"]
+    end
+    subgraph scripts__check_schema_identity
+        scripts__check_schema_identity__walk["walk"]
+        scripts__check_schema_identity__main["main"]
+    end
+    subgraph scripts__render_litellm_config
+        scripts__render_litellm_config__litellm_openrouter_model["litellm_openrouter_model"]
+        scripts__render_litellm_config__render["render"]
+        scripts__render_litellm_config__main["main"]
+    end
+    subgraph scripts__validate_schema
+        scripts__validate_schema__validate["validate"]
+        scripts__validate_schema__validate_tickets["validate_tickets"]
+    end
+    subgraph src__cli
+        src__cli__commandValidate["commandValidate"]
+        src__cli__llmUrl["llmUrl"]
+        src__cli__flags["flags"]
+        src__cli__rootPath["rootPath"]
+        src__cli__rawEvents["rawEvents"]
+        src__cli__readEventsJsonl["readEventsJsonl"]
+        src__cli__modeFromArgs["modeFromArgs"]
+        src__cli__commandDemo["commandDemo"]
+        src__cli__commandReality["commandReality"]
+        src__cli__commandAider["commandAider"]
+        src__cli__buildAiderArtifacts["buildAiderArtifacts"]
+        src__cli__flag["flag"]
+        src__cli__commandBuild["commandBuild"]
+        src__cli__buildArtifacts["buildArtifacts"]
+        src__cli__rel["rel"]
+        src__cli__loadCore["loadCore"]
+        src__cli__result["result"]
+        src__cli__commandGuidelines["commandGuidelines"]
+        src__cli__command["command"]
+        src__cli__buildOfferRealityArtifacts["buildOfferRealityArtifacts"]
+        src__cli__usage["usage"]
+        src__cli__guidelines["guidelines"]
+        src__cli__mode["mode"]
+        src__cli__main["main"]
+        src__cli__buildGuidelineArtifacts["buildGuidelineArtifacts"]
+        src__cli__root["root"]
+        src__cli__defaultInputPaths["defaultInputPaths"]
+        src__cli__absoluteInputs["absoluteInputs"]
+    end
+    subgraph src__extract
+        src__extract__deterministic__evidenceByEvent["evidenceByEvent"]
+        src__extract__deterministic__extractDeterministicRules["extractDeterministicRules"]
+        src__extract__deterministic__sourceClass["sourceClass"]
+        src__extract__deterministic__rankingWeight["rankingWeight"]
+        src__extract__deterministic__repeated["repeated"]
+        src__extract__deterministic__matches["matches"]
+        src__extract__deterministic__effectiveClass["effectiveClass"]
+        src__extract__deterministic__matchedEntriesByEvent["matchedEntriesByEvent"]
+        src__extract__deterministic__entries["entries"]
+        src__extract__deterministic__eventMatches["eventMatches"]
+    end
+    subgraph src__ingest
+        src__ingest__cursor__decodeJsonString["decodeJsonString"]
+        src__ingest__cursor__parsed["parsed"]
+        src__ingest__markdown__role["role"]
+        src__ingest__markdown__human["human"]
+        src__ingest__markdown__text["text"]
+        src__ingest__markdown__sequence["sequence"]
+        src__ingest__cursor__ingestCursorExport["ingestCursorExport"]
+        src__ingest__cursor__extractTipTapText["extractTipTapText"]
+        src__ingest__markdown__block["block"]
+        src__ingest__cursor__blobIndex["blobIndex"]
+        src__ingest__markdown__start["start"]
+        src__ingest__markdown__next["next"]
+        src__ingest__cursor__sequence["sequence"]
+        src__ingest__markdown__cleanHumanBlock["cleanHumanBlock"]
+        src__ingest__markdown__ingestMarkdownTranscript["ingestMarkdownTranscript"]
+        src__ingest__markdown__end["end"]
+        src__ingest__markdown__current["current"]
+    end
+    subgraph src__llm
+        src__llm__client__LlmServiceError__timer["timer"]
+        src__llm__client__LlmServiceError__authHeaders["authHeaders"]
+        src__llm__client__LlmServiceError__controller["controller"]
+        src__llm__client__LlmServiceError__postJson["postJson"]
+        src__llm__client__LlmServiceError__text["text"]
+        src__llm__client__LlmServiceError__eventWindowSize["eventWindowSize"]
+        src__llm__client__LlmServiceError__clearTimeout["clearTimeout"]
+        src__llm__client__LlmServiceError__serviceHealth["serviceHealth"]
+        src__llm__client__LlmServiceError__extractIntentCandidatesWithLlm["extractIntentCandidatesWithLlm"]
+    end
+    subgraph src__reality
+        src__reality__offer__reconcileOfferHistory["reconcileOfferHistory"]
+        src__reality__offer__extractPlanPrice["extractPlanPrice"]
+        src__reality__offer__currentById["currentById"]
+        src__reality__offer__normalized["normalized"]
+        src__reality__offer__price["price"]
+    end
+    subgraph src__twin
+        src__twin__render__escapeCell["escapeCell"]
+        src__twin__aggregate__buildDeveloperTwin["buildDeveloperTwin"]
+        src__twin__validate__TwinValidationError__validateGenerator["validateGenerator"]
+        src__twin__validate__TwinValidationError__validateRules["validateRules"]
+        src__twin__aggregate__candidateRules["candidateRules"]
+        src__twin__validate__TwinValidationError__evidenceIndex["evidenceIndex"]
+        src__twin__aggregate__buildWorkflow["buildWorkflow"]
+        src__twin__guidelines__selectRules["selectRules"]
+        src__twin__aggregate__buildModelStages["buildModelStages"]
+        src__twin__validate__TwinValidationError__validateWorkflow["validateWorkflow"]
+        src__twin__render__renderTwinMarkdown["renderTwinMarkdown"]
+        src__twin__validate__TwinValidationError__validateTwin["validateTwin"]
+        src__twin__guidelines__generateDeterministicGuidelines["generateDeterministicGuideline"]
+    end
+    subgraph src__util
+        src__util__hash__sha256["sha256"]
+        src__util__text__excerpt["excerpt"]
+        src__util__text__normalizeForMatch["normalizeForMatch"]
+        src__util__text__compactWhitespace["compactWhitespace"]
+        src__util__text__redactSecrets["redactSecrets"]
+        src__util__command__checkCommand["checkCommand"]
+        src__util__command__tokens["tokens"]
+        src__util__command__tokenizeCommand["tokenizeCommand"]
+        src__util__hash__stableId["stableId"]
+        src__util__command__isAllowedCommand["isAllowedCommand"]
+        src__util__text__isLikelyCorrection["isLikelyCorrection"]
+    end
+    llm_service__cli___guard_bind --> llm_service__core__flag_enabled
+    llm_service__cli__main --> llm_service__cli___write
+    llm_service__cli__main --> llm_service__cli__parser
+    llm_service__cli__main --> llm_service__core__health
+    llm_service__cli__main --> llm_service__core__complete_intents
+    llm_service__cli__main --> llm_service__cli___read
+    llm_service__cli__main --> llm_service__core__complete_guidelines
+    llm_service__app__healthz --> llm_service__core__health
+    llm_service__app__extract_intents --> llm_service__core__complete_intents
+    llm_service__app__generate_guidelines --> llm_service__core__complete_guidelines
+    llm_service__app__chat_completions --> llm_service__core__complete_chat
+    llm_service__core___routing --> llm_service__core___root
+    llm_service__core___route_enabled --> src__ingest__markdown__next
+    llm_service__core___route_enabled --> llm_service__core__flag_enabled
+    llm_service__core___route_enabled --> llm_service__core___routing
+    llm_service__core___registry --> llm_service__core___root
+    llm_service__core___stage_entry --> llm_service__core___registry
+    llm_service__core___schema --> llm_service__core___root
+    llm_service__core__resolve_route --> llm_service__core___stage_entry
+    llm_service__core__resolve_route --> llm_service__core___route_enabled
+    llm_service__core___real_structured --> llm_service__core__resolve_route
+    llm_service__core___real_structured --> llm_service__core___extract_text
+    llm_service__core___real_structured --> llm_service__core___sha
+    llm_service__core__fake_mode --> llm_service__core__flag_enabled
+    llm_service__core___run_stage --> llm_service__core__fake_mode
+    llm_service__core___run_stage --> llm_service__core___real_structured
+    llm_service__core___run_stage --> llm_service__core___provenance
+    llm_service__core___run_stage --> llm_service__core___sha
+    llm_service__core___run_stage --> llm_service__core___schema
+    llm_service__core___run_stage --> llm_service__audit__append_audit
+    llm_service__core__complete_intents --> llm_service__core___run_stage
+    llm_service__core__complete_guidelines --> llm_service__core___run_stage
+    llm_service__core__complete_chat --> llm_service__core__fake_mode
+    llm_service__core__complete_chat --> llm_service__core__resolve_route
+    llm_service__core__complete_chat --> llm_service__core___sha
+    llm_service__core__complete_chat --> llm_service__core___provenance
+    llm_service__core__health --> llm_service__core__fake_mode
+    llm_service__core__health --> llm_service__core___route_enabled
+    llm_service__audit__append_audit --> llm_service__audit___path
+    llm_service__audit__append_audit --> llm_service__audit__audit_ref
+    src__cli__rootPath --> src__cli__flag
+    src__cli__modeFromArgs --> src__cli__flag
+    src__cli__mode --> src__cli__buildArtifacts
+    src__cli__defaultInputPaths --> src__cli__flags
+    src__cli__buildArtifacts --> src__cli__loadCore
+    src__cli__buildArtifacts --> src__cli__defaultInputPaths
+    src__cli__buildArtifacts --> src__cli__rel
+    src__cli__absoluteInputs --> src__cli__rel
+    src__cli__rawEvents --> src__cli__rel
+    src__cli__buildGuidelineArtifacts --> src__cli__loadCore
+    src__cli__buildGuidelineArtifacts --> src__cli__flag
+    src__cli__guidelines --> src__cli__buildGuidelineArtifacts
+    src__cli__buildOfferRealityArtifacts --> src__cli__readEventsJsonl
+    src__cli__buildAiderArtifacts --> src__cli__flag
+    src__cli__commandBuild --> src__cli__rootPath
+    src__cli__commandBuild --> src__cli__modeFromArgs
+    src__cli__commandBuild --> src__cli__flag
+    src__cli__commandBuild --> src__cli__buildArtifacts
+    src__cli__root --> src__cli__buildArtifacts
+    src__cli__llmUrl --> src__cli__buildArtifacts
+    src__cli__result --> src__cli__buildGuidelineArtifacts
+    src__cli__commandValidate --> src__cli__rootPath
+    src__cli__commandValidate --> src__cli__flag
+    src__cli__commandGuidelines --> src__cli__rootPath
+    src__cli__commandGuidelines --> src__cli__modeFromArgs
+    src__cli__commandGuidelines --> src__cli__flag
+    src__cli__commandGuidelines --> src__cli__buildGuidelineArtifacts
+    src__cli__commandReality --> src__cli__rootPath
+    src__cli__commandReality --> src__cli__buildOfferRealityArtifacts
+    src__cli__commandAider --> src__cli__rootPath
+    src__cli__commandAider --> src__cli__buildAiderArtifacts
+    src__cli__commandDemo --> src__cli__rootPath
+    src__cli__commandDemo --> src__cli__modeFromArgs
+    src__cli__commandDemo --> src__cli__flag
+    src__cli__commandDemo --> src__cli__buildArtifacts
+    src__cli__commandDemo --> src__cli__buildGuidelineArtifacts
+    src__cli__commandDemo --> src__cli__buildOfferRealityArtifacts
+    src__cli__commandDemo --> src__cli__buildAiderArtifacts
+    src__cli__main --> src__cli__commandBuild
+    src__cli__main --> src__cli__commandValidate
+    src__cli__main --> src__cli__commandGuidelines
+    src__cli__main --> src__cli__commandReality
+    src__cli__main --> src__cli__commandAider
+    src__cli__main --> src__cli__commandDemo
+    src__cli__main --> src__cli__usage
+    src__cli__command --> src__cli__main
+    src__extract__deterministic__extractDeterministicRules --> src__extract__deterministic__eventMatches
+    src__extract__deterministic__extractDeterministicRules --> src__extract__deterministic__effectiveClass
+    src__extract__deterministic__matches --> src__extract__deterministic__eventMatches
+    src__extract__deterministic__matchedEntriesByEvent --> src__extract__deterministic__eventMatches
+    src__extract__deterministic__evidenceByEvent --> src__extract__deterministic__effectiveClass
+    src__extract__deterministic__evidenceByEvent --> src__extract__deterministic__rankingWeight
+    src__extract__deterministic__entries --> src__extract__deterministic__rankingWeight
+    src__extract__deterministic__repeated --> src__extract__deterministic__rankingWeight
+    src__extract__deterministic__sourceClass --> src__extract__deterministic__rankingWeight
+    src__reality__offer__extractPlanPrice --> src__reality__offer__price
+    src__reality__offer__reconcileOfferHistory --> src__reality__offer__extractPlanPrice
+    src__reality__offer__currentById --> src__reality__offer__extractPlanPrice
+    src__reality__offer__normalized --> src__reality__offer__extractPlanPrice
+    src__twin__guidelines__generateDeterministicGuidelines --> src__twin__guidelines__selectRules
+    src__twin__aggregate__buildDeveloperTwin --> src__twin__aggregate__candidateRules
+    src__twin__aggregate__buildDeveloperTwin --> src__twin__aggregate__buildWorkflow
+    src__twin__aggregate__buildDeveloperTwin --> src__twin__aggregate__buildModelStages
+    src__twin__render__renderTwinMarkdown --> src__twin__render__escapeCell
+    src__llm__client__LlmServiceError__postJson --> src__llm__client__LlmServiceError__authHeaders
+    src__llm__client__LlmServiceError__postJson --> src__llm__client__LlmServiceError__text
+    src__llm__client__LlmServiceError__controller --> src__llm__client__LlmServiceError__clearTimeout
+    src__llm__client__LlmServiceError__timer --> src__llm__client__LlmServiceError__clearTimeout
+    src__llm__client__LlmServiceError__serviceHealth --> src__llm__client__LlmServiceError__clearTimeout
+    src__llm__client__LlmServiceError__extractIntentCandidatesWithLlm --> src__llm__client__LlmServiceError__eventWindowSize
+    src__ingest__markdown__ingestMarkdownTranscript --> src__ingest__markdown__cleanHumanBlock
+    src__ingest__markdown__text --> src__ingest__markdown__cleanHumanBlock
+    src__ingest__markdown__sequence --> src__ingest__markdown__cleanHumanBlock
+    src__ingest__markdown__current --> src__ingest__markdown__cleanHumanBlock
+    src__ingest__markdown__next --> src__ingest__markdown__cleanHumanBlock
+    src__ingest__markdown__role --> src__ingest__markdown__cleanHumanBlock
+    src__ingest__markdown__start --> src__ingest__markdown__cleanHumanBlock
+    src__ingest__markdown__end --> src__ingest__markdown__cleanHumanBlock
+    src__ingest__markdown__block --> src__ingest__markdown__cleanHumanBlock
+    src__ingest__markdown__human --> src__ingest__markdown__cleanHumanBlock
+    src__ingest__cursor__extractTipTapText --> src__ingest__cursor__decodeJsonString
+    src__ingest__cursor__ingestCursorExport --> src__ingest__cursor__extractTipTapText
+    src__ingest__cursor__parsed --> src__ingest__cursor__extractTipTapText
+    src__ingest__cursor__sequence --> src__ingest__cursor__extractTipTapText
+    src__ingest__cursor__blobIndex --> src__ingest__cursor__extractTipTapText
+    src__util__hash__stableId --> src__util__hash__sha256
+    src__util__text__excerpt --> src__util__text__compactWhitespace
+    src__util__text__excerpt --> src__util__text__redactSecrets
+    src__util__text__isLikelyCorrection --> src__util__text__normalizeForMatch
+    src__util__command__checkCommand --> src__util__command__tokenizeCommand
+    src__util__command__tokens --> src__util__command__tokenizeCommand
+    src__util__command__isAllowedCommand --> src__util__command__checkCommand
+    scripts__render_litellm_config__render --> scripts__render_litellm_config__litellm_openrouter_model
+    scripts__render_litellm_config__main --> scripts__render_litellm_config__render
+    src__twin__validate__TwinValidationError__validateTwin --> src__twin__validate__TwinValidationError__validateGenerator
+    src__twin__validate__TwinValidationError__validateTwin --> src__twin__validate__TwinValidationError__evidenceIndex
+    src__twin__validate__TwinValidationError__validateTwin --> src__twin__validate__TwinValidationError__validateRules
+    src__twin__validate__TwinValidationError__validateTwin --> src__twin__validate__TwinValidationError__validateWorkflow
+    scripts__validate_schema__validate_tickets --> scripts__validate_schema__validate
+    scripts__check_schema_identity__main --> scripts__check_schema_identity__walk
+    scripts__check_flag_parity__main --> scripts__check_flag_parity__routing_flags
+    scripts__check_flag_parity__main --> scripts__check_flag_parity__env_example_values

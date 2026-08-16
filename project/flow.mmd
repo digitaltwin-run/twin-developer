@@ -1,0 +1,49 @@
+flowchart TD
+%% generated in 0.01s
+
+    %% Entry points (blue)
+    classDef entry fill:#4dabf7,stroke:#1971c2,color:#fff
+
+    subgraph CLI
+        llm_service__cli___guard_bind["_guard_bind"]
+        llm_service__cli___read["_read"]
+        llm_service__cli___write["_write"]
+        llm_service__cli__parser["parser"]
+        llm_service__cli__main["main"]
+        src__cli__flag["flag"]
+        src__cli__index["index"]
+        src__cli__flags["flags"]
+        src__cli__rootPath["rootPath"]
+        src__cli__rel["rel"]
+        src__cli__modeFromArgs["modeFromArgs"]
+        src__cli__mode["mode"]
+        src__cli__defaultInputPaths["defaultInputPaths"]
+        src__cli__provided["provided"]
+        src__cli__values["values"]
+        ...["+40 more"]
+    end
+
+    subgraph Core
+        llm_service__app__require_token["require_token"]
+        llm_service__app__healthz["healthz"]
+        llm_service__app__extract_intents["extract_intents"]
+        llm_service__app__generate_guidelines["generate_guidelines"]
+        llm_service__app__chat_completions["chat_completions"]
+        llm_service__core__Provenance__headers["headers"]
+        llm_service__core___root["_root"]
+        llm_service__core___registry["_registry"]
+        llm_service__core___stage_entry["_stage_entry"]
+        llm_service__core__resolve_route("resolve_route CC=11")
+        llm_service__core___fake_intents["_fake_intents"]
+        llm_service__core___fake_guidelines["_fake_guidelines"]
+        llm_service__core___real_structured["_real_structured"]
+        llm_service__core___run_stage["_run_stage"]
+        llm_service__core__complete_intents["complete_intents"]
+        ...["+172 more"]
+    end
+
+    subgraph Exporters
+        src__ingest__cursor__ingestCursorExport["ingestCursorExport"]
+    end
+
+    class llm_service__cli___guard_bind,llm_service__cli___read,llm_service__cli___write,llm_service__cli__parser,llm_service__cli__main,llm_service__app__require_token,llm_service__app__healthz,llm_service__app__extract_intents,llm_service__app__generate_guidelines,llm_service__app__chat_completions entry

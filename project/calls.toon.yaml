@@ -1,0 +1,227 @@
+# code2llm call graph | /home/tom/github/subactor/twin-developer
+# generated in 0.06s
+# nodes: 133 | edges: 142 | modules: 21
+# CC̄=3.5
+
+HUBS[20]:
+  src.cli.buildArtifacts
+    CC=7  in:5  out:27  total:32
+  llm_service.core.resolve_route
+    CC=11  in:2  out:26  total:28
+  scripts.check-schema-identity.main
+    CC=11  in:0  out:23  total:23
+  src.extract.deterministic.extractDeterministicRules
+    CC=25  in:0  out:22  total:22
+  llm_service.cli.main
+    CC=11  in:0  out:22  total:22
+  scripts.check-flag-parity.main
+    CC=11  in:0  out:21  total:21
+  llm_service.core.complete_chat
+    CC=9  in:3  out:16  total:19
+  llm_service.core.health
+    CC=5  in:2  out:15  total:17
+  llm_service.core._real_structured
+    CC=7  in:1  out:16  total:17
+  scripts.render-litellm-config.main
+    CC=5  in:0  out:17  total:17
+  scripts.validate-schema.validate
+    CC=4  in:1  out:15  total:16
+  llm_service.core._run_stage
+    CC=3  in:2  out:14  total:16
+  src.cli.buildGuidelineArtifacts
+    CC=7  in:4  out:12  total:16
+  llm_service.audit.append_audit
+    CC=3  in:6  out:9  total:15
+  llm_service.cli.parser
+    CC=2  in:1  out:14  total:15
+  src.llm.client.LlmServiceError.postJson
+    CC=12  in:0  out:14  total:14
+  llm_service.core._route_enabled
+    CC=5  in:6  out:8  total:14
+  src.reality.offer.reconcileOfferHistory
+    CC=14  in:0  out:13  total:13
+  llm_service.core._sha
+    CC=1  in:8  out:4  total:12
+  src.ingest.markdown.cleanHumanBlock
+    CC=3  in:10  out:2  total:12
+
+MODULES:
+  llm_service.app  [4 funcs]
+    chat_completions  CC=3  out:8
+    extract_intents  CC=2  out:8
+    generate_guidelines  CC=2  out:8
+    healthz  CC=1  out:2
+  llm_service.audit  [3 funcs]
+    _path  CC=2  out:3
+    append_audit  CC=3  out:9
+    audit_ref  CC=1  out:4
+  llm_service.cli  [5 funcs]
+    _guard_bind  CC=4  out:5
+    _read  CC=3  out:4
+    _write  CC=3  out:6
+    main  CC=11  out:22
+    parser  CC=2  out:14
+  llm_service.core  [18 funcs]
+    _extract_text  CC=6  out:7
+    _provenance  CC=4  out:7
+    _real_structured  CC=7  out:16
+    _registry  CC=1  out:3
+    _root  CC=1  out:2
+    _route_enabled  CC=5  out:8
+    _routing  CC=1  out:3
+    _run_stage  CC=3  out:14
+    _schema  CC=1  out:3
+    _sha  CC=1  out:4
+  scripts.check-flag-parity  [3 funcs]
+    env_example_values  CC=5  out:7
+    main  CC=11  out:21
+    routing_flags  CC=3  out:4
+  scripts.check-schema-identity  [2 funcs]
+    main  CC=11  out:23
+    walk  CC=7  out:7
+  scripts.render-litellm-config  [3 funcs]
+    litellm_openrouter_model  CC=2  out:1
+    main  CC=5  out:17
+    render  CC=4  out:10
+  scripts.validate-schema  [2 funcs]
+    validate  CC=4  out:15
+    validate_tickets  CC=2  out:5
+  src.cli  [28 funcs]
+    absoluteInputs  CC=1  out:3
+    buildAiderArtifacts  CC=3  out:7
+    buildArtifacts  CC=7  out:27
+    buildGuidelineArtifacts  CC=7  out:12
+    buildOfferRealityArtifacts  CC=1  out:6
+    command  CC=2  out:1
+    commandAider  CC=1  out:4
+    commandBuild  CC=3  out:6
+    commandDemo  CC=3  out:10
+    commandGuidelines  CC=3  out:6
+  src.extract.deterministic  [10 funcs]
+    effectiveClass  CC=3  out:0
+    entries  CC=1  out:6
+    eventMatches  CC=1  out:3
+    evidenceByEvent  CC=5  out:11
+    extractDeterministicRules  CC=25  out:22
+    matchedEntriesByEvent  CC=4  out:5
+    matches  CC=4  out:5
+    rankingWeight  CC=3  out:1
+    repeated  CC=1  out:6
+    sourceClass  CC=1  out:6
+  src.ingest.cursor  [6 funcs]
+    blobIndex  CC=8  out:6
+    decodeJsonString  CC=2  out:2
+    extractTipTapText  CC=6  out:7
+    ingestCursorExport  CC=8  out:8
+    parsed  CC=8  out:6
+    sequence  CC=8  out:6
+  src.ingest.markdown  [11 funcs]
+    block  CC=6  out:4
+    cleanHumanBlock  CC=3  out:2
+    current  CC=6  out:4
+    end  CC=6  out:4
+    human  CC=1  out:2
+    ingestMarkdownTranscript  CC=10  out:7
+    next  CC=6  out:4
+    role  CC=6  out:4
+    sequence  CC=10  out:6
+    start  CC=6  out:4
+  src.llm.client  [9 funcs]
+    authHeaders  CC=2  out:0
+    clearTimeout  CC=1  out:0
+    controller  CC=7  out:6
+    eventWindowSize  CC=4  out:3
+    extractIntentCandidatesWithLlm  CC=1  out:4
+    postJson  CC=12  out:14
+    serviceHealth  CC=7  out:9
+    text  CC=3  out:3
+    timer  CC=7  out:6
+  src.reality.offer  [5 funcs]
+    currentById  CC=13  out:9
+    extractPlanPrice  CC=5  out:4
+    normalized  CC=8  out:7
+    price  CC=1  out:2
+    reconcileOfferHistory  CC=14  out:13
+  src.twin.aggregate  [4 funcs]
+    buildDeveloperTwin  CC=21  out:9
+    buildModelStages  CC=2  out:4
+    buildWorkflow  CC=2  out:0
+    candidateRules  CC=10  out:9
+  src.twin.guidelines  [2 funcs]
+    generateDeterministicGuidelines  CC=9  out:4
+    selectRules  CC=8  out:10
+  src.twin.render  [2 funcs]
+    escapeCell  CC=1  out:1
+    renderTwinMarkdown  CC=12  out:6
+  src.twin.validate  [5 funcs]
+    evidenceIndex  CC=2  out:3
+    validateGenerator  CC=2  out:3
+    validateRules  CC=2  out:3
+    validateTwin  CC=4  out:9
+    validateWorkflow  CC=2  out:3
+  src.util.command  [4 funcs]
+    checkCommand  CC=11  out:8
+    isAllowedCommand  CC=1  out:1
+    tokenizeCommand  CC=1  out:3
+    tokens  CC=6  out:6
+  src.util.hash  [2 funcs]
+    sha256  CC=1  out:3
+    stableId  CC=1  out:2
+  src.util.text  [5 funcs]
+    compactWhitespace  CC=1  out:2
+    excerpt  CC=2  out:4
+    isLikelyCorrection  CC=4  out:3
+    normalizeForMatch  CC=1  out:4
+    redactSecrets  CC=2  out:1
+
+EDGES:
+  llm_service.cli._guard_bind → llm_service.core.flag_enabled
+  llm_service.cli.main → llm_service.cli._write
+  llm_service.cli.main → llm_service.cli.parser
+  llm_service.cli.main → llm_service.core.health
+  llm_service.cli.main → llm_service.core.complete_intents
+  llm_service.cli.main → llm_service.cli._read
+  llm_service.cli.main → llm_service.core.complete_guidelines
+  llm_service.app.healthz → llm_service.core.health
+  llm_service.app.extract_intents → llm_service.core.complete_intents
+  llm_service.app.generate_guidelines → llm_service.core.complete_guidelines
+  llm_service.app.chat_completions → llm_service.core.complete_chat
+  llm_service.core._routing → llm_service.core._root
+  llm_service.core._route_enabled → src.ingest.markdown.next
+  llm_service.core._route_enabled → llm_service.core.flag_enabled
+  llm_service.core._route_enabled → llm_service.core._routing
+  llm_service.core._registry → llm_service.core._root
+  llm_service.core._stage_entry → llm_service.core._registry
+  llm_service.core._schema → llm_service.core._root
+  llm_service.core.resolve_route → llm_service.core._stage_entry
+  llm_service.core.resolve_route → llm_service.core._route_enabled
+  llm_service.core._real_structured → llm_service.core.resolve_route
+  llm_service.core._real_structured → llm_service.core._extract_text
+  llm_service.core._real_structured → llm_service.core._sha
+  llm_service.core.fake_mode → llm_service.core.flag_enabled
+  llm_service.core._run_stage → llm_service.core.fake_mode
+  llm_service.core._run_stage → llm_service.core._real_structured
+  llm_service.core._run_stage → llm_service.core._provenance
+  llm_service.core._run_stage → llm_service.core._sha
+  llm_service.core._run_stage → llm_service.core._schema
+  llm_service.core._run_stage → llm_service.audit.append_audit
+  llm_service.core.complete_intents → llm_service.core._run_stage
+  llm_service.core.complete_guidelines → llm_service.core._run_stage
+  llm_service.core.complete_chat → llm_service.core.fake_mode
+  llm_service.core.complete_chat → llm_service.core.resolve_route
+  llm_service.core.complete_chat → llm_service.core._sha
+  llm_service.core.complete_chat → llm_service.core._provenance
+  llm_service.core.health → llm_service.core.fake_mode
+  llm_service.core.health → llm_service.core._route_enabled
+  llm_service.audit.append_audit → llm_service.audit._path
+  llm_service.audit.append_audit → llm_service.audit.audit_ref
+  src.cli.rootPath → src.cli.flag
+  src.cli.modeFromArgs → src.cli.flag
+  src.cli.mode → src.cli.buildArtifacts
+  src.cli.defaultInputPaths → src.cli.flags
+  src.cli.buildArtifacts → src.cli.loadCore
+  src.cli.buildArtifacts → src.cli.defaultInputPaths
+  src.cli.buildArtifacts → src.cli.rel
+  src.cli.absoluteInputs → src.cli.rel
+  src.cli.rawEvents → src.cli.rel
+  src.cli.buildGuidelineArtifacts → src.cli.loadCore

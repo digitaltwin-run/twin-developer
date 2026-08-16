@@ -1,0 +1,559 @@
+# twin-developer | 93f 18066L | yaml:4,json:28,txt:2,md:19,shell:6,python:11,typescript:22 | 2026-08-16
+# generated in 0.04s
+# producer: code2llm | artifact: map.toon.yaml | schema: 1
+# stats: 294 func | 0 cls | 93 mod | CC̄=3.5 | critical:4 | cycles:0
+# alerts[5]: fan-out buildArtifacts=27; CC extractDeterministicRules=25; fan-out extractDeterministicRules=22; CC buildDeveloperTwin=21; CC TwinValidationError.validateGuidelines=20
+# hotspots[5]: buildArtifacts fan=27; extractDeterministicRules fan=22; main fan=17; main fan=14; _real_structured fan=14
+# evolution: CC̄ 3.6→3.5 (improved -0.1)
+# Keys: M=modules, D=details, i=imports, e=exports, c=classes, f=functions, m=methods
+M[93]:
+  CHANGELOG.md,52
+  Makefile,89
+  README.md,446
+  TODO.md,78
+  config/litellm-proxy.yaml,34
+  config/llm-routing.json,71
+  config/model-registry.json,34
+  config/rule-catalog.json,346
+  config/source-policy.json,61
+  data/context/example-task.md,3
+  data/context/policy-dsl.README.md,35
+  data/context/project.json,62
+  data/context/subactor-cloud-v1.offer.json,97
+  data/context/todo2code.README.md,927
+  data/fixtures/minimal-twin.json,54
+  data/fixtures/shell-history.txt,4
+  data/normalized/extraction-map.json,91
+  data/normalized/source-manifest.json,24
+  data/output/VALIDATION.md,54
+  data/output/aider-message.md,80
+  data/output/developer-twin.md,236
+  data/output/developer-twin.dsl.json,2680
+  data/output/examples/llm-fake/developer-twin.md,246
+  data/output/examples/llm-fake/developer-twin.dsl.json,2701
+  data/output/examples/llm-fake/guidelines.json,89
+  data/output/examples/llm-fake/guidelines.audit.json,6
+  data/output/guidelines.json,89
+  data/output/guidelines.audit.json,10
+  data/output/offer-reality.md,39
+  data/output/validation-receipt.json,67
+  data/raw/history-cursor.json,1404
+  data/raw/history-portal.md,1569
+  docs/ARCHITECTURE.md,35
+  docs/AUDIT_AND_AUTONOMY_PLAN.md,784
+  docs/DSL.md,18
+  docs/NEXT_STEPS.md,49
+  docs/README.md,512
+  docs/SECURITY.md,51
+  docs/SOURCE_TRUTH.md,17
+  llm_service/__init__.py,3
+  llm_service/__main__.py,3
+  llm_service/app.py,70
+  llm_service/audit.py,46
+  llm_service/cli.py,99
+  llm_service/core.py,368
+  llm_service/models.py,51
+  package.json,25
+  planfile.yaml,630
+  prefact.yaml,94
+  project2.sh,55
+  requirements.txt,5
+  schemas/developer-twin.schema.json,609
+  schemas/guidelines.schema.json,29
+  schemas/llm-intent-extraction.schema.json,33
+  schemas/llm-routing.schema.json,44
+  schemas/local-ticket-intent.schema.json,35
+  schemas/model-registry.schema.json,38
+  schemas/project-context.schema.json,36
+  schemas/rule-catalog.schema.json,53
+  schemas/source-policy.schema.json,64
+  scripts/check-flag-parity.py,70
+  scripts/check-schema-identity.py,101
+  scripts/llmctl.sh,5
+  scripts/render-litellm-config.py,80
+  scripts/run-aider.sh,37
+  scripts/run-fake-llm-demo.sh,24
+  scripts/run-litellm-proxy.sh,10
+  scripts/validate-schema.py,56
+  scripts/verify-artifacts.sh,57
+  src/aider/prompt.ts,45
+  src/cli.ts,329
+  src/extract/deterministic.ts,146
+  src/ingest/index.ts,32
+  src/ingest/common.ts,35
+  src/ingest/cursor.ts,65
+  src/ingest/jsonl.ts,27
+  src/ingest/markdown.ts,66
+  src/ingest/plain.ts,22
+  src/ingest/shell.ts,27
+  src/llm/client.ts,138
+  src/node-shims.d.ts,45
+  src/reality/offer.ts,144
+  src/twin/aggregate.ts,199
+  src/twin/guidelines.ts,71
+  src/twin/render.ts,55
+  src/twin/validate.ts,136
+  src/types.ts,232
+  src/util/command.ts,65
+  src/util/files.ts,29
+  src/util/hash.ts,9
+  src/util/text.ts,47
+  testql-scenarios/generated-from-pytests.testql.toon.yaml,10
+  tsconfig.json,18
+D:
+  src/extract/deterministic.ts:
+    i: ../util/hash.js,../util/text.js
+    e: DeterministicExtraction,rankingWeight,eventMatches,haystack,supportingEvent,effectiveClass,extractDeterministicRules,matches,matchedEntriesByEvent,rows,current,evidenceByEvent,entries,repeated,sourceClass,rows,refs,correctionBoost,repetitionBoost,avgIntentWeight,confidence,dockerRule
+    DeterministicExtraction:
+    rankingWeight()
+    eventMatches()
+    haystack()
+    supportingEvent()
+    effectiveClass()
+    extractDeterministicRules()
+    matches()
+    matchedEntriesByEvent()
+    rows()
+    current()
+    evidenceByEvent()
+    entries()
+    repeated()
+    sourceClass()
+    rows()
+    refs()
+    correctionBoost()
+    repetitionBoost()
+    avgIntentWeight()
+    confidence()
+    dockerRule()
+  src/twin/aggregate.ts:
+    i: ../util/files.js,../util/hash.js,../util/text.js
+    e: candidateRules,known,index,missing,buildWorkflow,buildModelStages,buildDeveloperTwin,candidateResult,id
+    candidateRules()
+    known()
+    index()
+    missing()
+    buildWorkflow()
+    buildModelStages()
+    buildDeveloperTwin()
+    candidateResult()
+    id()
+  src/twin/validate.ts:
+    i: ../types.js,../util/command.js
+    e: TwinValidationError
+    TwinValidationError: super(-1),validateGenerator(-1),evidenceIndex(-1),evidenceIds(-1),evidenceSet(-1),validateRules(-1),ruleIds(-1),evidenceActors(-1),missing(-1),agentOnly(-1),validateWorkflow(-1),orders(-1),validateTwin(-1),validateGenerator(-1),evidenceSet(-1),validateRules(-1),validateWorkflow(-1),validateIntentCandidates(-1),row(-1),candidate(-1),validateGuidelines(-1),row(-1),knownRules(-1),step(-1),verdict(-1)
+  src/reality/offer.ts:
+    i: ../types.js,../util/text.js
+    e: OfferPlan,OfferCatalog,OfferRealityReport,price,cleaned,extractPlanPrice,escaped,forward,backward,reconcileOfferHistory,currentPlans,currentById,normalized,claimed,current,matchesCurrent,blocking,renderOfferRealityMarkdown
+    OfferPlan:
+    OfferCatalog:
+    OfferRealityReport:
+    price()
+    cleaned()
+    extractPlanPrice()
+    escaped()
+    forward()
+    backward()
+    reconcileOfferHistory()
+    currentPlans()
+    currentById()
+    normalized()
+    claimed()
+    current()
+    matchesCurrent()
+    blocking()
+    renderOfferRealityMarkdown()
+  src/twin/render.ts:
+    i: ../types.js
+    e: escapeCell,renderTwinMarkdown,renderGuidelinesMarkdown
+    escapeCell()
+    renderTwinMarkdown()
+    renderGuidelinesMarkdown()
+  src/llm/client.ts:
+    i: ../types.js
+    e: LlmServiceError,LlmProvenance,LlmResult
+    LlmServiceError: super(-1),readProvenance(-1),provider(-1),model(-1),authHeaders(-1),token(-1),postJson(-1),controller(-1),timer(-1),response(-1),text(-1),detail(-1),clearTimeout(-1),serviceHealth(-1),controller(-1),timer(-1),response(-1),clearTimeout(-1),DEFAULT_EVENT_WINDOW(-1),eventWindowSize(-1),raw(-1),parsed(-1),extractIntentCandidatesWithLlm(-1),humanEvents(-1),windowSize(-1),window(-1),result(-1),generateGuidelinesWithLlm(-1)
+    LlmProvenance:
+    LlmResult:
+  src/ingest/index.ts:
+    i: ../types.js,./cursor.js,./jsonl.js,./markdown.js,./plain.js,./shell.js,node:path
+    e: ingestFiles,sequence,lower
+    ingestFiles()
+    sequence()
+    lower()
+  llm_service/cli.py:
+    e: _guard_bind,_read,_write,parser,main
+    _guard_bind(host)
+    _read(path)
+    _write(value;path)
+    parser()
+    main(argv)
+  llm_service/core.py:
+    e: LlmConfigurationError,LlmResponseError,Route,Provenance,_sha,_root,_routing,flag_enabled,_route_enabled,_registry,_stage_entry,_schema,_prefixed,resolve_route,_fake_intents,_fake_guidelines,_extract_text,_real_structured,fake_mode,_provenance,_run_stage,complete_intents,complete_guidelines,complete_chat,health
+    LlmConfigurationError(RuntimeError):
+    LlmResponseError(RuntimeError):
+    Route:
+    Provenance: headers(0)  # Kto faktycznie wyprodukował artefakt.
+
+Bez tego rekordu wyni...
+    _sha(value)
+    _root()
+    _routing()
+    flag_enabled(name;default)
+    _route_enabled(route_id)
+    _registry()
+    _stage_entry(stage)
+    _schema(name)
+    _prefixed(provider;model)
+    resolve_route(stage;explicit_model)
+    _fake_intents(payload)
+    _fake_guidelines(payload)
+    _extract_text(response)
+    _real_structured(stage;payload;schema;system)
+    fake_mode()
+    _provenance(audit;ref)
+    _run_stage(stage;payload;schema_name;system;fake)
+    complete_intents(payload)
+    complete_guidelines(payload)
+    complete_chat(messages;model;temperature;max_tokens)
+    health()
+  src/ingest/jsonl.ts:
+    i: ../types.js,./common.js,node:fs/promises
+    e: ingestJsonl,lines,sequence,parsed,eventSequence,event
+    ingestJsonl()
+    lines()
+    sequence()
+    parsed()
+    eventSequence()
+    event()
+  src/util/command.ts:
+    e: CommandVerdict,MAX_LENGTH,tokenizeCommand,checkCommand,syntax,tokens,allowedTokens,extra,unsafe,isAllowedCommand
+    CommandVerdict:
+    MAX_LENGTH()
+    tokenizeCommand()
+    checkCommand()
+    syntax()
+    tokens()
+    allowedTokens()
+    extra()
+    unsafe()
+    isAllowedCommand()
+  scripts/check-schema-identity.py:
+    e: walk,owned,main
+    walk(node;path)
+    owned(value)
+    main()
+  scripts/check-flag-parity.py:
+    e: routing_flags,env_example_values,main
+    routing_flags()
+    env_example_values()
+    main()
+  src/ingest/markdown.ts:
+    i: ../types.js,./common.js,node:fs/promises
+    e: cleanHumanBlock,beforeTrace,ingestMarkdownTranscript,text,sequence,current,next,role,start,end,block,human,event,agent
+    cleanHumanBlock()
+    beforeTrace()
+    ingestMarkdownTranscript()
+    text()
+    sequence()
+    current()
+    next()
+    role()
+    start()
+    end()
+    block()
+    human()
+    event()
+    agent()
+  src/twin/guidelines.ts:
+    i: ../types.js,../util/text.js
+    e: ProjectContext,selectRules,normalized,catalogById,selected,entry,needles,fallback,left,right,generateDeterministicGuidelines,rules,validationCommands,order,commands,ruleRefs
+    ProjectContext:
+    selectRules()
+    normalized()
+    catalogById()
+    selected()
+    entry()
+    needles()
+    fallback()
+    left()
+    right()
+    generateDeterministicGuidelines()
+    rules()
+    validationCommands()
+    order()
+    commands()
+    ruleRefs()
+  src/cli.ts:
+    i: ./aider/prompt.js,./extract/deterministic.js,./ingest/index.js,./llm/client.js,./reality/offer.js,./twin/aggregate.js,./twin/guidelines.js,./twin/render.js,./twin/validate.js,./util/files.js,./util/hash.js,node:fs/promises,node:path
+    e: RuleCatalogFile,OfferCatalog,flag,index,flags,rootPath,rel,modeFromArgs,mode,defaultInputPaths,provided,values,readEventsJsonl,text,writeEventsJsonl,loadCore,buildArtifacts,absoluteInputs,rawEvents,events,content,sourceFile,extraction,llmCandidates,llmUsed,degraded,response,twin,buildGuidelineArtifacts,twin,task,deterministic,guidelines,response,buildOfferRealityArtifacts,eventsPath,events,catalog,report,buildAiderArtifacts,twin,guidelines,project,task,commandBuild,root,mode,llmUrl,result,commandValidate,root,path,twin,diagnostics,commandGuidelines,root,mode,llmUrl,result,commandReality,root,commandAider,root,commandDemo,root,mode,llmUrl,guidelines,usage,main,command
+    RuleCatalogFile:
+    OfferCatalog:
+    flag()
+    index()
+    flags()
+    rootPath()
+    rel()
+    modeFromArgs()
+    mode()
+    defaultInputPaths()
+    provided()
+    values()
+    readEventsJsonl()
+    text()
+    writeEventsJsonl()
+    loadCore()
+    buildArtifacts()
+    absoluteInputs()
+    rawEvents()
+    events()
+    content()
+    sourceFile()
+    extraction()
+    llmCandidates()
+    llmUsed()
+    degraded()
+    response()
+    twin()
+    buildGuidelineArtifacts()
+    twin()
+    task()
+    deterministic()
+    guidelines()
+    response()
+    buildOfferRealityArtifacts()
+    eventsPath()
+    events()
+    catalog()
+    report()
+    buildAiderArtifacts()
+    twin()
+    guidelines()
+    project()
+    task()
+    commandBuild()
+    root()
+    mode()
+    llmUrl()
+    result()
+    commandValidate()
+    root()
+    path()
+    twin()
+    diagnostics()
+    commandGuidelines()
+    root()
+    mode()
+    llmUrl()
+    result()
+    commandReality()
+    root()
+    commandAider()
+    root()
+    commandDemo()
+    root()
+    mode()
+    llmUrl()
+    guidelines()
+    usage()
+    main()
+    command()
+  src/ingest/cursor.ts:
+    i: ../types.js,./common.js,node:fs/promises
+    e: CursorExport,decodeJsonString,extractTipTapText,combined,ingestCursorExport,parsed,sequence,blobIndex,message,event
+    CursorExport:
+    decodeJsonString()
+    extractTipTapText()
+    combined()
+    ingestCursorExport()
+    parsed()
+    sequence()
+    blobIndex()
+    message()
+    event()
+  src/ingest/common.ts:
+    i: ../types.js,../util/hash.js,../util/text.js,node:path
+    e: createEvent,text,redactedText,isCorrection,sourceClass,contentHash,id
+    createEvent()
+    text()
+    redactedText()
+    isCorrection()
+    sourceClass()
+    contentHash()
+    id()
+  src/ingest/shell.ts:
+    i: ../types.js,./common.js,node:fs/promises
+    e: ingestShellHistory,lines,sequence,command,event
+    ingestShellHistory()
+    lines()
+    sequence()
+    command()
+    event()
+  src/aider/prompt.ts:
+    i: ../types.js
+    e: buildAiderMessage,selected
+    buildAiderMessage()
+    selected()
+  scripts/render-litellm-config.py:
+    e: litellm_openrouter_model,render,main
+    litellm_openrouter_model(model_id)
+    render(use_env)
+    main()
+  llm_service/app.py:
+    e: require_token,healthz,extract_intents,generate_guidelines,chat_completions
+    require_token(x_twin_token)
+    healthz()
+    extract_intents(request)
+    generate_guidelines(request)
+    chat_completions(request)
+  src/node-shims.d.ts:
+    e: createHash,readFile,writeFile,mkdir,mkdtemp,rm,basename,dirname,extname,relative,resolve,join,tmpdir
+    createHash()
+    readFile()
+    writeFile()
+    mkdir()
+    mkdtemp()
+    rm()
+    basename()
+    dirname()
+    extname()
+    relative()
+    resolve()
+    join()
+    tmpdir()
+  src/util/text.ts:
+    e: redactSecrets,output,compactWhitespace,normalizeForMatch,excerpt,normalized,isLikelyCorrection,normalized,uniqueStrings
+    redactSecrets()
+    output()
+    compactWhitespace()
+    normalizeForMatch()
+    excerpt()
+    normalized()
+    isLikelyCorrection()
+    normalized()
+    uniqueStrings()
+  scripts/validate-schema.py:
+    e: validate,validate_tickets
+    validate(schema_name;document_name)
+    validate_tickets()
+  llm_service/audit.py:
+    e: _path,audit_ref,append_audit
+    _path()
+    audit_ref(record)
+    append_audit(record)
+  src/ingest/plain.ts:
+    i: ../types.js,./common.js,node:fs/promises
+    e: ingestPlainText,text,blocks,sequence,event
+    ingestPlainText()
+    text()
+    blocks()
+    sequence()
+    event()
+  src/util/files.ts:
+    i: node:fs/promises,node:path
+    e: readJson,text,writeJson,absolute,writeText,absolute,nowIso,forced,parsed
+    readJson()
+    text()
+    writeJson()
+    absolute()
+    writeText()
+    absolute()
+    nowIso()
+    forced()
+    parsed()
+  src/util/hash.ts:
+    i: node:crypto
+    e: sha256,stableId
+    sha256()
+    stableId()
+  planfile.yaml:
+  tsconfig.json:
+  requirements.txt:
+  TODO.md:
+  project2.sh:
+  package.json:
+  prefact.yaml:
+  CHANGELOG.md:
+  schemas/llm-intent-extraction.schema.json:
+  schemas/guidelines.schema.json:
+  schemas/rule-catalog.schema.json:
+  schemas/developer-twin.schema.json:
+  llm_service/__init__.py:
+  llm_service/__main__.py:
+  llm_service/models.py:
+    e: StrictModel,EventInput,EvidenceInput,IntentRequest,GuidelinesRequest,ChatMessage,ChatRequest
+    StrictModel(BaseModel):
+    EventInput(StrictModel):
+    EvidenceInput(StrictModel):
+    IntentRequest(StrictModel):
+    GuidelinesRequest(StrictModel):
+    ChatMessage(StrictModel):
+    ChatRequest(BaseModel):
+  docs/DSL.md:
+  docs/SOURCE_TRUTH.md:
+  docs/NEXT_STEPS.md:
+  docs/ARCHITECTURE.md:
+  src/types.ts:
+    e: PromptEvent,EvidenceRecord,TwinRule,RuleCatalogEntry,Diagnostic,TruthRanking,SourcePolicy,LlmRouteConfig,ModelRegistryStage,ModelRegistry,LlmRoutingConfig,DeveloperTwinDsl,IntentCandidate,IntentCandidateResponse,GuidelineStep,Guidelines
+    PromptEvent:
+    EvidenceRecord:
+    TwinRule:
+    RuleCatalogEntry:
+    Diagnostic:
+    TruthRanking:
+    SourcePolicy:
+    LlmRouteConfig:
+    ModelRegistryStage:
+    ModelRegistry:
+    LlmRoutingConfig:
+    DeveloperTwinDsl:
+    IntentCandidate:
+    IntentCandidateResponse:
+    GuidelineStep:
+    Guidelines:
+  scripts/run-aider.sh:
+  scripts/run-litellm-proxy.sh:
+  scripts/llmctl.sh:
+  scripts/run-fake-llm-demo.sh:
+    e: cleanup
+    cleanup()
+  scripts/verify-artifacts.sh:
+  testql-scenarios/generated-from-pytests.testql.toon.yaml:
+  config/rule-catalog.json:
+  config/litellm-proxy.yaml:
+  config/source-policy.json:
+  config/llm-routing.json:
+  config/model-registry.json:
+  data/normalized/extraction-map.json:
+  data/normalized/source-manifest.json:
+  data/output/developer-twin.md:
+  data/output/offer-reality.md:
+  data/output/VALIDATION.md:
+  data/output/validation-receipt.json:
+  data/output/guidelines.audit.json:
+  data/output/aider-message.md:
+  data/output/guidelines.json:
+  data/output/developer-twin.dsl.json:
+  data/output/examples/llm-fake/developer-twin.md:
+  data/output/examples/llm-fake/guidelines.audit.json:
+  data/output/examples/llm-fake/guidelines.json:
+  data/output/examples/llm-fake/developer-twin.dsl.json:
+  data/fixtures/shell-history.txt:
+  data/fixtures/minimal-twin.json:
+  data/context/policy-dsl.README.md:
+  data/context/example-task.md:
+  data/context/subactor-cloud-v1.offer.json:
+  data/context/todo2code.README.md:
+  data/raw/history-cursor.json:
+  data/raw/history-portal.md:
+  Makefile:
+  README.md:
+  schemas/project-context.schema.json:
+  schemas/source-policy.schema.json:
+  schemas/model-registry.schema.json:
+  schemas/local-ticket-intent.schema.json:
+  schemas/llm-routing.schema.json:
+  docs/AUDIT_AND_AUTONOMY_PLAN.md:
+  docs/SECURITY.md:
+  docs/README.md:
+  data/context/project.json:
