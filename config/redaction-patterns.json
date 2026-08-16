@@ -1,0 +1,127 @@
+{
+  "schemaVersion": "subactor.developer-twin.redaction/v1",
+  "home": "config/redaction-patterns.json",
+  "note": "Jedyne HOME wzorców redakcji. Czytają je oba runtime'y: src/util/redaction.ts i llm_service/redaction.py. Rozjazd wykrywa scripts/check-redaction-parity.py, który uruchamia obie implementacje na tych samych fixture'ach.",
+  "replacementSyntax": "Grupy przechwytujące zapisuje się jako $1; strona Pythona tłumaczy je na \\1.",
+  "patterns": [
+    {
+      "id": "openai-style-key",
+      "pattern": "\\bsk-[A-Za-z0-9_-]{12,}\\b",
+      "replacement": "[REDACTED_API_KEY]",
+      "ignoreCase": false
+    },
+    {
+      "id": "stripe-key",
+      "pattern": "\\b(?:sk|rk|pk)_(?:live|test)_[A-Za-z0-9]{16,}\\b",
+      "replacement": "[REDACTED_STRIPE_KEY]",
+      "ignoreCase": false
+    },
+    {
+      "id": "github-token",
+      "pattern": "\\b(?:ghp|gho|ghu|ghs|ghr)_[A-Za-z0-9]{20,}\\b",
+      "replacement": "[REDACTED_GITHUB_TOKEN]",
+      "ignoreCase": false
+    },
+    {
+      "id": "github-fine-grained-token",
+      "pattern": "\\bgithub_pat_[A-Za-z0-9_]{20,}\\b",
+      "replacement": "[REDACTED_GITHUB_TOKEN]",
+      "ignoreCase": false
+    },
+    {
+      "id": "aws-access-key-id",
+      "pattern": "\\b(?:AKIA|ASIA)[0-9A-Z]{12,}\\b",
+      "replacement": "[REDACTED_AWS_KEY_ID]",
+      "ignoreCase": false
+    },
+    {
+      "id": "slack-token",
+      "pattern": "\\bxox[baprs]-[A-Za-z0-9-]{10,}\\b",
+      "replacement": "[REDACTED_SLACK_TOKEN]",
+      "ignoreCase": false
+    },
+    {
+      "id": "google-api-key",
+      "pattern": "\\bAIza[0-9A-Za-z_-]{30,}\\b",
+      "replacement": "[REDACTED_GOOGLE_KEY]",
+      "ignoreCase": false
+    },
+    {
+      "id": "npm-token",
+      "pattern": "\\bnpm_[A-Za-z0-9]{30,}\\b",
+      "replacement": "[REDACTED_NPM_TOKEN]",
+      "ignoreCase": false
+    },
+    {
+      "id": "jsonwebtoken",
+      "pattern": "\\beyJ[A-Za-z0-9_-]{8,}\\.[A-Za-z0-9_-]{8,}\\.[A-Za-z0-9_-]{8,}",
+      "replacement": "[REDACTED_JWT]",
+      "ignoreCase": false
+    },
+    {
+      "id": "private-key-block",
+      "pattern": "-----BEGIN (?:[A-Z]+ )*PRIVATE KEY-----[\\s\\S]*?-----END (?:[A-Z]+ )*PRIVATE KEY-----",
+      "replacement": "[REDACTED_PRIVATE_KEY]",
+      "ignoreCase": false
+    },
+    {
+      "id": "subactor-user-token",
+      "pattern": "\\bsubactor_usr_(?:live|test)_[A-Za-z0-9_-]+\\b",
+      "replacement": "[REDACTED_SUBACTOR_TOKEN]",
+      "ignoreCase": false
+    },
+    {
+      "id": "bearer-token",
+      "pattern": "(Bearer\\s+)[A-Za-z0-9._~+/=-]{12,}",
+      "replacement": "$1[REDACTED_TOKEN]",
+      "ignoreCase": true
+    },
+    {
+      "id": "uppercase-secret-assignment",
+      "pattern": "\\b([A-Z0-9_]*(?:KEY|TOKEN|SECRET|PASSWORD|PASSWD|PASS)\\s*[=:]\\s*)(?!Bearer\\b|Basic\\b)[^\\s\"']{8,}",
+      "replacement": "$1[REDACTED]",
+      "ignoreCase": false,
+      "note": "Bez ignoreCase celowo. Wersja case-insensitive redagowała prozę typu 'Authorization: Bearer <token>', bo AUTH + [A-Z0-9_]* dopasowywało 'Authorization'."
+    },
+    {
+      "id": "connection-string-password",
+      "pattern": "\\b([a-z][a-z0-9+.-]*://[^\\s:/@]+:)[^\\s@/]{4,}(@)",
+      "replacement": "$1[REDACTED]$2",
+      "ignoreCase": false
+    },
+    {
+      "id": "keyword-gated-hex",
+      "pattern": "\\b((?:secret|token|apikey|api_key|password|signature)\\W{0,3})([A-Fa-f0-9]{32,64})\\b",
+      "replacement": "$1[REDACTED_HEX]",
+      "ignoreCase": true,
+      "note": "Zastępuje dawny bezwarunkowy [A-Fa-f0-9]{40,64}, który redagował każdy SHA commita — czyli niszczył identyfikatory rewizji, na których stoi ranking projectReality."
+    }
+  ],
+  "fixtures": {
+    "mustRedact": [
+      "OPENROUTER_API_KEY=sk-abcdefghijklmnop",
+      "export GITHUB_TOKEN=ghp_ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+      "github_pat_11ABCDEFG0abcdefghijklmnopqrstuvwxyz012345",
+      "AWS_ACCESS_KEY_ID=AKIAIOSFODNN7EXAMPLE",
+      "xoxb-123456789012-abcdefghijkl",
+      "AIzaSyA1234567890abcdefghijklmnopqrstuvw",
+      "npm_abcdefghijklmnopqrstuvwxyz0123456789",
+      "Authorization: Bearer abcdefghijklmnopqrstuvwxyz",
+      "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.dBjftJeZ4CVPmB92K27uhbUJU1p1r_wW1gFWFOEjXk",
+      "subactor_usr_live_abcdef123456",
+      "postgres://appuser:hunter2secret@db.internal:5432/app",
+      "-----BEGIN RSA PRIVATE KEY-----\nMIIEowIBAAKCAQEA\n-----END RSA PRIVATE KEY-----",
+      "secret: 5f4dcc3b5aa765d61d8327deb882cf995f4dcc3b5aa765d61d8327deb882cf99",
+      "sk_live_abcdefghijklmnopqrstuvwx"
+    ],
+    "mustSurvive": [
+      "git checkout 6ca123f4b5e6d7c8a9b0c1d2e3f4a5b6c7d8e9f0",
+      "sha256:43ba3b3905045e158dff0af1e35474db44551448a6b9621130926302e5c749ed",
+      "Authorization: Bearer <token>",
+      "Ustaw nagłówek Authorization zgodnie z dokumentacją REST API.",
+      "Wersja pinowana na rewizji abc833d.",
+      "npm test",
+      "KEY: value"
+    ]
+  }
+}

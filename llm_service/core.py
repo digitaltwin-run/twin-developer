@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import Any
 
 from .audit import append_audit
+from .redaction import redact_payload
 
 
 class LlmConfigurationError(RuntimeError):
@@ -213,11 +214,14 @@ def _real_structured(stage: str, payload: dict[str, Any], schema: dict[str, Any]
         raise LlmConfigurationError("litellm is not installed; run pip install -r requirements.txt") from exc
 
     route = resolve_route(stage)
+    # Ostatnia bramka przed wyjściem na zewnątrz. Nie ufa temu, że wywołujący
+    # zredagował ładunek — REST, CLI i Aider mają różne ścieżki wejścia.
+    safe_payload = redact_payload(payload)
     kwargs: dict[str, Any] = {
         "model": route.model,
         "messages": [
             {"role": "system", "content": system},
-            {"role": "user", "content": json.dumps(payload, ensure_ascii=False)},
+            {"role": "user", "content": json.dumps(safe_payload, ensure_ascii=False)},
         ],
         "temperature": 0,
         "response_format": {
@@ -242,7 +246,7 @@ def _real_structured(stage: str, payload: dict[str, Any], schema: dict[str, Any]
         "provider": route.provider,
         "model": route.model,
         "responseId": getattr(response, "id", None),
-        "requestHash": _sha(payload),
+        "requestHash": _sha(safe_payload),
         "schemaHash": _sha(schema),
         "usage": usage.model_dump() if hasattr(usage, "model_dump") else (dict(usage) if isinstance(usage, dict) else None),
     }
@@ -313,9 +317,11 @@ def complete_guidelines(payload: dict[str, Any]) -> tuple[dict[str, Any], Proven
 
 
 def complete_chat(messages: list[dict[str, str]], model: str | None = None, temperature: float = 0.0, max_tokens: int | None = None) -> tuple[dict[str, Any], Provenance]:
+    # Redakcja przed każdą ścieżką — fake też echo'uje treść użytkownika.
+    safe_messages = redact_payload(messages)
     if fake_mode():
-        text = "FAKE: " + (messages[-1]["content"] if messages else "")
-        audit = {"stage": "chat", "status": "succeeded", "provider": "fake", "model": "fixture", "requestHash": _sha(messages)}
+        text = "FAKE: " + (safe_messages[-1]["content"] if safe_messages else "")
+        audit = {"stage": "chat", "status": "succeeded", "provider": "fake", "model": "fixture", "requestHash": _sha(safe_messages)}
         result = {"id": "fake-chat", "object": "chat.completion", "model": "fixture", "choices": [{"index": 0, "message": {"role": "assistant", "content": text}, "finish_reason": "stop"}], "usage": {"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0}}
         return result, _provenance(audit, append_audit(audit))
     try:
@@ -325,9 +331,9 @@ def complete_chat(messages: list[dict[str, str]], model: str | None = None, temp
     try:
         route = resolve_route("chat", model)
     except LlmConfigurationError:
-        append_audit({"stage": "chat", "status": "failed", "provider": "unresolved", "model": "unresolved", "requestHash": _sha(messages), "error": "LlmConfigurationError"})
+        append_audit({"stage": "chat", "status": "failed", "provider": "unresolved", "model": "unresolved", "requestHash": _sha(safe_messages), "error": "LlmConfigurationError"})
         raise
-    kwargs: dict[str, Any] = {"model": route.model, "messages": messages, "temperature": temperature}
+    kwargs: dict[str, Any] = {"model": route.model, "messages": safe_messages, "temperature": temperature}
     if max_tokens is not None:
         kwargs["max_tokens"] = max_tokens
     if route.api_base:
@@ -335,7 +341,7 @@ def complete_chat(messages: list[dict[str, str]], model: str | None = None, temp
     if route.api_key:
         kwargs["api_key"] = route.api_key
     response = completion(**kwargs)
-    audit = {"stage": "chat", "status": "succeeded", "provider": route.provider, "model": route.model, "responseId": getattr(response, "id", None), "requestHash": _sha(messages)}
+    audit = {"stage": "chat", "status": "succeeded", "provider": route.provider, "model": route.model, "responseId": getattr(response, "id", None), "requestHash": _sha(safe_messages)}
     result = response.model_dump() if hasattr(response, "model_dump") else dict(response)
     return result, _provenance(audit, append_audit(audit))
 

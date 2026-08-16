@@ -11,7 +11,11 @@
 
 ## Controls
 
-- redakcja w warstwie ingest TypeScript **(uwaga: nie obejmuje usługi Python — patrz Znane luki)**;
+- redakcja sekretów: wspólne HOME `config/redaction-patterns.json`
+  (`subactor.developer-twin.redaction/v1`), ingest TypeScript
+  (`src/util/redaction.ts`) oraz ostatnia bramka przed `completion(...)`
+  w Pythonie (`llm_service/redaction.py`); parzystość JS↔Python:
+  `scripts/check-redaction-parity.py`;
 - hashe raw source i eventów;
 - dwa rankingi prawdy;
 - strict JSON Schema dla artefaktów **i konfiguracji**, plus walidacja TypeScript;
@@ -37,13 +41,9 @@
 
 Otwarte, z pełnym opisem w `docs/AUDIT_AND_AUTONOMY_PLAN.md`:
 
-- **A-4** — redakcja sekretów działa wyłącznie w warstwie TypeScript. Usługa Python
-  przekazuje payload do dostawcy bez inspekcji, więc każdy inny konsument
-  (`/v1/chat/completions`, skrypt, drugi agent) omija tę kontrolę.
-- **A-5** — `data/normalized/events.jsonl` zapisuje pole `text` w wersji surowej
-  obok `redactedText`.
-- **A-6** — wzorce nie obejmują tokenów GitHub, AWS, Slack, JWT ani bloków klucza
-  prywatnego, a heurystyka hex redaguje SHA commitów.
+- **A-4 / A-5 / A-6** — zamknięte w Group A: wspólne HOME wzorców, redakcja
+  w ingestcie i przed wyjściem LLM, brak surowego `text` w `PromptEvent`,
+  rozszerzone wzorce + `mustSurvive` dla SHA/prozy, bramka parzystości.
 - **A-7** — `forbiddenEffects` z ticketu nie jest egzekwowane przez żadną bramkę.
 
 ## Data retention

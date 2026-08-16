@@ -20,6 +20,7 @@ import { generateDeterministicGuidelines, type ProjectContext } from './twin/gui
 import { renderGuidelinesMarkdown, renderTwinMarkdown } from './twin/render.js';
 import { validateGuidelines, validateIntentCandidates, validateTwin } from './twin/validate.js';
 import { nowIso, readJson, writeJson, writeText } from './util/files.js';
+import { loadRedactor } from './util/redaction.js';
 import { sha256 } from './util/hash.js';
 
 interface RuleCatalogFile { rules: RuleCatalogEntry[] }
@@ -100,7 +101,8 @@ export async function buildArtifacts(options: { root: string; mode: Mode; llmUrl
   const { root, mode, llmUrl } = options;
   const { sourcePolicy, catalog, routing, modelRegistry } = await loadCore(root);
   const absoluteInputs = defaultInputPaths(root);
-  const rawEvents = await ingestFiles(absoluteInputs);
+  const redact = await loadRedactor(root);
+  const rawEvents = await ingestFiles(absoluteInputs, redact);
   const events = rawEvents.map((event) => ({ ...event, sourceFile: rel(root, resolve(event.sourceFile)) }));
   const sourceManifest = {
     schemaVersion: 'subactor.developer-twin.source-manifest/v1',

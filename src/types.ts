@@ -21,7 +21,7 @@ export interface PromptEvent {
   sourceClass: SourceClass;
   actor: Actor;
   sequence: number;
-  text: string;
+  /** Wyłącznie zredagowana treść. Surowy tekst nie opuszcza procesu ingestu. */
   redactedText: string;
   contentHash: string;
   isCorrection: boolean;

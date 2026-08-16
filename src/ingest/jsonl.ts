@@ -1,8 +1,9 @@
 import { readFile } from 'node:fs/promises';
 import type { PromptEvent } from '../types.js';
+import type { Redactor } from '../util/redaction.js';
 import { createEvent } from './common.js';
 
-export async function ingestJsonl(path: string, startSequence = 0): Promise<PromptEvent[]> {
+export async function ingestJsonl(path: string, redact: Redactor, startSequence = 0): Promise<PromptEvent[]> {
   const lines = (await readFile(path, 'utf8')).split(/\r?\n/).filter((line) => line.trim());
   const events: PromptEvent[] = [];
   let sequence = startSequence;
@@ -13,6 +14,7 @@ export async function ingestJsonl(path: string, startSequence = 0): Promise<Prom
     const eventSequence = parsed.sequence ?? sequence;
     sequence = Math.max(sequence, eventSequence) + 1;
     const event = createEvent({
+      redact,
       sourceFile: path,
       sourceFormat: 'jsonl',
       sourceClass: parsed.sourceClass ?? 'human_instruction',

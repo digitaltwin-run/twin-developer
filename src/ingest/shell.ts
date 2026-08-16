@@ -1,8 +1,9 @@
 import { readFile } from 'node:fs/promises';
 import type { PromptEvent } from '../types.js';
+import type { Redactor } from '../util/redaction.js';
 import { createEvent } from './common.js';
 
-export async function ingestShellHistory(path: string, startSequence = 0): Promise<PromptEvent[]> {
+export async function ingestShellHistory(path: string, redact: Redactor, startSequence = 0): Promise<PromptEvent[]> {
   const lines = (await readFile(path, 'utf8')).split(/\r?\n/);
   const events: PromptEvent[] = [];
   let sequence = startSequence;
@@ -13,6 +14,7 @@ export async function ingestShellHistory(path: string, startSequence = 0): Promi
       .trim();
     if (!command || command.startsWith('#')) continue;
     const event = createEvent({
+      redact,
       sourceFile: path,
       sourceFormat: 'shell-history',
       sourceClass: 'accepted_command',

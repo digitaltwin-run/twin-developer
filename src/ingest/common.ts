@@ -1,7 +1,8 @@
 import { basename } from 'node:path';
 import type { Actor, PromptEvent, SourceClass } from '../types.js';
 import { sha256, stableId } from '../util/hash.js';
-import { compactWhitespace, isLikelyCorrection, redactSecrets } from '../util/text.js';
+import type { Redactor } from '../util/redaction.js';
+import { compactWhitespace, isLikelyCorrection } from '../util/text.js';
 
 export function createEvent(input: {
   sourceFile: string;
@@ -10,11 +11,12 @@ export function createEvent(input: {
   actor: Actor;
   sequence: number;
   text: string;
+  redact: Redactor;
   metadata?: Record<string, unknown>;
 }): PromptEvent | null {
   const text = compactWhitespace(input.text);
   if (!text || text.length < 2) return null;
-  const redactedText = redactSecrets(text);
+  const redactedText = input.redact(text);
   const isCorrection = input.actor === 'human' && isLikelyCorrection(redactedText);
   const sourceClass = isCorrection ? 'human_correction' : input.sourceClass;
   const contentHash = sha256(redactedText);
@@ -26,7 +28,6 @@ export function createEvent(input: {
     sourceClass,
     actor: input.actor,
     sequence: input.sequence,
-    text,
     redactedText,
     contentHash,
     isCorrection,

@@ -1,5 +1,6 @@
 import { readFile } from 'node:fs/promises';
 import type { PromptEvent } from '../types.js';
+import type { Redactor } from '../util/redaction.js';
 import { createEvent } from './common.js';
 
 interface CursorExport {
@@ -26,7 +27,7 @@ function extractTipTapText(decoded: string): string | null {
   return combined || null;
 }
 
-export async function ingestCursorExport(path: string, startSequence = 0): Promise<PromptEvent[]> {
+export async function ingestCursorExport(path: string, redact: Redactor, startSequence = 0): Promise<PromptEvent[]> {
   const parsed = JSON.parse(await readFile(path, 'utf8')) as CursorExport;
   const events: PromptEvent[] = [];
   let sequence = startSequence;
@@ -43,6 +44,7 @@ export async function ingestCursorExport(path: string, startSequence = 0): Promi
     const message = extractTipTapText(decoded);
     if (message) {
       const event = createEvent({
+        redact,
         sourceFile: path,
         sourceFormat: 'cursor-export',
         sourceClass: 'human_instruction',

@@ -9,7 +9,7 @@ import { buildDeveloperTwin } from '../src/twin/aggregate.js';
 import { generateDeterministicGuidelines } from '../src/twin/guidelines.js';
 import { validateGuidelines, validateTwin } from '../src/twin/validate.js';
 import { readJson } from '../src/util/files.js';
-import { redactSecrets } from '../src/util/text.js';
+import { compileRedactor, loadRedactionConfig } from '../src/util/redaction.js';
 
 const root = resolve('.');
 
@@ -22,10 +22,11 @@ test('histories produce an evidence-grounded policy twin', async () => {
     readJson<any>(resolve(root, 'data/context/subactor-cloud-v1.offer.json')),
     readJson<ModelRegistry>(resolve(root, 'config/model-registry.json'))
   ]);
+  const redact = compileRedactor(await loadRedactionConfig(root));
   const events = await ingestFiles([
     resolve(root, 'data/raw/history-portal.md'),
     resolve(root, 'data/raw/history-cursor.json')
-  ]);
+  ], redact);
   assert.ok(events.length >= 40, `expected at least 40 events, got ${events.length}`);
   assert.ok(events.some((event) => event.actor === 'human' && event.isCorrection));
   assert.ok(events.every((event) => !/subactor_usr_live_[A-Za-z0-9_-]+/.test(event.redactedText)));
@@ -72,17 +73,31 @@ test('validator rejects an active rule with an unknown evidence reference', asyn
   assert.throws(() => validateTwin(twin, true), /DT_RULE_EVIDENCE_MISSING/);
 });
 
-test('secret redaction covers API keys, bearer tokens and Subactor tokens', () => {
-  const input = 'OPENROUTER_API_KEY=sk-abcdefghijklmnop Bearer abcdefghijklmnopqrstuvwxyz subactor_usr_live_abcdef123456';
-  const output = redactSecrets(input);
-  assert.ok(!output.includes('sk-abcdefghijklmnop'));
-  assert.ok(!output.includes('abcdefghijklmnopqrstuvwxyz'));
-  assert.ok(!output.includes('subactor_usr_live_abcdef123456'));
+test('redakcja pokrywa fixture\'y z HOME wzorców i nie tyka SHA ani prozy', async () => {
+  const config = await loadRedactionConfig(root);
+  const redact = compileRedactor(config);
+  for (const sample of config.fixtures.mustRedact) {
+    const output = redact(sample);
+    assert.notEqual(output, sample, `nie zredagowano: ${sample.slice(0, 60)}`);
+    assert.ok(output.includes('REDACTED'), `brak znacznika: ${sample.slice(0, 60)}`);
+  }
+  for (const sample of config.fixtures.mustSurvive) {
+    assert.equal(redact(sample), sample, `fałszywie dodatni: ${sample.slice(0, 60)}`);
+  }
 });
 
+test('zdarzenia nie niosą surowego tekstu', async () => {
+  const redact = compileRedactor(await loadRedactionConfig(root));
+  const events = await ingestFiles([resolve(root, 'data/fixtures/shell-history.txt')], redact);
+  for (const event of events) {
+    assert.equal((event as unknown as Record<string, unknown>).text, undefined, 'PromptEvent nadal niesie surowy text');
+    assert.ok(typeof event.redactedText === 'string' && event.redactedText.length > 0);
+  }
+});
 
 test('shell history adapter emits accepted-command events', async () => {
-  const events = await ingestFiles([resolve(root, 'data/fixtures/shell-history.txt')]);
+  const redact = compileRedactor(await loadRedactionConfig(root));
+  const events = await ingestFiles([resolve(root, 'data/fixtures/shell-history.txt')], redact);
   assert.equal(events.length, 3);
   assert.ok(events.every((event) => event.sourceFormat === 'shell-history'));
   assert.ok(events.every((event) => event.sourceClass === 'accepted_command'));

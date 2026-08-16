@@ -1,5 +1,6 @@
 import { readFile } from 'node:fs/promises';
 import type { PromptEvent } from '../types.js';
+import type { Redactor } from '../util/redaction.js';
 import { createEvent } from './common.js';
 
 const marker = /^### (User Input|Planner Response)\s*$/gm;
@@ -10,7 +11,7 @@ function cleanHumanBlock(block: string): string {
   return beforeTrace.trim();
 }
 
-export async function ingestMarkdownTranscript(path: string, startSequence = 0): Promise<PromptEvent[]> {
+export async function ingestMarkdownTranscript(path: string, redact: Redactor, startSequence = 0): Promise<PromptEvent[]> {
   const text = await readFile(path, 'utf8');
   const matches = [...text.matchAll(marker)];
   const events: PromptEvent[] = [];
@@ -26,6 +27,7 @@ export async function ingestMarkdownTranscript(path: string, startSequence = 0):
 
     if (role === 'User Input') {
       const human = createEvent({
+        redact,
         sourceFile: path,
         sourceFormat: 'markdown-transcript',
         sourceClass: 'human_instruction',
@@ -38,6 +40,7 @@ export async function ingestMarkdownTranscript(path: string, startSequence = 0):
 
       for (const command of block.matchAll(acceptedCommand)) {
         const event = createEvent({
+          redact,
           sourceFile: path,
           sourceFormat: 'markdown-transcript',
           sourceClass: 'accepted_command',
@@ -50,6 +53,7 @@ export async function ingestMarkdownTranscript(path: string, startSequence = 0):
       }
     } else {
       const agent = createEvent({
+        redact,
         sourceFile: path,
         sourceFormat: 'markdown-transcript',
         sourceClass: 'agent_claim',

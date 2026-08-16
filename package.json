@@ -13,7 +13,8 @@
     "validate": "node dist/src/cli.js validate && python3 scripts/validate-schema.py",
     "test:ts": "node --test dist/tests/*.test.js",
     "test:py": "python3 -m unittest discover -s tests -p 'test_*.py'",
-    "test": "npm run build && npm run test:ts && npm run test:py"
+    "test:redaction": "python3 scripts/check-redaction-parity.py",
+    "test": "npm run build && npm run test:ts && npm run test:py && npm run test:redaction"
   },
   "devDependencies": {
     "typescript": "^5.8.3"
