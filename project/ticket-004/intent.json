@@ -1,0 +1,50 @@
+{
+  "schema": "subactor.twin-developer.ticket-intent/v1",
+  "ticketId": "ticket-004",
+  "title": "R-005 — domyślnie wyłączony raw chat i ścisły kontrakt REST",
+  "status": "in_progress",
+  "workstream": "security",
+  "purpose": "Ogólny endpoint chat nie może działać jako domyślnie dostępne proxy do providera ani przyjmować nieznanych pól. Pozostaje wyłącznie kontrolowanym narzędziem debugowym uruchamianym jawną flagą.",
+  "scope": [
+    "wyłączenie /v1/chat/completions bez TWIN_ENABLE_RAW_CHAT=true",
+    "odrzucanie nieznanych pól ChatRequest",
+    "negatywne testy disabled-by-default i niepoprawnej flagi",
+    "udokumentowanie kontrolowanej ścieżki opt-in"
+  ],
+  "allowedPaths": [
+    "llm_service/app.py",
+    "llm_service/models.py",
+    "tests/test_llm_service.py",
+    "README.md",
+    "project/ticket-004/**",
+    "project/TICKETS.md"
+  ],
+  "forbiddenEffects": [
+    "włączenie raw chat domyślnie",
+    "osłabienie ochrony non-loopback lub tokenu",
+    "wykonanie połączenia z zewnętrznym providerem podczas testów",
+    "zmiana pozostałych kontraktów REST",
+    "deployment"
+  ],
+  "dependencies": [
+    "ticket-002 fail-closed routing i bind guard",
+    "grupa A wspólna redakcja TS/Python"
+  ],
+  "validation": [
+    "make validate",
+    "make test"
+  ],
+  "acceptanceCriteria": [
+    "Raw chat bez jawnej flagi zwraca kontrolowaną odmowę i nie wywołuje providera.",
+    "Niepoprawna wartość flagi kończy się fail-closed.",
+    "ChatRequest odrzuca każde nieznane pole.",
+    "Endpointy intent i guidelines zachowują dotychczasowe kontrakty.",
+    "Pełne bramki repozytorium przechodzą."
+  ],
+  "evidencePolicy": {
+    "humanIntentHome": "docs/AUDIT_AND_AUTONOMY_PLAN.md#ticket-r-005",
+    "projectRealityHome": "llm_service/app.py",
+    "llmAuthority": "propose-only",
+    "unknownIsFalse": false
+  }
+}

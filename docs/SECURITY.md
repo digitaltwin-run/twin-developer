@@ -35,7 +35,10 @@
 - Aider dry-run i no-auto-commits;
 - brak sekretów w LLM audit;
 - fail-closed w `require-llm`;
-- osobna zgoda na source mutation, commit, deployment i secret mutation.
+- osobna zgoda na source mutation, commit, deployment i secret mutation;
+- **A-7** `forbiddenEffects`: katalog `config/forbidden-effects.json`, bramka
+  `scripts/check-forbidden-effects.py` w `make validate`, hooki
+  `githooks/pre-commit` i `githooks/pre-push` (`git config core.hooksPath githooks`).
 
 ## Znane luki
 
@@ -44,7 +47,9 @@ Otwarte, z pełnym opisem w `docs/AUDIT_AND_AUTONOMY_PLAN.md`:
 - **A-4 / A-5 / A-6** — zamknięte w Group A: wspólne HOME wzorców, redakcja
   w ingestcie i przed wyjściem LLM, brak surowego `text` w `PromptEvent`,
   rozszerzone wzorce + `mustSurvive` dla SHA/prozy, bramka parzystości.
-- **A-7** — `forbiddenEffects` z ticketu nie jest egzekwowane przez żadną bramkę.
+- **A-7** — zamknięte lokalnie: każdy napis z ticketu musi mieć id/alias w
+  katalogu; `kind=paths` egzekwuje changeset, `kind=hook` tylko z `--hook`,
+  `kind=recorded`/`delegated` fail-closed bez udawania testera.
 
 ## Data retention
 

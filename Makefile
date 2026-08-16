@@ -47,6 +47,7 @@ validate: build
 	$(PYTHON) scripts/check-schema-identity.py
 	$(PYTHON) scripts/check-flag-parity.py
 	$(PYTHON) scripts/check-redaction-parity.py
+	$(PYTHON) scripts/check-forbidden-effects.py
 	$(MAKE) verify-artifacts
 
 verify-artifacts: build

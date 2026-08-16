@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# A-7: staged pliki kontra forbiddenEffects aktywnego ticketu.
+set -euo pipefail
+ROOT=$(git rev-parse --show-toplevel)
+exec python3 "$ROOT/scripts/check-forbidden-effects.py" --hook pre-commit

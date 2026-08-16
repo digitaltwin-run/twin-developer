@@ -227,8 +227,12 @@ Endpointy:
 GET  /healthz                    (bez tokenu)
 POST /v1/intents/extract         (X-Twin-Token, gdy TWIN_API_TOKEN ustawiony)
 POST /v1/guidelines/generate     (jw.)
-POST /v1/chat/completions        (jw.)
+POST /v1/chat/completions        (domyślnie 404; wymaga TWIN_ENABLE_RAW_CHAT=true)
 ```
+
+Raw chat jest wyłącznie narzędziem debugowym. Nie ustawiaj
+`TWIN_ENABLE_RAW_CHAT` w zwykłym profilu usługi; endpointy semantyczne powyżej
+mają ścisłe kontrakty i pozostają preferowaną granicą.
 
 Odpowiedzi endpointów LLM niosą nagłówki proweniencji `x-twin-provider`,
 `x-twin-model`, `x-twin-audit-ref` i opcjonalnie `x-twin-response-id`. Runtime

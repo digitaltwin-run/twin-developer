@@ -12,6 +12,7 @@ from .core import (
     complete_chat,
     complete_guidelines,
     complete_intents,
+    flag_enabled,
     health,
 )
 from .models import ChatRequest, GuidelinesRequest, IntentRequest
@@ -31,6 +32,16 @@ def require_token(x_twin_token: str | None = Header(default=None)) -> None:
         return
     if not x_twin_token or not hmac.compare_digest(x_twin_token, expected):
         raise HTTPException(status_code=401, detail="Invalid or missing X-Twin-Token.")
+
+
+def require_raw_chat_enabled() -> None:
+    """Raw chat jest narzędziem debugowym, nigdy domyślnym API usługi."""
+    try:
+        enabled = flag_enabled("TWIN_ENABLE_RAW_CHAT", default=False)
+    except LlmConfigurationError as exc:
+        raise HTTPException(status_code=503, detail="Raw chat configuration is invalid.") from exc
+    if not enabled:
+        raise HTTPException(status_code=404, detail="Raw chat endpoint is disabled.")
 
 
 @app.get("/healthz")
@@ -56,7 +67,10 @@ def generate_guidelines(request: GuidelinesRequest) -> JSONResponse:
     return JSONResponse(content=result, headers=provenance.headers())
 
 
-@app.post("/v1/chat/completions", dependencies=[Depends(require_token)])
+@app.post(
+    "/v1/chat/completions",
+    dependencies=[Depends(require_token), Depends(require_raw_chat_enabled)],
+)
 def chat_completions(request: ChatRequest) -> JSONResponse:
     try:
         result, provenance = complete_chat(

@@ -1,0 +1,94 @@
+{
+  "schemaVersion": "subactor.developer-twin.forbidden-effects/v1",
+  "home": "config/forbidden-effects.json",
+  "note": "Jedyny katalog efektów, które bramka umie nazwać. Każdy napis w ticket.forbiddenEffects musi tu mieć id albo alias. Nieznany efekt to FAIL — inaczej DSL znowu jest dokumentacją. Rodzaj paths jest egzekwowany na changesetcie (make validate i hook). Rodzaj hook tylko gdy skrypt dostanie --hook. Rodzaj recorded jest nazwany, ale nie ma testera plików: nie udajemy egzekucji.",
+  "effects": [
+    {
+      "id": "publishing-raw-prompt-history",
+      "aliases": ["publishing raw prompt history"],
+      "kind": "paths",
+      "denyGlobs": ["data/raw/**"],
+      "note": "Nowe albo zmienione pliki w data/raw/ są publikacją surowej historii. Pliki już na HEAD nie wchodzą do changsetu, więc korpus ingestu z initial commit nie blokuje validate."
+    },
+    {
+      "id": "production-secret-mutation",
+      "aliases": ["production secret mutation"],
+      "kind": "paths",
+      "denyGlobs": [".env", ".env.local", ".env.production", "**/credentials.json"]
+    },
+    {
+      "id": "commit-without-gates",
+      "aliases": ["commit bez zielonych bramek make validate i make test"],
+      "kind": "hook",
+      "hooks": ["pre-commit"],
+      "note": "Hook pre-commit odmawia, gdy staged pliki łamią paths. Pełne make validate zostaje w Makefile — hook nie udaje, że je uruchomił."
+    },
+    {
+      "id": "commit",
+      "aliases": ["commit"],
+      "kind": "hook",
+      "hooks": ["pre-commit"],
+      "note": "Tylko aktywny ticket. make validate nie odmawia commita — to zablokowałoby lądowanie naprawy."
+    },
+    {
+      "id": "push",
+      "aliases": ["push"],
+      "kind": "hook",
+      "hooks": ["pre-push"]
+    },
+    {
+      "id": "merge",
+      "aliases": ["merge"],
+      "kind": "hook",
+      "hooks": ["pre-push"]
+    },
+    {
+      "id": "deployment",
+      "aliases": ["deployment"],
+      "kind": "recorded",
+      "note": "To repo nie ma testera wdrożenia. Efekt jest nazwany, żeby aktywny ticket nie nosił ozdobnego napisu."
+    },
+    {
+      "id": "promote-candidate-rule",
+      "aliases": ["promocja reguły candidate do active"],
+      "kind": "recorded",
+      "note": "Katalog reguł nie nosi statusu candidate/active na dysku; promocja jest w ekstrakcji. Brak testera plików — nie udajemy."
+    },
+    {
+      "id": "edit-adopting-wellmanifest-repos",
+      "aliases": ["edycja plików zarządzanych w repozytoriach adoptujących wellmanifest"],
+      "kind": "recorded",
+      "note": "Bramka widzi tylko to repo. Edycja cudzego drzewa jest poza jej horyzontem."
+    },
+    {
+      "id": "foreign-contract-claim",
+      "aliases": ["deklarowanie zgodności z cudzym standardem bez potwierdzenia jego walidatorem"],
+      "kind": "delegated",
+      "delegate": "scripts/check-schema-identity.py"
+    },
+    {
+      "id": "enable-raw-chat-by-default",
+      "aliases": ["włączenie raw chat domyślnie"],
+      "kind": "recorded",
+      "note": "Domyślne włączenie /v1/chat/completions bez TWIN_ENABLE_RAW_CHAT jest kontraktowe; brak testera AST — zapisane, nie udajemy zielonej egzekucji plików."
+    },
+    {
+      "id": "weaken-loopback-or-token-guard",
+      "aliases": ["osłabienie ochrony non-loopback lub tokenu"],
+      "kind": "recorded",
+      "note": "Bind/token guard żyje w llm_service; bramka nazywa efekt, nie parsuje AST."
+    },
+    {
+      "id": "external-provider-during-tests",
+      "aliases": ["wykonanie połączenia z zewnętrznym providerem podczas testów"],
+      "kind": "recorded",
+      "note": "Testy mają iść przez fake/fixture; brak network-sniffera w bramce."
+    },
+    {
+      "id": "change-other-rest-contracts",
+      "aliases": ["zmiana pozostałych kontraktów REST"],
+      "kind": "recorded",
+      "note": "Ticket-004 chroni intent/guidelines przed drift; pełna egzekucja kontraktu jest w testach REST."
+    }
+  ]
+}

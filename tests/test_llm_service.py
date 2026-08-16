@@ -7,6 +7,11 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
+from fastapi import HTTPException
+from fastapi.testclient import TestClient
+from pydantic import ValidationError
+
+from llm_service.app import app, require_raw_chat_enabled
 from llm_service.cli import _guard_bind
 from llm_service.core import (
     LlmConfigurationError,
@@ -17,6 +22,7 @@ from llm_service.core import (
     health,
     resolve_route,
 )
+from llm_service.models import ChatRequest
 
 
 class FakeLlmServiceTest(unittest.TestCase):
@@ -169,6 +175,37 @@ class BindGuardTest(unittest.TestCase):
     def test_remote_bind_with_opt_in_and_token(self) -> None:
         with patch.dict(os.environ, {"TWIN_ALLOW_REMOTE": "1", "TWIN_API_TOKEN": "s3cret"}, clear=True):
             _guard_bind("0.0.0.0")
+
+
+class RawChatContainmentTest(unittest.TestCase):
+    """R-005: ogólny chat jest wyłączony bez jawnej, poprawnej flagi."""
+
+    def test_raw_chat_is_disabled_before_provider_call(self) -> None:
+        client = TestClient(app)
+        with patch.dict(os.environ, {}, clear=True), patch(
+            "llm_service.app.complete_chat"
+        ) as complete_chat_mock:
+            response = client.post(
+                "/v1/chat/completions",
+                json={"messages": [{"role": "user", "content": "hello"}]},
+            )
+        self.assertEqual(response.status_code, 404)
+        complete_chat_mock.assert_not_called()
+
+    def test_raw_chat_requires_a_valid_explicit_opt_in(self) -> None:
+        with patch.dict(os.environ, {"TWIN_ENABLE_RAW_CHAT": "true"}, clear=True):
+            require_raw_chat_enabled()
+        with patch.dict(os.environ, {"TWIN_ENABLE_RAW_CHAT": "sometimes"}, clear=True):
+            with self.assertRaises(HTTPException) as raised:
+                require_raw_chat_enabled()
+        self.assertEqual(raised.exception.status_code, 503)
+
+    def test_chat_request_rejects_unknown_fields(self) -> None:
+        with self.assertRaises(ValidationError):
+            ChatRequest.model_validate({
+                "messages": [{"role": "user", "content": "hello"}],
+                "provider_override": "external",
+            })
 
 
 class AuditPathTest(unittest.TestCase):

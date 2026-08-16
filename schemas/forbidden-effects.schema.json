@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/subactor.developer-twin.forbidden-effects/v1",
+  "title": "Katalog egzekwowalnych forbiddenEffects",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "home", "effects"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schemaVersion": { "const": "subactor.developer-twin.forbidden-effects/v1" },
+    "home": { "const": "config/forbidden-effects.json" },
+    "note": { "type": "string" },
+    "effects": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "aliases", "kind"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1, "pattern": "^[a-z][a-z0-9-]*$" },
+          "aliases": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "type": "string", "minLength": 1 }
+          },
+          "kind": { "enum": ["paths", "hook", "delegated", "recorded"] },
+          "denyGlobs": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+          "hooks": { "type": "array", "items": { "enum": ["pre-commit", "pre-push"] } },
+          "delegate": { "type": "string", "minLength": 1 },
+          "note": { "type": "string" }
+        },
+        "allOf": [
+          {
+            "if": { "properties": { "kind": { "const": "paths" } }, "required": ["kind"] },
+            "then": { "required": ["denyGlobs"], "properties": { "denyGlobs": { "minItems": 1 } } }
+          },
+          {
+            "if": { "properties": { "kind": { "const": "hook" } }, "required": ["kind"] },
+            "then": { "required": ["hooks"], "properties": { "hooks": { "minItems": 1 } } }
+          },
+          {
+            "if": { "properties": { "kind": { "const": "delegated" } }, "required": ["kind"] },
+            "then": { "required": ["delegate"] }
+          }
+        ]
+      }
+    }
+  }
+}

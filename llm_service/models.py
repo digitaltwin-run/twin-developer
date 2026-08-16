@@ -43,8 +43,7 @@ class ChatMessage(StrictModel):
     content: str
 
 
-class ChatRequest(BaseModel):
-    model_config = ConfigDict(extra="allow")
+class ChatRequest(StrictModel):
     model: str | None = None
     messages: list[ChatMessage]
     temperature: float = 0.0
