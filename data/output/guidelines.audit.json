@@ -1,6 +1,6 @@
 {
-  "requestedMode": "require-llm",
-  "effectiveMode": "llm",
+  "requestedMode": "deterministic",
+  "effectiveMode": "deterministic",
   "degraded": false,
   "reason": null
 }

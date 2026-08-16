@@ -1,8 +1,8 @@
 # Developer Digital Twin — execution policy
 
-- ID: `developer-twin:f365d76232d35c17`
+- ID: `developer-twin:71ce512c96244179`
 - Wygenerowano: 2026-08-16T12:00:00.000Z
-- Tryb: `require-llm`, LLM: tak, degraded: nie
+- Tryb: `deterministic`, LLM: nie, degraded: nie
 - Cel: Kontynuowanie rozwoju Subactor zgodnie z udokumentowanym sposobem pracy człowieka, bez imitowania jego tożsamości lub cech osobowości.
 
 ## Granica modelu
@@ -47,7 +47,6 @@ Co faktycznie istnieje i działa w projekcie.
 | `DT-DOCKER-001` | contextual | contextual | 0.819 | 2 | Docker jest narzędziem kontekstowym, nie domyślną zasadą |
 | `DT-GOV-001` | active | subactor | 0.880 | 1 | Ticket i intent przed wieloetapową zmianą |
 | `DT-LLM-001` | active | global | 0.990 | 16 | LLM jest ekstraktorem i doradcą, nie źródłem autorytetu |
-| `DT-LLM-101` | candidate | project | 0.720 | 2 | Porównanie side-by-side przed dużym refaktorem |
 | `DT-PROD-001` | active | subactor | 0.948 | 8 | Produkcja, bezpieczeństwo i anty-spam są częścią Definition of Done |
 | `DT-REALITY-001` | active | global | 0.988 | 8 | Dokumentacja i prompt muszą być konfrontowane z rzeczywistością |
 | `DT-REUSE-001` | active | subactor | 0.868 | 4 | Najpierw istniejące API, formularze i komponenty |
@@ -120,15 +119,6 @@ LLM może generować kandydatów DSL i wytyczne, ale runtime deterministyczny wa
 - Pozwalać LLM nadawać sobie uprawnień, deklarować DONE bez testów albo modyfikować sekrety.
 
 Dowody: `evidence:e6bbc0be7788a0d6`, `evidence:9105acb7f51036ff`, `evidence:71362d83e2de46c0`, `evidence:273e39098d7c490a`, `evidence:c769a91e78958a94`, `evidence:e85aeb834c6d02f3`, `evidence:d2cb286a45eafd8e`, `evidence:a0721eb41ab7adaf`, `evidence:ae874ca4eddd57ea`, `evidence:4990b17f356e4e48`, `evidence:fa80b06e21ef8564`, `evidence:43fd4a9245f3cd9f`, `evidence:061bdd499581b8a2`, `evidence:14295c4267d25d29`, `evidence:12a1b047f312ce07`, `evidence:08de1a94595be98b`
-
-### DT-LLM-101 — Porównanie side-by-side przed dużym refaktorem
-
-Przed zastąpieniem istniejącej ścieżki pokaż różnice między zachowaniem obecnym i proponowanym oraz przypisz je do dowodów.
-
-**SHOULD**
-- Przedstawić porównanie zachowania i źródeł prawdy przed refaktorem.
-
-Dowody: `evidence:e6bbc0be7788a0d6`, `evidence:87c8bb1e43f65669`
 
 ### DT-PROD-001 — Produkcja, bezpieczeństwo i anty-spam są częścią Definition of Done
 
@@ -243,4 +233,4 @@ Dowody: `evidence:0e9972121c3ecb61`, `evidence:b3e7f07432bb2261`, `evidence:273e
 
 - **info / DT_AGENT_CLAIMS_NON_AUTHORITATIVE:** 19 wypowiedzi agenta zachowano jako materiał audytowy, ale nie użyto ich do aktywacji reguł.
 - **review_required / DT_CONTEXTUAL_CONFLICT_PRESERVED:** Historia zawiera polecenia usunięcia konkretnego kontenera i użycia Dockera do parity. Reguła pozostaje kontekstowa.
-- **review_required / DT_LLM_CANDIDATES_REVIEW_REQUIRED:** 1 kandydatów LLM dodano ze statusem candidate; nie sterują wykonaniem bez promocji w ticket/intent.
+- **info / DT_LLM_DISABLED:** Ekstrakcję wykonano deterministycznie; LLM nie był wywoływany.

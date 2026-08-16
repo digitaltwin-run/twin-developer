@@ -1,6 +1,6 @@
 # Wytyczne wykonawcze
 
-LLM-reviewed, evidence-bound plan: Wykonaj zadanie w 7 etapach, stosując reguły developer twin jako ograniczenia i wymagając dowodów po zmianie.
+Wykonaj zadanie w 7 etapach, stosując reguły developer twin jako ograniczenia i wymagając dowodów po zmianie.
 
 ## Kroki
 
