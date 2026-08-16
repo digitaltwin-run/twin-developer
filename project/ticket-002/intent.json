@@ -1,5 +1,5 @@
 {
-  "schema": "new-project.intent/v3",
+  "schema": "subactor.twin-developer.ticket-intent/v1",
   "ticketId": "ticket-002",
   "title": "Faza 0 — naprawy blokujące przed wiązaniem w profilu autonomii",
   "status": "done",

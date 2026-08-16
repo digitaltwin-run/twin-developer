@@ -1,5 +1,5 @@
 {
-  "schema": "new-project.intent/v3",
+  "schema": "subactor.twin-developer.ticket-intent/v1",
   "ticketId": "ticket-001",
   "title": "Developer Digital Twin from prompt histories",
   "status": "done",

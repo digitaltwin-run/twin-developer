@@ -39,8 +39,15 @@ def validate(schema_name: str, document_name: str) -> None:
 
 
 def validate_tickets() -> None:
+    """Waliduje LOKALNY kontrakt ticketów.
+
+    To nie jest dowód zgodności z `wellmanifest/new-project`. Repozytorium nie ma
+    adopcji (`.governance/` nie istnieje), a jego intenty nie spełniają
+    `governance/intent.schema.json` standardu. Tożsamości pilnuje
+    `scripts/check-schema-identity.py`.
+    """
     for intent in sorted((ROOT / "project").glob("ticket-*/intent.json")):
-        validate("ticket-intent.schema.json", str(intent.relative_to(ROOT)))
+        validate("local-ticket-intent.schema.json", str(intent.relative_to(ROOT)))
 
 
 if __name__ == "__main__":

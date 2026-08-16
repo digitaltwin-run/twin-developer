@@ -1,13 +1,14 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://example.invalid/schemas/new-project.intent/v3",
-  "title": "Ticket intent",
+  "$id": "https://example.invalid/schemas/subactor.twin-developer.ticket-intent/v1",
+  "title": "Ticket intent — LOKALNY kontrakt tego repozytorium",
+  "description": "To NIE jest new-project.intent/v3. Repozytorium nie ma adopcji wellmanifest/new-project (.governance/ nie istnieje), więc nie może twierdzić zgodności z jego schematem. Prawdziwy kontrakt to governance/intent.schema.json w wellmanifest/new-project i wymaga dziesięciu pól, których ten kształt nie ma: ticket, summary, forbiddenPaths, stacks, dependsOn, conflictsWith, integrationTicket, classification. Migracja jest częścią Fazy 1 planu adopcji.",
   "type": "object",
   "additionalProperties": false,
   "required": ["schema", "ticketId", "title", "status", "purpose", "allowedPaths", "forbiddenEffects", "validation"],
   "properties": {
     "$schema": { "type": "string" },
-    "schema": { "const": "new-project.intent/v3" },
+    "schema": { "const": "subactor.twin-developer.ticket-intent/v1" },
     "ticketId": { "type": "string", "pattern": "^ticket-[0-9]{3}$" },
     "title": { "type": "string", "minLength": 1 },
     "status": { "enum": ["planned", "in_progress", "blocked", "done"] },

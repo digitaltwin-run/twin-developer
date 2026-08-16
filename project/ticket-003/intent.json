@@ -1,0 +1,48 @@
+{
+  "schema": "subactor.twin-developer.ticket-intent/v1",
+  "ticketId": "ticket-003",
+  "title": "Usunięcie podszywania się pod kontrakt new-project i bramka tożsamości schematów",
+  "status": "done",
+  "workstream": "governance",
+  "purpose": "Lokalny schemat deklarował identyfikator należący do wellmanifest/new-project i nadawał niezgodnym intentom pozór dowodu zgodności. Kontrakt zostaje przemianowany na własną przestrzeń nazw, a bramka blokuje powrót defektu.",
+  "scope": [
+    "E-0 przemianowanie schematu ticketów na subactor.twin-developer.ticket-intent/v1",
+    "E-0 oba intenty przestają deklarować new-project.intent/v3",
+    "E-0 scripts/check-schema-identity.py jako bramka w make validate",
+    "zapis ankiety 34 standardów wellmanifest w dokumencie planu"
+  ],
+  "allowedPaths": [
+    "schemas/**",
+    "scripts/**",
+    "project/ticket-00*/**",
+    "project/TICKETS.md",
+    "docs/**",
+    "Makefile"
+  ],
+  "forbiddenEffects": [
+    "edycja plików zarządzanych w repozytoriach adoptujących wellmanifest",
+    "deklarowanie zgodności z cudzym standardem bez potwierdzenia jego walidatorem",
+    "commit bez zielonych bramek make validate i make test",
+    "merge",
+    "deployment"
+  ],
+  "dependencies": [
+    "wellmanifest/new-project governance/intent.schema.json jako kontrakt odniesienia"
+  ],
+  "validation": [
+    "make validate",
+    "make test"
+  ],
+  "acceptanceCriteria": [
+    "Żaden plik w schemas/ nie deklaruje $id ani const należącego do obcego właściciela.",
+    "Ponowne wstawienie podrobionego $id kończy się SCHEMA-IDENTITY-FAIL i kodem 1.",
+    "Oba intenty deklarują wyłącznie lokalną przestrzeń nazw.",
+    "Dokument planu odnotowuje wynik ankiety wellmanifest wraz z obiema pułapkami pomiarowymi."
+  ],
+  "evidencePolicy": {
+    "humanIntentHome": "config/source-policy.json#truthDomains/humanIntent",
+    "projectRealityHome": "config/source-policy.json#truthDomains/projectReality",
+    "llmAuthority": "propose-only",
+    "unknownIsFalse": false
+  }
+}

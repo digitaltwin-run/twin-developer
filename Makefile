@@ -44,6 +44,7 @@ demo: build
 validate: build
 	$(NODE) dist/src/cli.js validate
 	$(PYTHON) scripts/validate-schema.py
+	$(PYTHON) scripts/check-schema-identity.py
 	$(PYTHON) scripts/check-flag-parity.py
 	$(MAKE) verify-artifacts
 

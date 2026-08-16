@@ -437,6 +437,43 @@ kopią w miniaturze, a każdy dowód, który wyprodukuje, wymaga tłumaczenia.
 
 **Naprawa:** patrz Faza 1 planu — konsumować kontrakty, nie definiować nowe.
 
+#### E-0 [Z] [P0] Lokalny schemat podszywał się pod kontrakt standardu
+
+Wykryte 2026-08-16, po zamknięciu ticket-002. Nie jest to defekt zastany —
+powstał w trakcie naprawy D-1 i został naprawiony w ticket-003.
+
+`schemas/ticket-intent.schema.json` deklarował
+`$id: https://example.invalid/schemas/new-project.intent/v3` oraz
+`"schema": { "const": "new-project.intent/v3" }` i był wpięty w `make validate`.
+Bramka drukowała `SCHEMA-PASS project/ticket-002/intent.json`.
+
+Prawdziwy kontrakt to `governance/intent.schema.json` w `wellmanifest/new-project`.
+Zwalidowane wobec niego, oba intenty odpadają identycznie:
+
+```
+project/ticket-001/intent.json  → 10 błędów
+project/ticket-002/intent.json  → 10 błędów
+  brak: ticket, summary, forbiddenPaths, stacks, dependsOn,
+        conflictsWith, integrationTicket, classification
+  nadmiar: purpose, status, forbiddenEffects, dependencies, evidencePolicy
+```
+
+`ticket-001` deklarował `new-project.intent/v3` od początku istnienia projektu,
+nigdy go nie spełniając; `ticket-002` powielił ten kształt, a nowy walidator
+nadał niezgodności pozór dowodu. To jest dokładnie ten tryb porażki, który cały
+ten projekt opisuje jako główne zagrożenie: **zielona bramka postawiona zamiast
+dowodu**.
+
+**Naprawa (ticket-003):** schemat przemianowany na
+`schemas/local-ticket-intent.schema.json` z własną przestrzenią nazw
+`subactor.twin-developer.ticket-intent/v1`, oba intenty przestały deklarować
+cudzy kontrakt, a `scripts/check-schema-identity.py` odrzuca każdy `$id`
+i `const` należący do obcego właściciela. Bramka zweryfikowana przez ponowne
+wstawienie podrobionego `$id` — `SCHEMA-IDENTITY-FAIL`, exit 1.
+
+Zgodność z `new-project.intent/v3` wolno zadeklarować dopiero wtedy, gdy
+potwierdzi ją walidator standardu, czyli po adopcji (Faza 1).
+
 #### E-2 [Z] [P0] Adopcja standardów jest zadeklarowana, nie zweryfikowana
 
 `data/context/project.json` deklaruje `adopts: [wellmanifest/new-project,
@@ -564,6 +601,52 @@ który wysyła dane wbrew konfiguracji, unieważniają każdą gwarancję zbudow
 - schemat dla każdego pliku w `config/` i `data/context/`.
 
 ---
+
+#### Stan wyjściowy Fazy 1: co pokazała ankieta wellmanifest
+
+Przed rozpoczęciem Fazy 1 przebadano wszystkie 34 repozytoria standardów
+w `wellmanifest/`, żeby ustalić, czy problem adopcji jest systemowy, czy lokalny.
+**Jest lokalny.**
+
+| Miara | Wynik |
+|---|---|
+| Intenty ticketów zgodne z `governance/intent.schema.json` | **190 / 193** |
+| Repozytoria adoptowane przechodzące własną bramkę | **24 / 24 `GOV-PASS`** |
+| Repozytoria z wewnętrzną niespójnością (pinowany schemat vs manifest) | **0** |
+| Repozytoria z kontraktem o nieistniejącym identyfikatorze | **1** (`auth-lifecycle`) |
+
+Dwie pułapki pomiarowe, w które łatwo wpaść:
+
+1. **Walidator huba wycelowany w cudze repo daje fałszywy alarm.**
+   `new-project/scripts/governance_check.py` w wersji 0.18.1 zwraca `GOV-FAIL`
+   dla wszystkich 24 adoptowanych repozytoriów, na polu
+   `approvalEvidence.signedAttestationPredicateType`. To nie jest defekt tych
+   repozytoriów — są przypięte do wcześniejszej rewizji standardu i **wewnętrznie
+   spójne**: ich pinowany `manifest.schema.json` i ich `manifest.json` niosą tę
+   samą wartość. Uruchomione własną bramką (`project/governance-check.sh`)
+   przechodzą.
+
+2. **Ręczna „naprawa" zepsułaby je.** Migracja hosta `wellmanifest.dev` →
+   `wellmanifest.com` jest już rozpoznana i zamknięta w hubie jako
+   `new-project/project/ticket-082` (DONE, wydane w v0.18.1). Ten ticket
+   stwierdza wprost, że repozytoria adoptujące przejmą zmianę **przez ponowną
+   adopcję generatorem, a nie przez ręczną edycję plików zarządzanych**, i że
+   jakakolwiek edycja wewnątrz repozytoriów adoptujących jest poza zakresem.
+   Podmiana samego `manifest.json` na `.com` unieważniłaby go wobec pinowanego
+   `manifest.schema.json`, który trzyma `.dev` jako `const` i jest plikiem
+   zarządzanym (jednym z 34 w `manifest.lock.json`). Zamieniłoby to 17 zielonych
+   repozytoriów na czerwone.
+
+**Jedyny realny wyjątek: `auth-lifecycle`.** `.governance/` zawiera wyłącznie
+pusty katalog `error/` — brak manifestu, brak `project.sh`. Trzy jego intenty
+deklarują `wellmanifest.new-project/intent/v1`, identyfikator, który **nigdy nie
+istniał** w hubie (historycznie było `new-project.intent/v1`). To ta sama klasa
+defektu co E-0, w jedynym innym miejscu w ekosystemie.
+
+**Wniosek dla planu:** wzorzec „deklaracja bez wiązania" nie jest chorobą
+wellmanifest — jest chorobą repozytoriów, które go nie zaadoptowały. Blokadą
+dla wszystkich pozostaje jedno: `goal governance adopt` wymaga Goal ≥ 2.1.295,
+a zainstalowany jest 2.1.284 i nie ma podkomendy `governance`.
 
 #### Faza 1 — Konsumpcja kontraktów zamiast własnych (`evidence`)
 
