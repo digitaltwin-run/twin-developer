@@ -1,5 +1,10 @@
 # ticket-003 — Koniec podszywania się pod cudze kontrakty
 
+- **Status**: DONE
+- **Workflow state**: PUBLICATION
+- **Owner**: antigravity
+
+
 ## Co się stało
 
 W ticket-002, naprawiając D-1 („konfiguracja bez schematów"), powstał plik

@@ -14,7 +14,8 @@
     "test:ts": "node --test dist/tests/*.test.js",
     "test:py": "python3 -m unittest discover -s tests -p 'test_*.py'",
     "test:redaction": "python3 scripts/check-redaction-parity.py",
-    "test": "npm run build && npm run test:ts && npm run test:py && npm run test:redaction"
+    "test": "npm run build && npm run test:ts && npm run test:py && npm run test:redaction",
+    "prepare": "bash scripts/install-agent-hosts.sh"
   },
   "devDependencies": {
     "typescript": "^5.8.3"
@@ -22,5 +23,10 @@
   "engines": {
     "node": ">=20",
     "python": ">=3.10"
+  },
+  "wellmanifest": {
+    "standard": "0.20.35",
+    "revision": "cfaa0bf0ea6b0e7349fed0bb62b5ce15792d687d",
+    "gate": "project/governance-check.sh"
   }
 }

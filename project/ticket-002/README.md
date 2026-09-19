@@ -1,5 +1,10 @@
 # ticket-002 — Faza 0 planu autonomii
 
+- **Status**: DONE
+- **Workflow state**: PUBLICATION
+- **Owner**: antigravity
+
+
 Zakres wynika bezpośrednio z `docs/AUDIT_AND_AUTONOMY_PLAN.md`, sekcja
 „Faza 0 — Naprawy blokujące (przed jakimkolwiek grantem)".
 

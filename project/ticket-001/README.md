@@ -1,6 +1,5 @@
 # ticket-001 — Developer Digital Twin from prompt histories
-
-Status: **DONE (example implementation)**  
+- **Status**: DONE
 Workstream: `runtime_service`  
 Owner: `human:founder`  
 Agent role: `agent:implementation` (propose/implement/test; no merge authority)

@@ -1,5 +1,10 @@
 # ticket-004 — R-005 containment ogólnego REST chat
 
+- **Status**: DONE
+- **Workflow state**: PUBLICATION
+- **Owner**: antigravity
+
+
 ## Problem
 
 `/v1/chat/completions` jest ogólnym proxy do skonfigurowanego providera. Mimo
