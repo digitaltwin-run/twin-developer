@@ -1,5 +1,5 @@
 {
-  "repository": "subactor/twin-developer",
+  "repository": "digitaltwin-run/twin-developer",
   "requiredChecks": [
     {
       "name": "governance / remote lifecycle",
