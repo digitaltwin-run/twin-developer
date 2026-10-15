@@ -11,13 +11,18 @@ data/output/llm-audit.jsonl
 .intent
 !.github/
 !.github/**
-!.cursor/
-!.cursor/**
-!.cursor*
+!.cursor/rules/
+!.cursor/rules/**
+.cursor/*.json
 !.aider*
 !.aider.conf.yml
 !scripts/
 !scripts/**
+scripts/**/__pycache__/
+# koru runtime artefacts (generated)
+.planfile/.koru/
+.koru/
+.planfile/sprints/*.bak-*
 !project/
 !project/**
 !.subactor/

@@ -1,9 +1,15 @@
-# Tickets
+# Ticket index (`project/`)
 
-| Ticket | Status | Scope |
-|---|---|---|
-| [ticket-001](ticket-001/README.md) | DONE | Developer digital twin DSL, runtime, LLM gateway and Aider integration |
-| [ticket-002](ticket-002/README.md) | DONE | Faza 0 planu autonomii — naprawy P0 granicy efektów i proweniencji |
-| [ticket-003](ticket-003/README.md) | DONE | Koniec podszywania się pod kontrakt new-project + bramka tożsamości schematów |
-| [ticket-004](ticket-004/README.md) | IN PROGRESS | R-005 — domyślnie wyłączony raw chat i ścisły kontrakt REST |
-- [ticket-005](project/ticket-005/README.md): Adopt wellmanifest/new-project 0.20.35
+This file indexes governance tickets without taking ownership of
+`project/README.md`, which may belong to an analysis generator.
+
+<!-- AUTO:TICKET_INDEX:START -->
+| Ticket ID | Spec | Preprompt | Human input | Agent plans | Agent logs | Changelog |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **ticket-001** | [`README.md`](./ticket-001/README.md) | [`preprompt.md`](./ticket-001/preprompt.md) | - | - | - | [`changelog.md`](./ticket-001/changelog.md) |
+| **ticket-002** | [`README.md`](./ticket-002/README.md) | - | - | - | - | - |
+| **ticket-003** | [`README.md`](./ticket-003/README.md) | - | - | - | - | - |
+| **ticket-004** | [`README.md`](./ticket-004/README.md) | - | - | - | - | - |
+| **ticket-005** | [`README.md`](./ticket-005/README.md) | - | - | - | - | - |
+| **ticket-006** | [`README.md`](./ticket-006/README.md) | - | - | - | - | - |
+<!-- AUTO:TICKET_INDEX:END -->
